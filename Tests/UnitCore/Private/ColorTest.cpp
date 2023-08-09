@@ -24,6 +24,39 @@ TEST_F(NMColorTest, ColorCreation)
     EXPECT_FLOAT_EQ(color.GetBlue(), 1.7f);
 }
 
+TEST_F(NMColorTest, GetClampedColor_Min)
+{
+    // Given
+    NMColor color(-0.5f, -0.4f, -1.0f);
+
+    // Then
+    EXPECT_EQ(color.GetClampedRed(), 0);
+    EXPECT_EQ(color.GetClampedGreen(), 0);
+    EXPECT_EQ(color.GetClampedBlue(), 0);
+}
+
+TEST_F(NMColorTest, GetClampedColor_Max)
+{
+    // Given
+    NMColor color(1.5f, 1.4f, 1.9f);
+
+    // Then
+    EXPECT_EQ(color.GetClampedRed(), 255);
+    EXPECT_EQ(color.GetClampedGreen(), 255);
+    EXPECT_EQ(color.GetClampedBlue(), 255);
+}
+
+TEST_F(NMColorTest, GetClampedColor_Middle)
+{
+    // Given
+    NMColor color(0.5f, 0.4f, 1.0f);
+
+    // Then
+    EXPECT_EQ(color.GetClampedRed(), 127);
+    EXPECT_EQ(color.GetClampedGreen(), 102);
+    EXPECT_EQ(color.GetClampedBlue(), 255);
+}
+
 TEST_F(NMColorTest, ColorEquality)
 {
     // Given

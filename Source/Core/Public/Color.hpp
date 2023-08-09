@@ -1,7 +1,10 @@
 #pragma once
 
+#include <cstdint>
 #include <iomanip>
 #include <iostream>
+
+#include "Math.hpp"
 
 class NMColor
 {
@@ -13,6 +16,10 @@ public:
     inline float GetRed() const { return r; }
     inline float GetGreen() const { return g; }
     inline float GetBlue() const { return b; }
+
+    inline int GetClampedRed() const { return static_cast<int>(nmmath::Clamp(r, 0.0f, 1.0f) * 255.0f); }
+    inline int GetClampedGreen() const { return static_cast<int>(nmmath::Clamp(g, 0.0f, 1.0f) * 255.0f); }
+    inline int GetClampedBlue() const { return static_cast<int>(nmmath::Clamp(b, 0.0f, 1.0f) * 255.0f); }
 
     bool operator==(const NMColor& other) const { return r == other.r && g == other.g && b == other.b; }
 
