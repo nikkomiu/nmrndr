@@ -1,5 +1,6 @@
 #pragma once
 
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -36,7 +37,13 @@ public:
 
     void Clear(const NMColor& color = NMColor(DEFAULT_CANVAS_COLOR_R, DEFAULT_CANVAS_COLOR_G, DEFAULT_CANVAS_COLOR_B));
 
-    std::string ToPPM() const;
+    std::ostream& ToPPM(std::ostream& os) const;
+    inline std::string ToPPM() const
+    {
+        std::stringstream ss;
+        ToPPM(ss);
+        return ss.str();
+    }
 
 protected:
 

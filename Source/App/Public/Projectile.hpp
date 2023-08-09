@@ -22,6 +22,9 @@ public:
         return os;
     }
 
+    inline const NMPoint& GetPosition() const { return position; }
+    inline const NMVector& GetVelocity() const { return velocity; }
+
 protected:
 
     NMWorld* world;

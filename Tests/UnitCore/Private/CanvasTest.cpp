@@ -104,10 +104,24 @@ TEST_F(NMCanvasTest, WritePixel_OutOfBounds)
     NMCanvas canvas;
 
     // When
-    canvas.WritePixel(20, 30, NMColor(1.0f, 0.0f, 0.0f));
+    canvas.WritePixel(50, 1, NMColor(1.0f, 0.0f, 0.0f));
+    canvas.WritePixel(1, 50, NMColor(1.0f, 0.0f, 0.0f));
 
     // Then
     ASSERT_EQ(canvas.GetPixelData()[9][9], NMColor(0.0f, 0.0f, 0.0f));
+}
+
+TEST_F(NMCanvasTest, WritePixel_Negative)
+{
+    // Given
+    NMCanvas canvas;
+
+    // When
+    canvas.WritePixel(-20, 1, NMColor(1.0f, 0.0f, 0.0f));
+    canvas.WritePixel(1, -10, NMColor(1.0f, 0.0f, 0.0f));
+
+    // Then
+    ASSERT_EQ(canvas.GetPixelData()[0][0], NMColor(0.0f, 0.0f, 0.0f));
 }
 
 TEST_F(NMCanvasTest, ClearCanvas)

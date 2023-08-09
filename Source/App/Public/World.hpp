@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <memory>
 #include <vector>
 
@@ -20,9 +21,22 @@ public:
     void AddProjectile(std::shared_ptr<NMProjectile> projectile);
     inline void ClearProjectiles() { projectiles.clear(); }
 
-    void Tick(float deltaTime);
+    void Run();
+
+    virtual bool ShouldEndPlay() { return false; }
+
+    virtual void OnBeginPlay();
+
+    virtual void Tick(float deltaTime);
+
+    virtual void Draw() {}
+
+    virtual void OnEndPlay();
 
 protected:
+
+    std::chrono::steady_clock::time_point startTime;
+    std::chrono::steady_clock::time_point prevTickTime;
 
     NMEnvironment environment;
     std::vector<std::shared_ptr<NMProjectile>> projectiles;

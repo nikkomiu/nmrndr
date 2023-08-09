@@ -1,7 +1,24 @@
 #include "Canvas.hpp"
 
 #include <cstdint>
-#include <sstream>
+#include <iostream>
+
+inline std::ostream& writeColorToLine(std::ostream& os, std::streampos& lineLength, int color)
+{
+    auto startPos = os.tellp() - lineLength;
+
+    // It fits if the color string length is 3 or less from the line limit of 70
+    bool fits = startPos <= 67 || (color < 100 && startPos <= 68) || (color < 10 && startPos <= 69);
+    if (!fits)
+    {
+        os.seekp(-1, std::ios_base::cur);
+        os << "\n";
+        lineLength = os.tellp();
+    }
+
+    os << color << " ";
+    return os;
+}
 
 void NMCanvas::Clear(const NMColor& color)
 {
@@ -24,45 +41,27 @@ void NMCanvas::SetCanvas(std::size_t width, std::size_t height, const NMColor& c
     }
 }
 
-inline void writeColorToLine(std::stringstream& ss, std::streampos& lineLength, int color)
+std::ostream& NMCanvas::ToPPM(std::ostream& os) const
 {
-    auto startPos = ss.tellp() - lineLength;
-
-    // It fits if the color string length is 3 or less from the line limit of 70
-    bool fits = startPos <= 67 || (color < 100 && startPos <= 68) || (color < 10 && startPos <= 69);
-    if (!fits)
-    {
-        ss.seekp(-1, std::ios_base::cur);
-        ss << "\n";
-        lineLength = ss.tellp();
-    }
-
-    ss << color << " ";
-}
-
-std::string NMCanvas::ToPPM() const
-{
-    std::stringstream ss;
-
-    ss << "P3\n";
-    ss << GetWidth() << " " << GetHeight() << "\n";
-    ss << "255\n";
+    os << "P3\n";
+    os << GetWidth() << " " << GetHeight() << "\n";
+    os << "255\n";
 
     for (auto& row : pixels)
     {
-        auto lineStartPos = ss.tellp();
+        auto lineStartPos = os.tellp();
 
         for (auto& pixel : row)
         {
-            writeColorToLine(ss, lineStartPos, pixel.GetClampedRed());
-            writeColorToLine(ss, lineStartPos, pixel.GetClampedGreen());
-            writeColorToLine(ss, lineStartPos, pixel.GetClampedBlue());
+            writeColorToLine(os, lineStartPos, pixel.GetClampedRed());
+            writeColorToLine(os, lineStartPos, pixel.GetClampedGreen());
+            writeColorToLine(os, lineStartPos, pixel.GetClampedBlue());
         }
 
         // Go back one character to remove the trailing space and add a newline
-        ss.seekp(-1, std::ios_base::cur);
-        ss << "\n";
+        os.seekp(-1, std::ios_base::cur);
+        os << "\n";
     }
 
-    return ss.str();
+    return os;
 }
