@@ -24,10 +24,7 @@ void NMCanvas::Clear(const NMColor& color)
 {
     for (auto& row : pixels)
     {
-        for (auto& pixel : row)
-        {
-            pixel = color;
-        }
+        std::fill(row.begin(), row.end(), color);
     }
 }
 

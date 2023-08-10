@@ -47,6 +47,7 @@ public:
 
 protected:
 
+    // TODO: change this implementation to use a single vector of size width * height
     std::vector<std::vector<NMColor>> pixels;
 
     void SetCanvas(std::size_t width, std::size_t height,
