@@ -5,10 +5,10 @@
 
 inline std::ostream& writeColorToLine(std::ostream& os, std::streampos& lineLength, int color)
 {
-    auto startPos = os.tellp() - lineLength;
+    std::streamoff curPos = os.tellp() - lineLength;
 
     // It fits if the color string length is 3 or less from the line limit of 70
-    bool fits = startPos <= 67 || (color < 100 && startPos <= 68) || (color < 10 && startPos <= 69);
+    bool fits = curPos <= 67 || (color < 100 && curPos <= 68) || (color < 10 && curPos <= 69);
     if (!fits)
     {
         os.seekp(-1, std::ios_base::cur);
@@ -20,45 +20,35 @@ inline std::ostream& writeColorToLine(std::ostream& os, std::streampos& lineLeng
     return os;
 }
 
-void NMCanvas::Clear(const NMColor& color)
-{
-    for (auto& row : pixels)
-    {
-        std::fill(row.begin(), row.end(), color);
-    }
-}
-
-void NMCanvas::SetCanvas(std::size_t width, std::size_t height, const NMColor& color)
-{
-    pixels.resize(height);
-
-    for (auto& row : pixels)
-    {
-        row.resize(width, color);
-    }
-}
-
 std::ostream& NMCanvas::ToPPM(std::ostream& os) const
 {
     os << "P3\n";
-    os << GetWidth() << " " << GetHeight() << "\n";
+    os << width << " " << height << "\n";
     os << "255\n";
 
-    for (auto& row : pixels)
+    std::streampos lineStartPos = 0;
+    for (std::size_t i = 0; i < pixels.size(); ++i)
     {
-        auto lineStartPos = os.tellp();
-
-        for (auto& pixel : row)
+        bool isLineStart = i % width == 0;
+        if (isLineStart)
         {
-            writeColorToLine(os, lineStartPos, pixel.GetClampedRed());
-            writeColorToLine(os, lineStartPos, pixel.GetClampedGreen());
-            writeColorToLine(os, lineStartPos, pixel.GetClampedBlue());
+            lineStartPos = os.tellp();
+
+            if (i != 0)
+            {
+                // Go back one character to remove the trailing space and add a newline
+                os.seekp(-1, std::ios_base::cur);
+                os << "\n";
+            }
         }
 
-        // Go back one character to remove the trailing space and add a newline
-        os.seekp(-1, std::ios_base::cur);
-        os << "\n";
+        writeColorToLine(os, lineStartPos, pixels[i].GetClampedRed());
+        writeColorToLine(os, lineStartPos, pixels[i].GetClampedGreen());
+        writeColorToLine(os, lineStartPos, pixels[i].GetClampedBlue());
     }
+
+    os.seekp(-1, std::ios_base::cur);
+    os << "\n";
 
     return os;
 }

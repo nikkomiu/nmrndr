@@ -7,25 +7,15 @@ TEST_F(NMCanvasTest, CreateCanvas)
     // Given
     NMCanvas canvas;
 
-    // When
-    auto& pixelData = canvas.GetPixelData();
-
     // Then
     ASSERT_EQ(canvas.GetWidth(), 10);
     ASSERT_EQ(canvas.GetHeight(), 10);
 
-    // Ensure each column has 10 rows
-    ASSERT_EQ(pixelData.size(), 10);
-
-    for (auto& row : pixelData)
+    for (int y = 0; y < canvas.GetHeight(); ++y)
     {
-        // Ensure each row has 10 pixels
-        ASSERT_EQ(row.size(), 10);
-
-        // Ensure each pixel is black by default
-        for (auto& pixel : row)
+        for (int x = 0; x < canvas.GetWidth(); ++x)
         {
-            ASSERT_EQ(pixel, NMColor(0.0f, 0.0f, 0.0f));
+            ASSERT_EQ(canvas.ReadPixel(x, y), NMColor(0.0f, 0.0f, 0.0f));
         }
     }
 }
@@ -35,25 +25,15 @@ TEST_F(NMCanvasTest, CreateCanvas_WithWidthAndHeight)
     // Given
     NMCanvas canvas(20, 30);
 
-    // When
-    auto& pixelData = canvas.GetPixelData();
-
     // Then
     ASSERT_EQ(canvas.GetWidth(), 20);
     ASSERT_EQ(canvas.GetHeight(), 30);
 
-    // Ensure each column has 30 rows
-    ASSERT_EQ(pixelData.size(), 30);
-
-    for (auto& row : pixelData)
+    for (int y = 0; y < canvas.GetHeight(); ++y)
     {
-        // Ensure each row has 20 pixels
-        ASSERT_EQ(row.size(), 20);
-
-        // Ensure each pixel is black by default
-        for (auto& pixel : row)
+        for (int x = 0; x < canvas.GetWidth(); ++x)
         {
-            ASSERT_EQ(pixel, NMColor(0.0f, 0.0f, 0.0f));
+            ASSERT_EQ(canvas.ReadPixel(x, y), NMColor(0.0f, 0.0f, 0.0f));
         }
     }
 }
@@ -63,25 +43,15 @@ TEST_F(NMCanvasTest, CreateCanvas_WithWidthAndHeightAndColor)
     // Given
     NMCanvas canvas(20, 30, NMColor(0.5f, 0.5f, 0.5f));
 
-    // When
-    auto& pixelData = canvas.GetPixelData();
-
     // Then
     ASSERT_EQ(canvas.GetWidth(), 20);
     ASSERT_EQ(canvas.GetHeight(), 30);
 
-    // Ensure each column has 30 rows
-    ASSERT_EQ(pixelData.size(), 30);
-
-    for (auto& row : pixelData)
+    for (int y = 0; y < canvas.GetHeight(); ++y)
     {
-        // Ensure each row has 20 pixels
-        ASSERT_EQ(row.size(), 20);
-
-        // Ensure each pixel is red by default
-        for (auto& pixel : row)
+        for (int x = 0; x < canvas.GetWidth(); ++x)
         {
-            ASSERT_EQ(pixel, NMColor(0.5f, 0.5f, 0.5f));
+            ASSERT_EQ(canvas.ReadPixel(x, y), NMColor(0.5f, 0.5f, 0.5f));
         }
     }
 }
@@ -95,7 +65,7 @@ TEST_F(NMCanvasTest, WritePixel)
     canvas.WritePixel(2, 3, NMColor(1.0f, 0.0f, 0.0f));
 
     // Then
-    ASSERT_EQ(canvas.GetPixelData()[3][2], NMColor(1.0f, 0.0f, 0.0f));
+    ASSERT_EQ(canvas.ReadPixel(2, 3), NMColor(1.0f, 0.0f, 0.0f));
 }
 
 TEST_F(NMCanvasTest, WritePixel_OutOfBounds)
@@ -108,7 +78,7 @@ TEST_F(NMCanvasTest, WritePixel_OutOfBounds)
     canvas.WritePixel(1, 50, NMColor(1.0f, 0.0f, 0.0f));
 
     // Then
-    ASSERT_EQ(canvas.GetPixelData()[9][9], NMColor(0.0f, 0.0f, 0.0f));
+    ASSERT_EQ(canvas.ReadPixel(9, 9), NMColor(0.0f, 0.0f, 0.0f));
 }
 
 TEST_F(NMCanvasTest, WritePixel_Negative)
@@ -121,7 +91,7 @@ TEST_F(NMCanvasTest, WritePixel_Negative)
     canvas.WritePixel(1, -10, NMColor(1.0f, 0.0f, 0.0f));
 
     // Then
-    ASSERT_EQ(canvas.GetPixelData()[0][0], NMColor(0.0f, 0.0f, 0.0f));
+    ASSERT_EQ(canvas.ReadPixel(0, 0), NMColor(0.0f, 0.0f, 0.0f));
 }
 
 TEST_F(NMCanvasTest, ClearCanvas)
@@ -134,7 +104,7 @@ TEST_F(NMCanvasTest, ClearCanvas)
     canvas.Clear();
 
     // Then
-    ASSERT_EQ(canvas.GetPixelData()[3][2], NMColor(0.0f, 0.0f, 0.0f));
+    ASSERT_EQ(canvas.ReadPixel(3, 2), NMColor(0.0f, 0.0f, 0.0f));
 }
 
 TEST_F(NMCanvasTest, ClearCanvas_WithColor)
@@ -147,7 +117,7 @@ TEST_F(NMCanvasTest, ClearCanvas_WithColor)
     canvas.Clear(NMColor(0.0f, 1.0f, 0.0f));
 
     // Then
-    ASSERT_EQ(canvas.GetPixelData()[3][2], NMColor(0.0f, 1.0f, 0.0f));
+    ASSERT_EQ(canvas.ReadPixel(3, 2), NMColor(0.0f, 1.0f, 0.0f));
 }
 
 TEST_F(NMCanvasTest, ToPPM_Header)
