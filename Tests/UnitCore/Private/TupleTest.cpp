@@ -1,6 +1,10 @@
-#include "TupleTest.hpp"
+#include <gtest/gtest.h>
 
 #include "Tuple.hpp"
+
+class NMTupleTest : public ::testing::Test
+{
+};
 
 #pragma region Constructors
 

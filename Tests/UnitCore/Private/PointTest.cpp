@@ -1,7 +1,11 @@
-#include "PointTest.hpp"
+#include <gtest/gtest.h>
 
 #include "Point.hpp"
 #include "Tuple.hpp"
+
+class NMPointTest : public ::testing::Test
+{
+};
 
 TEST_F(NMPointTest, PointCreation_Default)
 {

@@ -1,6 +1,10 @@
-#include "MathTest.hpp"
+#include <gtest/gtest.h>
 
 #include "Math.hpp"
+
+class NMMathTest : public ::testing::Test
+{
+};
 
 TEST_F(NMMathTest, FloatEquals)
 {

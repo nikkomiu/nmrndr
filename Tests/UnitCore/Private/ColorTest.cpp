@@ -1,6 +1,10 @@
-#include "ColorTest.hpp"
+#include <gtest/gtest.h>
 
 #include "Color.hpp"
+
+class NMColorTest : public ::testing::Test
+{
+};
 
 TEST_F(NMColorTest, ColorCreation_Default)
 {

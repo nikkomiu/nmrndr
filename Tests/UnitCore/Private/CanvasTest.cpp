@@ -1,6 +1,10 @@
-#include "CanvasTest.hpp"
+#include <gtest/gtest.h>
 
 #include "Canvas.hpp"
+
+class NMCanvasTest : public ::testing::Test
+{
+};
 
 TEST_F(NMCanvasTest, CreateCanvas)
 {

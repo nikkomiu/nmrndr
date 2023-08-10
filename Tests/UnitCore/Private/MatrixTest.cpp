@@ -1,8 +1,12 @@
-#include "MatrixTest.hpp"
+#include <gtest/gtest.h>
 
 #include <cmath>
 
 #include "Matrix.hpp"
+
+class NMMatrixTest : public ::testing::Test
+{
+};
 
 TEST_F(NMMatrixTest, Creation)
 {

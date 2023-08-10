@@ -1,10 +1,14 @@
-#include "VectorTest.hpp"
+#include <gtest/gtest.h>
 
 #include <cmath>
 
 #include "Point.hpp"
 #include "Tuple.hpp"
 #include "Vector.hpp"
+
+class NMVectorTest : public ::testing::Test
+{
+};
 
 TEST_F(NMVectorTest, VectorCreation_Default)
 {
