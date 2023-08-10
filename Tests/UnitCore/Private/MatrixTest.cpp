@@ -79,6 +79,132 @@ TEST_F(NMMatrixTest, Creation_WithDimensionsAndData)
     ASSERT_EQ(matrix.Get(1, 2), 6.0f);
 }
 
+TEST_F(NMMatrixTest, OperatorEquality)
+{
+    // Given
+    NMMatrix matrix1({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {5.0f, 6.0f, 7.0f, 8.0f},
+        {9.0f, 8.0f, 7.0f, 6.0f},
+        {5.0f, 4.0f, 3.0f, 2.0f},
+    });
+    NMMatrix matrix2({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {5.0f, 6.0f, 7.0f, 8.0f},
+        {9.0f, 8.0f, 7.0f, 6.0f},
+        {5.0f, 4.0f, 3.0f, 2.0f},
+    });
+
+    // Then
+    ASSERT_TRUE(matrix1 == matrix2);
+}
+
+TEST_F(NMMatrixTest, OperatorEquality_NearEqual)
+{
+    // Given
+    NMMatrix matrix1({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {5.0f, 6.0f, 7.0f, 8.0f},
+        {9.0f, 8.0f, 7.0f, 6.0f},
+        {5.0f, 4.0f, 3.0f, 2.0f},
+    });
+    NMMatrix matrix2({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {5.0f, 6.0f, 7.0f, 8.0f},
+        {9.0f, 8.0f, 7.0f, 6.0f},
+        {5.0f, 4.0f, 2.9999999f, 2.0000001f},
+    });
+
+    // Then
+    ASSERT_TRUE(matrix1 == matrix2);
+}
+
+TEST_F(NMMatrixTest, OperatorEquality_NotEqual)
+{
+    // Given
+    NMMatrix matrix1({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {5.0f, 6.0f, 7.0f, 8.0f},
+        {9.0f, 8.0f, 7.0f, 6.0f},
+        {5.0f, 4.0f, 3.0f, 2.0f},
+    });
+    NMMatrix matrix2({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {5.0f, 6.0f, 7.0f, 8.0f},
+        {9.0f, 8.0f, 7.0f, 6.0f},
+        {5.0f, 4.0f, 3.0f, 1.0f},
+    });
+
+    // Then
+    ASSERT_FALSE(matrix1 == matrix2);
+}
+
+TEST_F(NMMatrixTest, StreamInsertionOperator)
+{
+    // Given
+    NMMatrix matrix({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {5.0f, 6.0f, 7.0f, 8.0f},
+        {9.0f, 8.0f, 7.0f, 6.0f},
+        {5.0f, 4.0f, 3.0f, 2.0f},
+    });
+
+    // When
+    std::stringstream stream;
+    stream << matrix;
+
+    // Then
+    ASSERT_EQ(stream.str(),
+              "|  1.000  2.000  3.000  4.000 |\n"
+              "|  5.000  6.000  7.000  8.000 |\n"
+              "|  9.000  8.000  7.000  6.000 |\n"
+              "|  5.000  4.000  3.000  2.000 |\n");
+}
+
+TEST_F(NMMatrixTest, StreamInsertionOperator_AutoExpand)
+{
+    // Given
+    NMMatrix matrix({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {5.0f, 6.0f, 7.0f, 8.0f},
+        {9.0f, 8.0f, 7.0f, 6.0f},
+        {5.0f, 4.0f, 3.0f, 200000.0f},
+    });
+
+    // When
+    std::stringstream stream;
+    stream << matrix;
+
+    // Then
+    ASSERT_EQ(stream.str(),
+              "|       1.000       2.000       3.000       4.000 |\n"
+              "|       5.000       6.000       7.000       8.000 |\n"
+              "|       9.000       8.000       7.000       6.000 |\n"
+              "|       5.000       4.000       3.000  200000.000 |\n");
+}
+
+TEST_F(NMMatrixTest, StreamInsertionOperator_FixedDecimalPrecision)
+{
+    // Given
+    NMMatrix matrix({
+        {1.3333333f, 2.6666666f, 3.63465243452f, 4.99999999999999f},
+        {5.0f, 6.0f, 7.0f, 8.0f},
+        {9.0f, 8.0f, 7.0f, 6.0f},
+        {5.0f, 4.0f, 3.0f, 2.0f},
+    });
+
+    // When
+    std::stringstream stream;
+    stream << matrix;
+
+    // Then
+    ASSERT_EQ(stream.str(),
+              "|  1.333  2.667  3.635  5.000 |\n"
+              "|  5.000  6.000  7.000  8.000 |\n"
+              "|  9.000  8.000  7.000  6.000 |\n"
+              "|  5.000  4.000  3.000  2.000 |\n");
+}
+
 TEST_F(NMMatrixTest, Get)
 {
     // Given

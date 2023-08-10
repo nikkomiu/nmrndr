@@ -1,7 +1,11 @@
 #pragma once
 
+#include <iomanip>
+#include <iostream>
 #include <limits>
 #include <vector>
+
+#include "Math.hpp"
 
 class NMMatrix
 {
@@ -32,6 +36,53 @@ public:
     NMMatrix(std::size_t width, std::size_t height, const std::vector<float>& data)
         : width(width), height(height), data(data)
     {
+    }
+
+    bool operator==(const NMMatrix& other) const
+    {
+        if (width != other.width || height != other.height)
+        {
+            return false;
+        }
+
+        for (std::size_t i = 0; i < data.size(); ++i)
+        {
+            if (!nmmath::FloatEquals(data[i], other.data[i]))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const NMMatrix& matrix)
+    {
+        os << std::setprecision(3) << std::fixed;
+
+        // get the largest number of digits in the matrix
+        int maxDigits = 0;
+        for (auto& val : matrix.data)
+        {
+            auto digits = static_cast<int>(std::to_string(val).length());
+            if (digits > maxDigits)
+            {
+                maxDigits = digits;
+            }
+        }
+
+        for (std::size_t y = 0; y < matrix.height; ++y)
+        {
+            os << "| ";
+            for (std::size_t x = 0; x < matrix.width; ++x)
+            {
+                auto idx = y * matrix.width + x;
+                os << std::setw(maxDigits - 2) << matrix.data[idx] << " ";
+            }
+            os << "|\n";
+        }
+
+        return os;
     }
 
     inline std::size_t GetWidth() const { return width; }

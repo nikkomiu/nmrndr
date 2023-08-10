@@ -5,11 +5,9 @@
 
 namespace nmmath
 {
-inline bool FloatEquals(float a, float b)
-{
-    float epsilon = std::numeric_limits<float>::epsilon();
-    return std::abs(a - b) < epsilon;
-}
+static float epsilon = std::numeric_limits<float>::epsilon();
+
+inline bool FloatEquals(float a, float b) { return std::abs(a - b) < epsilon; }
 
 inline float Clamp(float value, float min, float max)
 {
