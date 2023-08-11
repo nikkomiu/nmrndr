@@ -7,10 +7,10 @@ variables:
 
 build:
   stage: build
-  image: alpine:3.18
+  image: ubuntu:latest
   before_script:
-  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers make
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release
+  - apt-get update && apt-get install -y build-essential cmake ninja-build curl git zip unzip tar pkg-config
+  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=$(which ninja) -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target all
   artifacts:
@@ -25,10 +25,10 @@ build:
 
 ctest:
   stage: test
-  image: alpine:3.18
+  image: ubuntu:latest
   before_script:
-  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers make
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release
+  - apt-get update && apt-get install -y build-essential cmake ninja-build curl git zip unzip tar
+  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=$(which ninja) -S . -B ./Build/Release -G Ninja
   script:
   - cd Build/Release
   - ctest --output-on-failure
@@ -40,10 +40,10 @@ ctest:
 
 cppcheck:
   stage: test
-  image: alpine:3.18
+  image: ubuntu:latest
   before_script:
-  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers make
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release
+  - apt-get update && apt-get install -y build-essential cmake ninja-build curl git zip unzip tar
+  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=$(which ninja) -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target CppCheck
   cache:
@@ -54,10 +54,10 @@ cppcheck:
 
 clang format:
   stage: test
-  image: alpine:3.18
+  image: ubuntu:latest
   before_script:
-  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers make
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release
+  - apt-get update && apt-get install -y build-essential cmake ninja-build curl git zip unzip tar
+  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=$(which ninja) -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target ClangFormatDryRun
   cache:
@@ -68,10 +68,10 @@ clang format:
 
 clang check:
   stage: test
-  image: alpine:3.18
+  image: ubuntu:latest
   before_script:
-  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers make
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release
+  - apt-get update && apt-get install -y build-essential cmake ninja-build curl git zip unzip tar
+  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=$(which ninja) -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target ClangCheckDryRun
   cache:
