@@ -4,8 +4,9 @@ stages:
 
 build:
   stage: build
-  image: cmake:latest
+  image: alpine:3.18
   before_script:
+  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target all
@@ -21,8 +22,9 @@ build:
 
 ctest:
   stage: test
-  image: cmake:latest
+  image: alpine:3.18
   before_script:
+  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
   script:
   - cd Build/Release
@@ -35,10 +37,11 @@ ctest:
 
 cppcheck:
   stage: test
-  image: cmake:latest
+  image: alpine:3.18
   before_script:
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
   script:
+  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers
   - cmake --build ./Build/Release --config Release --target CppCheck
   cache:
     paths:
@@ -48,8 +51,9 @@ cppcheck:
 
 clang format:
   stage: test
-  image: cmake:latest
+  image: alpine:3.18
   before_script:
+  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target ClangFormatDryRun
@@ -61,8 +65,9 @@ clang format:
 
 clang check:
   stage: test
-  image: cmake:latest
+  image: alpine:3.18
   before_script:
+  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target ClangCheckDryRun
@@ -74,7 +79,7 @@ clang check:
 
 # clang tidy:
 #   stage: test
-#   image: cmake:latest
+#   image: alpine:3.18
 #   before_script:
 #   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
 #   script:
