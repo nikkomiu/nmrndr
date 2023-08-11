@@ -20,7 +20,6 @@ add_custom_target(
 
 add_custom_target(
     ClangFormat
-    ALL
     COMMAND /usr/bin/clang-format
     --Werror
     -i
@@ -29,7 +28,6 @@ add_custom_target(
 
 add_custom_target(
     ClangCheck
-    ALL
     COMMAND /usr/bin/clang-check
     -analyze
     -p .
