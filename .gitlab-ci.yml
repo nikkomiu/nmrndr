@@ -9,7 +9,7 @@ build:
   stage: build
   image: alpine:3.18
   before_script:
-  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers
+  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers ninja-build
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target all
@@ -27,7 +27,7 @@ ctest:
   stage: test
   image: alpine:3.18
   before_script:
-  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers
+  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers ninja-build
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
   script:
   - cd Build/Release
@@ -42,9 +42,9 @@ cppcheck:
   stage: test
   image: alpine:3.18
   before_script:
+  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers ninja-build
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
   script:
-  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers
   - cmake --build ./Build/Release --config Release --target CppCheck
   cache:
     paths:
@@ -56,7 +56,7 @@ clang format:
   stage: test
   image: alpine:3.18
   before_script:
-  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers
+  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers ninja-build
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target ClangFormatDryRun
@@ -70,7 +70,7 @@ clang check:
   stage: test
   image: alpine:3.18
   before_script:
-  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers
+  - apk --no-cache add cmake clang clang-dev make gcc g++ libc-dev linux-headers ninja-build
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target ClangCheckDryRun
@@ -79,16 +79,3 @@ clang check:
     - ./Build/Release
     - ./Tools/vcpkg/packages
     policy: pull
-
-# clang tidy:
-#   stage: test
-#   image: alpine:3.18
-#   before_script:
-#   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
-#   script:
-#   - cmake --build ./Build/Release --config Release --target ClangTidyDryRun
-#   cache:
-#     paths:
-#     - ./Build/Release
-#     - ./Tools/vcpkg/packages
-#     policy: pull
