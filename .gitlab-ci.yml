@@ -1,0 +1,86 @@
+stages:
+- build
+- test
+
+build:
+  stage: build
+  image: cmake:latest
+  before_script:
+  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
+  script:
+  - cmake --build ./Build/Release --config Release --target all
+  artifacts:
+    paths:
+    - ./Build/Release
+    expire_in: 1 day
+  cache:
+    paths:
+    - ./Build/Release
+    - ./Tools/vcpkg/packages
+    policy: pull-push
+
+ctest:
+  stage: test
+  image: cmake:latest
+  before_script:
+  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
+  script:
+  - cd Build/Release
+  - ctest --output-on-failure
+  cache:
+    paths:
+    - ./Build/Release
+    - ./Tools/vcpkg/packages
+    policy: pull
+
+cppcheck:
+  stage: test
+  image: cmake:latest
+  before_script:
+  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
+  script:
+  - cmake --build ./Build/Release --config Release --target CppCheck
+  cache:
+    paths:
+    - ./Build/Release
+    - ./Tools/vcpkg/packages
+    policy: pull
+
+clang format:
+  stage: test
+  image: cmake:latest
+  before_script:
+  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
+  script:
+  - cmake --build ./Build/Release --config Release --target ClangFormatDryRun
+  cache:
+    paths:
+    - ./Build/Release
+    - ./Tools/vcpkg/packages
+    policy: pull
+
+clang check:
+  stage: test
+  image: cmake:latest
+  before_script:
+  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
+  script:
+  - cmake --build ./Build/Release --config Release --target ClangCheckDryRun
+  cache:
+    paths:
+    - ./Build/Release
+    - ./Tools/vcpkg/packages
+    policy: pull
+
+# clang tidy:
+#   stage: test
+#   image: cmake:latest
+#   before_script:
+#   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B ./Build/Release -G Ninja
+#   script:
+#   - cmake --build ./Build/Release --config Release --target ClangTidyDryRun
+#   cache:
+#     paths:
+#     - ./Build/Release
+#     - ./Tools/vcpkg/packages
+#     policy: pull

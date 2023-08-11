@@ -26,7 +26,7 @@ public:
 
     inline const NMColor& ReadPixel(std::size_t x, std::size_t y) const
     {
-        if (x < 0 || x >= width || y < 0 || y >= height)
+        if (x >= width || y >= height)
         {
             static const NMColor color = DEFAULT_COLOR;
             return color;
@@ -37,7 +37,7 @@ public:
 
     inline void WritePixel(std::size_t x, std::size_t y, const NMColor& color)
     {
-        if (x < 0 || x >= width || y < 0 || y >= height)
+        if (x >= width || y >= height)
         {
             return;
         }

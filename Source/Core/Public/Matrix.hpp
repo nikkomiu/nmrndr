@@ -90,7 +90,7 @@ public:
 
     inline float Get(std::size_t x, std::size_t y) const
     {
-        if (x < 0 || x >= width || y < 0 || y >= height)
+        if (x >= width || y >= height)
         {
             return std::numeric_limits<float>::quiet_NaN();
         }
@@ -100,7 +100,7 @@ public:
 
     inline void Set(std::size_t x, std::size_t y, float value)
     {
-        if (x >= 0 && x < width && y >= 0 && y < height)
+        if (x < width && y < height)
         {
             data[y * width + x] = value;
         }

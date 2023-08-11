@@ -11,6 +11,14 @@ file(GLOB_RECURSE ALL_SOURCE_FILES
 )
 
 add_custom_target(
+    ClangFormatDryRun
+    COMMAND /usr/bin/clang-format
+    --Werror
+    -n
+    ${ALL_SOURCE_FILES}
+)
+
+add_custom_target(
     ClangFormat
     ALL
     COMMAND /usr/bin/clang-format
@@ -18,3 +26,44 @@ add_custom_target(
     -i
     ${ALL_SOURCE_FILES}
 )
+
+add_custom_target(
+    ClangCheck
+    ALL
+    COMMAND /usr/bin/clang-check
+    -analyze
+    -p .
+    --fixit
+    ${ALL_SOURCE_FILES}
+)
+
+add_custom_target(
+    ClangCheckDryRun
+    COMMAND /usr/bin/clang-check
+    -analyze
+    -p .
+    ${ALL_SOURCE_FILES}
+)
+
+# add_custom_target(
+#     ClangTidyDryRun
+#     COMMAND /usr/bin/clang-tidy
+#     -p .
+#     -checks=*
+#     -header-filter=""
+#     -warnings-as-errors=*
+#     -quiet
+#     ${ALL_SOURCE_FILES}
+# )
+
+# add_custom_target(
+#     ClangTidy
+#     COMMAND /usr/bin/clang-tidy
+#     -p .
+#     -checks=*
+#     -header-filter=""
+#     -warnings-as-errors=*
+#     -quiet
+#     -fix
+#     ${ALL_SOURCE_FILES}
+# )
