@@ -1,21 +1,36 @@
 stages:
+- build-ci-image
 - build
 - test
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
+build ci image:
+  stage: build-ci-image
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"auth\":\"$(printf "%s:%s" ${CI_DEPENDENCY_PROXY_USER} "${CI_DEPENDENCY_PROXY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --cache=true --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/ci-build.Dockerfile --destination $CI_REGISTRY_IMAGE/ci-build:latest
+  rules:
+    - changes:
+      - ci-build.Dockerfile
+      - .gitlab-ci.yml
+  only:
+    - main
+
 build:
   stage: build
-  image: archlinux:latest
+  image: $CI_REGISTRY_IMAGE/ci-build:latest
   before_script:
-  - pacman -Sy --noconfirm base cmake ninja zip unzip curl tar clang glibc git pkg-config cppcheck
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target all
   artifacts:
     paths:
-    - ./Binaries/Release
+    - ./Binaries
     expire_in: 1 day
   cache:
     paths:
@@ -25,9 +40,8 @@ build:
 
 ctest:
   stage: test
-  image: archlinux:latest
+  image: $CI_REGISTRY_IMAGE/ci-build:latest
   before_script:
-  - pacman -Sy --noconfirm base cmake ninja zip unzip curl tar clang glibc git pkg-config cppcheck
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
   script:
   - cd Build/Release
@@ -40,9 +54,8 @@ ctest:
 
 cppcheck:
   stage: test
-  image: archlinux:latest
+  image: $CI_REGISTRY_IMAGE/ci-build:latest
   before_script:
-  - pacman -Sy --noconfirm base cmake ninja zip unzip curl tar clang glibc git pkg-config cppcheck
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target CppCheck
@@ -54,9 +67,8 @@ cppcheck:
 
 clang format:
   stage: test
-  image: archlinux:latest
+  image: $CI_REGISTRY_IMAGE/ci-build:latest
   before_script:
-  - pacman -Sy --noconfirm base cmake ninja zip unzip curl tar clang glibc git pkg-config cppcheck
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target ClangFormatDryRun
@@ -68,9 +80,8 @@ clang format:
 
 clang check:
   stage: test
-  image: archlinux:latest
+  image: $CI_REGISTRY_IMAGE/ci-build:latest
   before_script:
-  - pacman -Sy --noconfirm base cmake ninja zip unzip curl tar clang glibc git pkg-config cppcheck
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
   script:
   - cmake --build ./Build/Release --config Release --target ClangCheckDryRun

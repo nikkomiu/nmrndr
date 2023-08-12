@@ -5,8 +5,8 @@
 #include <limits>
 #include <vector>
 
-#include "NMM/Util.hpp"
 #include "NMM/Tuple.hpp"
+#include "NMM/Util.hpp"
 
 class NMMatrix
 {
