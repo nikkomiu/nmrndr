@@ -184,10 +184,7 @@ public:
         return determinant;
     }
 
-    inline bool IsInvertible()
-    {
-        return !nmmath::FloatEquals(Determinant(), 0.0f);
-    }
+    inline bool IsInvertible() { return !nmmath::FloatEquals(Determinant(), 0.0f); }
 
     NMMatrix Inverse()
     {
@@ -242,10 +239,7 @@ public:
         return NMMatrix(width - 1, height - 1, resultData);
     }
 
-    float Minor(std::size_t row, std::size_t column)
-    {
-        return Submatrix(row, column).Determinant();
-    }
+    float Minor(std::size_t row, std::size_t column) { return Submatrix(row, column).Determinant(); }
 
     float Cofactor(std::size_t row, std::size_t column)
     {
@@ -258,19 +252,12 @@ public:
         return minor;
     }
 
-    static NMMatrix Identity3x3()
-    {
-        return NMMatrix(3, 3, {1.0f, 0.0f, 0.0f,
-                               0.0f, 1.0f, 0.0f,
-                               0.0f, 0.0f, 1.0f});
-    }
+    static NMMatrix Identity3x3() { return NMMatrix(3, 3, {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f}); }
 
     static NMMatrix Identity4x4()
     {
-        return NMMatrix(4, 4, {1.0f, 0.0f, 0.0f, 0.0f,
-                               0.0f, 1.0f, 0.0f, 0.0f,
-                               0.0f, 0.0f, 1.0f, 0.0f,
-                               0.0f, 0.0f, 0.0f, 1.0f});
+        return NMMatrix(
+            4, 4, {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f});
     }
 
 protected:
