@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Point.hpp"
-#include "Vector.hpp"
+#include "NMM/Point.hpp"
+#include "NMM/Vector.hpp"
 #include "World.hpp"
 
 class NMProjectile

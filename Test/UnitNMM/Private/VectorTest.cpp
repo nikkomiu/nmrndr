@@ -2,9 +2,9 @@
 
 #include <cmath>
 
-#include "Point.hpp"
-#include "Tuple.hpp"
-#include "Vector.hpp"
+#include "NMM/Point.hpp"
+#include "NMM/Tuple.hpp"
+#include "NMM/Vector.hpp"
 
 class NMVectorTest : public ::testing::Test
 {

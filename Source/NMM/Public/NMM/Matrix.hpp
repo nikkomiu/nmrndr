@@ -5,7 +5,8 @@
 #include <limits>
 #include <vector>
 
-#include "Math.hpp"
+#include "NMM/Util.hpp"
+#include "NMM/Tuple.hpp"
 
 class NMMatrix
 {
@@ -54,6 +55,46 @@ public:
         }
 
         return true;
+    }
+
+    NMMatrix operator*(const NMMatrix& other) const
+    {
+        if (width != other.height)
+        {
+            return NMMatrix();
+        }
+
+        std::vector<float> resultData(width * other.height);
+
+        // TODO: solve this without cubic complexity
+        for (std::size_t y = 0; y < height; ++y)
+        {
+            for (std::size_t x = 0; x < other.width; ++x)
+            {
+                float sum = 0.0f;
+                for (std::size_t i = 0; i < width; ++i)
+                {
+                    sum += Get(i, y) * other.Get(x, i);
+                }
+                resultData[y * other.width + x] = sum;
+            }
+        }
+
+        return NMMatrix(other.width, height, resultData);
+    }
+
+    NMTuple operator*(const NMTuple& tuple) const
+    {
+        if (width != 4 || height != 4)
+        {
+            return NMTuple();
+        }
+
+        NMMatrix tupleMatrix(1, 4, {tuple.GetX(), tuple.GetY(), tuple.GetZ(), tuple.GetW()});
+
+        auto resultMatrix = *this * tupleMatrix;
+
+        return NMTuple(resultMatrix.Get(0, 0), resultMatrix.Get(0, 1), resultMatrix.Get(0, 2), resultMatrix.Get(0, 3));
     }
 
     friend std::ostream& operator<<(std::ostream& os, const NMMatrix& matrix)

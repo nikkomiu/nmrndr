@@ -5,9 +5,9 @@
 #include <iostream>
 #include <limits>
 
-#include "Math.hpp"
-#include "Point.hpp"
-#include "Vector.hpp"
+#include "NMM/Util.hpp"
+#include "NMM/Point.hpp"
+#include "NMM/Vector.hpp"
 
 class NMTuple
 {

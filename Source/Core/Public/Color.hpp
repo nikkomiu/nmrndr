@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <iostream>
 
-#include "Math.hpp"
+#include "NMM/Util.hpp"
 
 class NMColor
 {

@@ -2,7 +2,8 @@
 
 #include <cmath>
 
-#include "Matrix.hpp"
+#include "NMM/Matrix.hpp"
+#include "NMM/Tuple.hpp"
 
 class NMMatrixTest : public ::testing::Test
 {
@@ -137,6 +138,73 @@ TEST_F(NMMatrixTest, OperatorEquality_NotEqual)
 
     // Then
     ASSERT_FALSE(matrix1 == matrix2);
+}
+
+TEST_F(NMMatrixTest, OperatorMultiply_Matrix)
+{
+    // Given
+    NMMatrix matrix1({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {5.0f, 6.0f, 7.0f, 8.0f},
+        {9.0f, 8.0f, 7.0f, 6.0f},
+        {5.0f, 4.0f, 3.0f, 2.0f},
+    });
+
+    NMMatrix matrix2({
+        {-2.0f, 1.0f, 2.0f, 3.0f},
+        {3.0f, 2.0f, 1.0f, -1.0f},
+        {4.0f, 3.0f, 6.0f, 5.0f},
+        {1.0f, 2.0f, 7.0f, 8.0f},
+    });
+
+    // When
+    NMMatrix result = matrix1 * matrix2;
+
+    // Then
+    ASSERT_EQ(result.GetWidth(), 4);
+    ASSERT_EQ(result.GetHeight(), 4);
+
+    ASSERT_EQ(result.Get(0, 0), 20.0f);
+    ASSERT_EQ(result.Get(1, 0), 22.0f);
+    ASSERT_EQ(result.Get(2, 0), 50.0f);
+    ASSERT_EQ(result.Get(3, 0), 48.0f);
+
+    ASSERT_EQ(result.Get(0, 1), 44.0f);
+    ASSERT_EQ(result.Get(1, 1), 54.0f);
+    ASSERT_EQ(result.Get(2, 1), 114.0f);
+    ASSERT_EQ(result.Get(3, 1), 108.0f);
+
+    ASSERT_EQ(result.Get(0, 2), 40.0f);
+    ASSERT_EQ(result.Get(1, 2), 58.0f);
+    ASSERT_EQ(result.Get(2, 2), 110.0f);
+    ASSERT_EQ(result.Get(3, 2), 102.0f);
+
+    ASSERT_EQ(result.Get(0, 3), 16.0f);
+    ASSERT_EQ(result.Get(1, 3), 26.0f);
+    ASSERT_EQ(result.Get(2, 3), 46.0f);
+    ASSERT_EQ(result.Get(3, 3), 42.0f);
+}
+
+TEST_F(NMMatrixTest, OperatorMultiply_Tuple)
+{
+    // Given
+    NMMatrix matrix({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {2.0f, 4.0f, 4.0f, 2.0f},
+        {8.0f, 6.0f, 4.0f, 1.0f},
+        {0.0f, 0.0f, 0.0f, 1.0f},
+    });
+
+    NMTuple tuple(1.0f, 2.0f, 3.0f, 1.0f);
+
+    // When
+    NMTuple result = matrix * tuple;
+
+    // Then
+    ASSERT_EQ(result.GetX(), 18.0f);
+    ASSERT_EQ(result.GetY(), 24.0f);
+    ASSERT_EQ(result.GetZ(), 33.0f);
+    ASSERT_EQ(result.GetW(), 1.0f);
 }
 
 TEST_F(NMMatrixTest, StreamInsertionOperator)

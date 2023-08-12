@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vector.hpp"
+#include "NMM/Vector.hpp"
 
 class NMEnvironment
 {

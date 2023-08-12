@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Tuple.hpp"
+#include "NMM/Tuple.hpp"
 
 class NMTupleTest : public ::testing::Test
 {

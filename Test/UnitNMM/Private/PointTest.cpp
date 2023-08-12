@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "Point.hpp"
-#include "Tuple.hpp"
+#include "NMM/Point.hpp"
+#include "NMM/Tuple.hpp"
 
 class NMPointTest : public ::testing::Test
 {

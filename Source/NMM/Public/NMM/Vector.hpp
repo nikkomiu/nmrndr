@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <ostream>
 
-#include "Math.hpp"
+#include "NMM/Util.hpp"
 
 class NMPoint;
 class NMTuple;

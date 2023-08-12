@@ -24,6 +24,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include(CTest)
 include(GenerateExportHeader)
 include(GoogleTest)
+include(Tools/cmake/Builder.cmake)
 include(Tools/cmake/ClangFormat.cmake)
 include(Tools/cmake/CppCheck.cmake)
 include(Tools/cmake/Git.cmake)
@@ -36,9 +37,10 @@ find_package(GTest CONFIG REQUIRED)
 # ###################################################################### #
 # Load Projects                                                          #
 # ###################################################################### #
+add_subdirectory(Source/NMM)
 add_subdirectory(Source/Core)
 add_subdirectory(Source/App)
 
 if(BUILD_TESTING)
-    add_subdirectory(Tests)
+    add_subdirectory(Test)
 endif()

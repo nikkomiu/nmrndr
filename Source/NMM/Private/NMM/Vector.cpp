@@ -1,7 +1,7 @@
-#include "Vector.hpp"
+#include "NMM/Vector.hpp"
 
-#include "Point.hpp"
-#include "Tuple.hpp"
+#include "NMM/Point.hpp"
+#include "NMM/Tuple.hpp"
 
 NMPoint NMVector::operator+(const NMPoint &point) const
 {
