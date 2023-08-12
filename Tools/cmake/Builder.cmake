@@ -110,4 +110,14 @@ function(nm_test)
     gtest_discover_tests(${PKG_NAME}
         TEST_PREFIX "${ARG_PKG_TYPE}/${ARG_PKG_NAME}/"
     )
+
+    add_custom_target(${PKG_NAME}Coverage
+        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${PKG_NAME} --gtest_output=xml:${CMAKE_CURRENT_BINARY_DIR}/default.xml
+    )
+
+    add_custom_command(
+        TARGET ${PKG_NAME}Coverage
+        COMMAND llvm-profdata merge -o ${CMAKE_CURRENT_BINARY_DIR}/${PKG_NAME}.profdata ${CMAKE_CURRENT_BINARY_DIR}/default.profraw
+        COMMAND llvm-cov show -format html -o ${CMAKE_CURRENT_BINARY_DIR}/coverage ${CMAKE_CURRENT_BINARY_DIR}/${PKG_NAME} -instr-profile=${CMAKE_CURRENT_BINARY_DIR}/${PKG_NAME}.profdata
+    )
 endfunction()

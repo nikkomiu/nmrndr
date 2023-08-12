@@ -1,19 +1,31 @@
-CTest:
+Test Unit NMCore:
   stage: test
   image: $CI_REGISTRY_IMAGE/ci-build:latest
   before_script:
   - cmake --preset Test
   script:
   - cmake --build --preset Test
-  - ctest --preset Test --output-junit ./ctest_junit.xml
-  # Coverage
-  - llvm-profdata merge -o ./Build/UnitCore.profdata ./Build/Test/UnitCore/default.profraw
-  - llvm-profdata merge -o ./Build/UnitNMM.profdata ./Build/Test/UnitNMM/default.profraw
-  # HTML reports
-  - llvm-cov show -format=html -instr-profile=./Build/UnitCore.profdata -output-dir=./Build/coverage ./Build/Test/UnitCore/TestUnitNMCore
-  - mv ./Build/coverage/index.html ./Build/coverage/index_core.html
-  - llvm-cov show -format=html -instr-profile=./Build/UnitNMM.profdata -output-dir=./Build/coverage ./Build/Test/UnitNMM/TestUnitNMMath
-  - mv ./Build/coverage/index.html ./Build/coverage/index_nmm.html
+  - cmake --build --preset Test --target TestUnitNMCoreCoverage
+  artifacts:
+    when: always
+    paths:
+    - ./Build/coverage
+    reports:
+      junit: ./Build/ctest_junit.xml
+  cache:
+    paths:
+    - ./Build/
+    - ./Tools/vcpkg/packages
+    policy: pull
+
+Test Unit NMM:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/ci-build:latest
+  before_script:
+  - cmake --preset Test
+  script:
+  - cmake --build --preset Test
+  - cmake --build --preset Test --target TestUnitNMCoreCoverage
   artifacts:
     when: always
     paths:
