@@ -6,8 +6,14 @@ CTest:
   script:
   - cmake --build --preset Test
   - ctest --preset Test --output-junit ./ctest_junit.xml
-  - llvm-profdata merge -o ./Build/coverage.profdata ./Build/Test/**/default.profraw
-  - llvm-cov show -format=html -instr-profile=./Build/coverage.profdata -output-dir=./Build/coverage ./Build/Test/**/TestUnit{NMMath,NMCore}
+  # Coverage
+  - llvm-profdata merge -o ./Build/UnitCore.profdata ./Build/Test/UnitCore/default.profraw
+  - llvm-profdata merge -o ./Build/UnitNMM.profdata ./Build/Test/UnitNMM/default.profraw
+  # HTML reports
+  - llvm-cov show -format=html -instr-profile=./Build/UnitCore.profdata -output-dir=./Build/coverage ./Build/Test/UnitCore/TestUnitNMCore
+  - mv ./Build/coverage/index.html ./Build/coverage/index_core.html
+  - llvm-cov show -format=html -instr-profile=./Build/UnitNMM.profdata -output-dir=./Build/coverage ./Build/Test/UnitNMM/TestUnitNMMath
+  - mv ./Build/coverage/index.html ./Build/coverage/index_nmm.html
   artifacts:
     when: always
     paths:
