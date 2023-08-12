@@ -147,6 +147,37 @@ public:
         }
     }
 
+    void Transpose()
+    {
+        if (width != height)
+        {
+            return;
+        }
+
+        for (std::size_t y = 0; y < height; ++y)
+        {
+            for (std::size_t x = y + 1; x < width; ++x)
+            {
+                std::swap(data[y * width + x], data[x * width + y]);
+            }
+        }
+    }
+
+    static NMMatrix Identity3x3()
+    {
+        return NMMatrix(3, 3, {1.0f, 0.0f, 0.0f,
+                               0.0f, 1.0f, 0.0f,
+                               0.0f, 0.0f, 1.0f});
+    }
+
+    static NMMatrix Identity4x4()
+    {
+        return NMMatrix(4, 4, {1.0f, 0.0f, 0.0f, 0.0f,
+                               0.0f, 1.0f, 0.0f, 0.0f,
+                               0.0f, 0.0f, 1.0f, 0.0f,
+                               0.0f, 0.0f, 0.0f, 1.0f});
+    }
+
 protected:
 
     std::size_t width;

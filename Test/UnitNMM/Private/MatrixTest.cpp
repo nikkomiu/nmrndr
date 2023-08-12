@@ -368,3 +368,84 @@ TEST_F(NMMatrixTest, Set_NegativeIndex)
     ASSERT_EQ(matrix.Get(0, 2), 0.0f);
     ASSERT_EQ(matrix.Get(1, 2), 0.0f);
 }
+
+TEST_F(NMMatrixTest, Transpose)
+{
+    //Given
+    NMMatrix matrix = NMMatrix(4, 4, {
+        0.0f, 9.0f, 3.0f, 0.0f,
+        9.0f, 8.0f, 0.0f, 8.0f,
+        1.0f, 8.0f, 5.0f, 3.0f,
+        0.0f, 0.0f, 5.0f, 8.0f,
+    });
+
+    NMMatrix expectedMatrix = NMMatrix(4, 4, {
+        0.0f, 9.0f, 1.0f, 0.0f,
+        9.0f, 8.0f, 8.0f, 0.0f,
+        3.0f, 0.0f, 5.0f, 5.0f,
+        0.0f, 8.0f, 3.0f, 8.0f,
+    });
+
+    // When
+    matrix.Transpose();
+
+    // Then
+    ASSERT_EQ(matrix.GetWidth(), 4);
+    ASSERT_EQ(matrix.GetHeight(), 4);
+
+    ASSERT_EQ(matrix, expectedMatrix);
+}
+
+TEST_F(NMMatrixTest, TransposeIdentity)
+{
+    // Given
+    NMMatrix matrix = NMMatrix::Identity4x4();
+
+    // When
+    matrix.Transpose();
+
+    // Then
+    ASSERT_EQ(matrix.GetWidth(), 4);
+    ASSERT_EQ(matrix.GetHeight(), 4);
+
+    ASSERT_EQ(matrix, NMMatrix::Identity4x4());
+}
+
+TEST_F(NMMatrixTest, Identity3x3)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(3, 3, {
+        0.0f, 1.0f, 2.0f,
+        1.0f, 2.0f, 4.0f,
+        2.0f, 4.0f, 8.0f,
+    });
+
+    // When
+    NMMatrix result = matrix * NMMatrix::Identity3x3();
+
+    // Then
+    ASSERT_EQ(result.GetWidth(), 3);
+    ASSERT_EQ(result.GetHeight(), 3);
+
+    ASSERT_EQ(result, matrix);
+}
+
+TEST_F(NMMatrixTest, Identity4x4)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(4, 4, {
+        0.0f, 1.0f, 2.0f, 4.0f,
+        1.0f, 2.0f, 4.0f, 8.0f,
+        2.0f, 4.0f, 8.0f, 16.0f,
+        4.0f, 8.0f, 16.0f, 32.0f,
+    });
+
+    // When
+    NMMatrix result = matrix * NMMatrix::Identity4x4();
+
+    // Then
+    ASSERT_EQ(result.GetWidth(), 4);
+    ASSERT_EQ(result.GetHeight(), 4);
+
+    ASSERT_EQ(result, matrix);
+}
