@@ -6,8 +6,12 @@ CTest:
   script:
   - cmake --build --preset Test
   - ctest --preset Test --output-junit ./ctest_junit.xml
+  - llvm-profdata merge -o ./Build/coverage.profdata ./Build/Test/**/default.profraw
+  - llvm-cov show -format=html -instr-profile=./Build/coverage.profdata -output-dir=./Build/coverage ./Build/Test/**/TestUnit{NMMath,NMCore}
   artifacts:
     when: always
+    paths:
+    - ./Build/coverage
     reports:
       junit: ./TestResults/ctest_junit.xml
   cache:
