@@ -50,7 +50,6 @@ public:
         {
             if (!nmmath::FloatEquals(data[i], other.data[i]))
             {
-                std::cout << std::setprecision(9) << "data[" << i << "] " << data[i] << " != " << other.data[i] << " -- " << nmmath::epsilon << std::endl;
                 return false;
             }
         }
