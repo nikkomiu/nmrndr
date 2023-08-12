@@ -528,25 +528,12 @@ TEST_F(NMMatrixTest, Inverse)
     ASSERT_EQ(inverse.GetWidth(), 4);
     ASSERT_EQ(inverse.GetHeight(), 4);
 
-    ASSERT_FLOAT_EQ(inverse.Get(0, 0), 0.218045115f);
-    ASSERT_FLOAT_EQ(inverse.Get(1, 0), 0.451127819f);
-    ASSERT_FLOAT_EQ(inverse.Get(2, 0), 0.240601504f);
-    ASSERT_FLOAT_EQ(inverse.Get(3, 0), -0.045112781f);
-
-    ASSERT_FLOAT_EQ(inverse.Get(0, 1), -0.808270676f);
-    ASSERT_FLOAT_EQ(inverse.Get(1, 1), -1.456766917f);
-    ASSERT_FLOAT_EQ(inverse.Get(2, 1), -0.443609023f);
-    ASSERT_FLOAT_EQ(inverse.Get(3, 1), 0.520676692f);
-
-    ASSERT_FLOAT_EQ(inverse.Get(0, 2), -0.078947368f);
-    ASSERT_FLOAT_EQ(inverse.Get(1, 2), -0.223684211f);
-    ASSERT_FLOAT_EQ(inverse.Get(2, 2), -0.052631579f);
-    ASSERT_FLOAT_EQ(inverse.Get(3, 2), 0.197368421f);
-
-    ASSERT_FLOAT_EQ(inverse.Get(0, 3), -0.522556390f);
-    ASSERT_FLOAT_EQ(inverse.Get(1, 3), -0.813909774f);
-    ASSERT_FLOAT_EQ(inverse.Get(2, 3), -0.300751865f);
-    ASSERT_FLOAT_EQ(inverse.Get(3, 3), 0.306390977f);
+    ASSERT_EQ(inverse, NMMatrix(4, 4, {
+        0.218045115f, 0.451127819f, 0.240601504f, -0.045112781f,
+        -0.808270676f, -1.456766917f, -0.443609023f, 0.520676692f,
+        -0.078947368f, -0.223684211f, -0.052631579f, 0.197368421f,
+        -0.522556390f, -0.813909774f, -0.300751865f, 0.306390977f,
+    }));
 
     ASSERT_FLOAT_EQ(matrix.Determinant(), 532.0f);
     ASSERT_FLOAT_EQ(matrix.Cofactor(2, 3), -160.0f);
@@ -572,25 +559,12 @@ TEST_F(NMMatrixTest, Inverse_B)
     ASSERT_EQ(inverse.GetWidth(), 4);
     ASSERT_EQ(inverse.GetHeight(), 4);
 
-    ASSERT_FLOAT_EQ(inverse.Get(0, 0), -0.153846153f);
-    ASSERT_FLOAT_EQ(inverse.Get(1, 0), -0.153846153f);
-    ASSERT_FLOAT_EQ(inverse.Get(2, 0), -0.282051282f);
-    ASSERT_FLOAT_EQ(inverse.Get(3, 0), -0.538461538f);
-
-    ASSERT_FLOAT_EQ(inverse.Get(0, 1), -0.076923077f);
-    ASSERT_FLOAT_EQ(inverse.Get(1, 1), 0.123076923f);
-    ASSERT_FLOAT_EQ(inverse.Get(2, 1), 0.025641026f);
-    ASSERT_FLOAT_EQ(inverse.Get(3, 1), 0.030769231f);
-
-    ASSERT_FLOAT_EQ(inverse.Get(0, 2), 0.358974359f);
-    ASSERT_FLOAT_EQ(inverse.Get(1, 2), 0.358974359f);
-    ASSERT_FLOAT_EQ(inverse.Get(2, 2), 0.435897436f);
-    ASSERT_FLOAT_EQ(inverse.Get(3, 2), 0.923076923f);
-
-    ASSERT_FLOAT_EQ(inverse.Get(0, 3), -0.692307692f);
-    ASSERT_FLOAT_EQ(inverse.Get(1, 3), -0.692307692f);
-    ASSERT_FLOAT_EQ(inverse.Get(2, 3), -0.769230769f);
-    ASSERT_FLOAT_EQ(inverse.Get(3, 3), -1.923076923f);
+    ASSERT_EQ(inverse, NMMatrix(4, 4, {
+        -0.153846153f, -0.153846153f, -0.282051282f, -0.538461538f,
+        -0.076923077f, 0.123076923f, 0.025641026f, 0.030769231f,
+        0.358974359f, 0.358974359f, 0.435897436f, 0.923076923f,
+        -0.692307692f, -0.692307692f, -0.769230769f, -1.923076923f,
+    }));
 }
 
 TEST_F(NMMatrixTest, Inverse_C)
@@ -610,25 +584,12 @@ TEST_F(NMMatrixTest, Inverse_C)
     ASSERT_EQ(inverse.GetWidth(), 4);
     ASSERT_EQ(inverse.GetHeight(), 4);
 
-    ASSERT_FLOAT_EQ(inverse.Get(0, 0), -0.040740741f);
-    ASSERT_FLOAT_EQ(inverse.Get(1, 0), -0.077777778f);
-    ASSERT_FLOAT_EQ(inverse.Get(2, 0), 0.144444444f);
-    ASSERT_FLOAT_EQ(inverse.Get(3, 0), -0.222222222f);
-
-    ASSERT_FLOAT_EQ(inverse.Get(0, 1), -0.077777778f);
-    ASSERT_FLOAT_EQ(inverse.Get(1, 1), 0.033333333f);
-    ASSERT_FLOAT_EQ(inverse.Get(2, 1), 0.366666667f);
-    ASSERT_FLOAT_EQ(inverse.Get(3, 1), -0.333333333f);
-
-    ASSERT_FLOAT_EQ(inverse.Get(0, 2), -0.029012346f);
-    ASSERT_FLOAT_EQ(inverse.Get(1, 2), -0.146296296f);
-    ASSERT_FLOAT_EQ(inverse.Get(2, 2), -0.109259259f);
-    ASSERT_FLOAT_EQ(inverse.Get(3, 2), 0.129629630f);
-
-    ASSERT_FLOAT_EQ(inverse.Get(0, 3), 0.177777778f);
-    ASSERT_FLOAT_EQ(inverse.Get(1, 3), 0.066666667f);
-    ASSERT_FLOAT_EQ(inverse.Get(2, 3), -0.266666667f);
-    ASSERT_FLOAT_EQ(inverse.Get(3, 3), 0.333333333f);
+    ASSERT_EQ(inverse, NMMatrix(4, 4, {
+        -0.040740741f, -0.077777778f, 0.144444444f, -0.222222222f,
+        -0.077777778f, 0.033333333f, 0.366666667f, -0.333333333f,
+        -0.029012346f, -0.146296296f, -0.109259259f, 0.129629630f,
+        0.177777778f, 0.066666667f, -0.266666667f, 0.333333333f,
+    }));
 }
 
 TEST_F(NMMatrixTest, Inverse_Multiply)
