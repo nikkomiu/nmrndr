@@ -10,4 +10,4 @@ ci build:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
         - ci-build.Dockerfile
-       - .gitlab/ci/ci-image-build.yml
+        - .gitlab/ci/ci-image-build.yml
