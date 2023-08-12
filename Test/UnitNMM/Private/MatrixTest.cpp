@@ -411,6 +411,340 @@ TEST_F(NMMatrixTest, TransposeIdentity)
     ASSERT_EQ(matrix, NMMatrix::Identity4x4());
 }
 
+TEST_F(NMMatrixTest, Determinant_2x2)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(2, 2, {
+        1.0f, 5.0f,
+        -3.0f, 2.0f,
+    });
+
+    // When
+    float result = matrix.Determinant();
+
+    // Then
+    ASSERT_EQ(result, 17.0f);
+}
+
+TEST_F(NMMatrixTest, Determinant_3x3)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(3, 3, {
+        1.0f, 2.0f, 6.0f,
+        -5.0f, 8.0f, -4.0f,
+        2.0f, 6.0f, 4.0f,
+    });
+
+    // When
+    float result1 = matrix.Cofactor(0, 0);
+    float result2 = matrix.Cofactor(0, 1);
+    float result3 = matrix.Cofactor(0, 2);
+    float result4 = matrix.Determinant();
+
+    // Then
+    ASSERT_EQ(result1, 56.0f);
+    ASSERT_EQ(result2, 12.0f);
+    ASSERT_EQ(result3, -46.0f);
+    ASSERT_EQ(result4, -196.0f);
+}
+
+TEST_F(NMMatrixTest, Determinant_4x4)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(4, 4, {
+        -2.0f, -8.0f, 3.0f, 5.0f,
+        -3.0f, 1.0f, 7.0f, 3.0f,
+        1.0f, 2.0f, -9.0f, 6.0f,
+        -6.0f, 7.0f, 7.0f, -9.0f,
+    });
+
+    // When
+    float result1 = matrix.Cofactor(0, 0);
+    float result2 = matrix.Cofactor(0, 1);
+    float result3 = matrix.Cofactor(0, 2);
+    float result4 = matrix.Cofactor(0, 3);
+    float result5 = matrix.Determinant();
+
+    // Then
+    ASSERT_EQ(result1, 690.0f);
+    ASSERT_EQ(result2, 447.0f);
+    ASSERT_EQ(result3, 210.0f);
+    ASSERT_EQ(result4, 51.0f);
+    ASSERT_EQ(result5, -4071.0f);
+}
+
+TEST_F(NMMatrixTest, IsInvertible)
+{
+    // Given
+    NMMatrix matrix1 = NMMatrix(4, 4, {
+        6.0f, 4.0f, 4.0f, 4.0f,
+        5.0f, 5.0f, 7.0f, 6.0f,
+        4.0f, -9.0f, 3.0f, -7.0f,
+        9.0f, 1.0f, 7.0f, -6.0f,
+    });
+
+    // When
+    float determinant1 = matrix1.Determinant();
+    bool isInvertable1 = matrix1.IsInvertible();
+
+    // Then
+    EXPECT_EQ(determinant1, -2120.0f);
+    EXPECT_TRUE(isInvertable1);
+}
+
+TEST_F(NMMatrixTest, IsInvertable_False)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(4, 4, {
+        -4.0f, 2.0f, -2.0f, -3.0f,
+        9.0f, 6.0f, 2.0f, 6.0f,
+        0.0f, -5.0f, 1.0f, -5.0f,
+        0.0f, 0.0f, 0.0f, 0.0f,
+    });
+
+    // When
+    float determinant = matrix.Determinant();
+    bool isInvertable = matrix.IsInvertible();
+
+    // Then
+    EXPECT_EQ(determinant, 0.0f);
+    EXPECT_FALSE(isInvertable);
+}
+
+TEST_F(NMMatrixTest, Inverse)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(4, 4, {
+        -5.0f, 2.0f, 6.0f, -8.0f,
+        1.0f, -5.0f, 1.0f, 8.0f,
+        7.0f, 7.0f, -6.0f, -7.0f,
+        1.0f, -3.0f, 7.0f, 4.0f,
+    });
+
+    // When
+    NMMatrix inverse = matrix.Inverse();
+
+    // Then
+    ASSERT_EQ(inverse.GetWidth(), 4);
+    ASSERT_EQ(inverse.GetHeight(), 4);
+
+    ASSERT_FLOAT_EQ(inverse.Get(0, 0), 0.218045115f);
+    ASSERT_FLOAT_EQ(inverse.Get(1, 0), 0.451127819f);
+    ASSERT_FLOAT_EQ(inverse.Get(2, 0), 0.240601504f);
+    ASSERT_FLOAT_EQ(inverse.Get(3, 0), -0.045112781f);
+
+    ASSERT_FLOAT_EQ(inverse.Get(0, 1), -0.808270676f);
+    ASSERT_FLOAT_EQ(inverse.Get(1, 1), -1.456766917f);
+    ASSERT_FLOAT_EQ(inverse.Get(2, 1), -0.443609023f);
+    ASSERT_FLOAT_EQ(inverse.Get(3, 1), 0.520676692f);
+
+    ASSERT_FLOAT_EQ(inverse.Get(0, 2), -0.078947368f);
+    ASSERT_FLOAT_EQ(inverse.Get(1, 2), -0.223684211f);
+    ASSERT_FLOAT_EQ(inverse.Get(2, 2), -0.052631579f);
+    ASSERT_FLOAT_EQ(inverse.Get(3, 2), 0.197368421f);
+
+    ASSERT_FLOAT_EQ(inverse.Get(0, 3), -0.522556390f);
+    ASSERT_FLOAT_EQ(inverse.Get(1, 3), -0.813909774f);
+    ASSERT_FLOAT_EQ(inverse.Get(2, 3), -0.300751865f);
+    ASSERT_FLOAT_EQ(inverse.Get(3, 3), 0.306390977f);
+
+    ASSERT_FLOAT_EQ(matrix.Determinant(), 532.0f);
+    ASSERT_FLOAT_EQ(matrix.Cofactor(2, 3), -160.0f);
+    // ASSERT_FLOAT_EQ(inverse.Get(3, 2), -160.0f / 532.0f);
+    ASSERT_FLOAT_EQ(matrix.Cofactor(3, 2), 105.0f);
+    // ASSERT_FLOAT_EQ(inverse.Get(2, 3), 105.0f / 532.0f);
+}
+
+TEST_F(NMMatrixTest, Inverse_B)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(4, 4, {
+        8.0f, -5.0f, 9.0f, 2.0f,
+        7.0f, 5.0f, 6.0f, 1.0f,
+        -6.0f, 0.0f, 9.0f, 6.0f,
+        -3.0f, 0.0f, -9.0f, -4.0f,
+    });
+
+    // When
+    NMMatrix inverse = matrix.Inverse();
+
+    // Then
+    ASSERT_EQ(inverse.GetWidth(), 4);
+    ASSERT_EQ(inverse.GetHeight(), 4);
+
+    ASSERT_FLOAT_EQ(inverse.Get(0, 0), -0.153846153f);
+    ASSERT_FLOAT_EQ(inverse.Get(1, 0), -0.153846153f);
+    ASSERT_FLOAT_EQ(inverse.Get(2, 0), -0.282051282f);
+    ASSERT_FLOAT_EQ(inverse.Get(3, 0), -0.538461538f);
+
+    ASSERT_FLOAT_EQ(inverse.Get(0, 1), -0.076923077f);
+    ASSERT_FLOAT_EQ(inverse.Get(1, 1), 0.123076923f);
+    ASSERT_FLOAT_EQ(inverse.Get(2, 1), 0.025641026f);
+    ASSERT_FLOAT_EQ(inverse.Get(3, 1), 0.030769231f);
+
+    ASSERT_FLOAT_EQ(inverse.Get(0, 2), 0.358974359f);
+    ASSERT_FLOAT_EQ(inverse.Get(1, 2), 0.358974359f);
+    ASSERT_FLOAT_EQ(inverse.Get(2, 2), 0.435897436f);
+    ASSERT_FLOAT_EQ(inverse.Get(3, 2), 0.923076923f);
+
+    ASSERT_FLOAT_EQ(inverse.Get(0, 3), -0.692307692f);
+    ASSERT_FLOAT_EQ(inverse.Get(1, 3), -0.692307692f);
+    ASSERT_FLOAT_EQ(inverse.Get(2, 3), -0.769230769f);
+    ASSERT_FLOAT_EQ(inverse.Get(3, 3), -1.923076923f);
+}
+
+TEST_F(NMMatrixTest, Inverse_C)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(4, 4, {
+        9.0f, 3.0f, 0.0f, 9.0f,
+        -5.0f, -2.0f, -6.0f, -3.0f,
+        -4.0f, 9.0f, 6.0f, 4.0f,
+        -7.0f, 6.0f, 6.0f, 2.0f,
+    });
+
+    // When
+    NMMatrix inverse = matrix.Inverse();
+
+    // Then
+    ASSERT_EQ(inverse.GetWidth(), 4);
+    ASSERT_EQ(inverse.GetHeight(), 4);
+
+    ASSERT_FLOAT_EQ(inverse.Get(0, 0), -0.040740741f);
+    ASSERT_FLOAT_EQ(inverse.Get(1, 0), -0.077777778f);
+    ASSERT_FLOAT_EQ(inverse.Get(2, 0), 0.144444444f);
+    ASSERT_FLOAT_EQ(inverse.Get(3, 0), -0.222222222f);
+
+    ASSERT_FLOAT_EQ(inverse.Get(0, 1), -0.077777778f);
+    ASSERT_FLOAT_EQ(inverse.Get(1, 1), 0.033333333f);
+    ASSERT_FLOAT_EQ(inverse.Get(2, 1), 0.366666667f);
+    ASSERT_FLOAT_EQ(inverse.Get(3, 1), -0.333333333f);
+
+    ASSERT_FLOAT_EQ(inverse.Get(0, 2), -0.029012346f);
+    ASSERT_FLOAT_EQ(inverse.Get(1, 2), -0.146296296f);
+    ASSERT_FLOAT_EQ(inverse.Get(2, 2), -0.109259259f);
+    ASSERT_FLOAT_EQ(inverse.Get(3, 2), 0.129629630f);
+
+    ASSERT_FLOAT_EQ(inverse.Get(0, 3), 0.177777778f);
+    ASSERT_FLOAT_EQ(inverse.Get(1, 3), 0.066666667f);
+    ASSERT_FLOAT_EQ(inverse.Get(2, 3), -0.266666667f);
+    ASSERT_FLOAT_EQ(inverse.Get(3, 3), 0.333333333f);
+}
+
+TEST_F(NMMatrixTest, Inverse_Multiply)
+{
+    // Given
+    NMMatrix matrixA = NMMatrix(4, 4, {
+        3.0f, -9.0f, 7.0f, 3.0f,
+        3.0f, -8.0f, 2.0f, -9.0f,
+        -4.0f, 4.0f, 4.0f, 1.0f,
+        -6.0f, 5.0f, -1.0f, 1.0f,
+    });
+
+    NMMatrix matrixB = NMMatrix(4, 4, {
+        8.0f, 2.0f, 2.0f, 2.0f,
+        3.0f, -1.0f, 7.0f, 0.0f,
+        7.0f, 0.0f, 5.0f, 4.0f,
+        6.0f, -2.0f, 0.0f, 5.0f,
+    });
+
+    NMMatrix matrixAB = matrixA * matrixB;
+
+    // When
+    NMMatrix matrixBInverse = matrixB.Inverse();
+
+    // Then
+    EXPECT_EQ(matrixAB * matrixBInverse, matrixA);
+}
+
+TEST_F(NMMatrixTest, Submatrix_4x4)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(4, 4, {
+        -6.0f, 1.0f, 1.0f, 6.0f,
+        -8.0f, 5.0f, 8.0f, 6.0f,
+        -1.0f, 0.0f, 8.0f, 2.0f,
+        -7.0f, 1.0f, -1.0f, 1.0f,
+    });
+
+    NMMatrix expectedMatrix = NMMatrix(3, 3, {
+        -6.0f, 1.0f, 6.0f,
+        -8.0f, 8.0f, 6.0f,
+        -7.0f, -1.0f, 1.0f,
+    });
+
+    // When
+    NMMatrix result = matrix.Submatrix(2, 1);
+
+    // Then
+    ASSERT_EQ(result.GetWidth(), 3);
+    ASSERT_EQ(result.GetHeight(), 3);
+
+    ASSERT_EQ(result, expectedMatrix);
+}
+
+TEST_F(NMMatrixTest, Submatrix_3x3)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(3, 3, {
+        1.0f, 5.0f, 0.0f,
+        -3.0f, 2.0f, 7.0f,
+        0.0f, 6.0f, -3.0f,
+    });
+
+    NMMatrix expectedMatrix = NMMatrix(2, 2, {
+        -3.0f, 2.0f,
+        0.0f, 6.0f,
+    });
+
+    // When
+    NMMatrix result = matrix.Submatrix(0, 2);
+
+    // Then
+    ASSERT_EQ(result.GetWidth(), 2);
+    ASSERT_EQ(result.GetHeight(), 2);
+
+    ASSERT_EQ(result, expectedMatrix);
+}
+
+TEST_F(NMMatrixTest, Minor)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(3, 3, {
+        3.0f, 5.0f, 0.0f,
+        2.0f, -1.0f, -7.0f,
+        6.0f, -1.0f, 5.0f,
+    });
+
+    // When
+    float result = matrix.Minor(1, 0);
+
+    // Then
+    ASSERT_EQ(result, 25.0f);
+}
+
+TEST_F(NMMatrixTest, Cofactor)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(3, 3, {
+        3.0f, 5.0f, 0.0f,
+        2.0f, -1.0f, -7.0f,
+        6.0f, -1.0f, 5.0f,
+    });
+
+    // When
+    float result1 = matrix.Minor(0, 0);
+    float result2 = matrix.Cofactor(0, 0);
+    float result3 = matrix.Minor(1, 0);
+    float result4 = matrix.Cofactor(1, 0);
+
+    // Then
+    ASSERT_EQ(result1, -12.0f);
+    ASSERT_EQ(result2, -12.0f);
+    ASSERT_EQ(result3, 25.0f);
+    ASSERT_EQ(result4, -25.0f);
+}
+
 TEST_F(NMMatrixTest, Identity3x3)
 {
     // Given

@@ -50,6 +50,7 @@ public:
         {
             if (!nmmath::FloatEquals(data[i], other.data[i]))
             {
+                std::cout << std::setprecision(9) << "data[" << i << "] " << data[i] << " != " << other.data[i] << " -- " << nmmath::epsilon << std::endl;
                 return false;
             }
         }
@@ -161,6 +162,101 @@ public:
                 std::swap(data[y * width + x], data[x * width + y]);
             }
         }
+    }
+
+    float Determinant()
+    {
+        if (width != height)
+        {
+            return std::numeric_limits<float>::quiet_NaN();
+        }
+
+        if (width == 2)
+        {
+            return data[0] * data[3] - data[1] * data[2];
+        }
+
+        float determinant = 0.0f;
+        for (std::size_t x = 0; x < width; ++x)
+        {
+            determinant += data[x] * Cofactor(0, x);
+        }
+
+        return determinant;
+    }
+
+    inline bool IsInvertible()
+    {
+        return !nmmath::FloatEquals(Determinant(), 0.0f);
+    }
+
+    NMMatrix Inverse()
+    {
+        if (!IsInvertible())
+        {
+            return NMMatrix();
+        }
+
+        std::vector<float> resultData(width * height);
+
+        auto determinant = Determinant();
+        for (std::size_t y = 0; y < height; ++y)
+        {
+            for (std::size_t x = 0; x < width; ++x)
+            {
+                auto cofactor = Cofactor(y, x);
+                resultData[x * width + y] = cofactor / determinant;
+            }
+        }
+
+        return NMMatrix(width, height, resultData);
+    }
+
+    NMMatrix Submatrix(std::size_t row, std::size_t column)
+    {
+        if (width != height)
+        {
+            return NMMatrix();
+        }
+
+        std::size_t idx = 0;
+        std::vector<float> resultData((width - 1) * (height - 1));
+        for (std::size_t y = 0; y < height; ++y)
+        {
+            if (y == row)
+            {
+                continue;
+            }
+
+            for (std::size_t x = 0; x < width; ++x)
+            {
+                if (x == column)
+                {
+                    continue;
+                }
+
+                resultData[idx] = data[y * width + x];
+                idx++;
+            }
+        }
+
+        return NMMatrix(width - 1, height - 1, resultData);
+    }
+
+    float Minor(std::size_t row, std::size_t column)
+    {
+        return Submatrix(row, column).Determinant();
+    }
+
+    float Cofactor(std::size_t row, std::size_t column)
+    {
+        auto minor = Minor(row, column);
+        if ((row + column) % 2 == 1)
+        {
+            minor *= -1.0f;
+        }
+
+        return minor;
     }
 
     static NMMatrix Identity3x3()

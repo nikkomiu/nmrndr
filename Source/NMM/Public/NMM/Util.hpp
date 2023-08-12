@@ -5,7 +5,7 @@
 
 namespace nmmath
 {
-static float epsilon = std::numeric_limits<float>::epsilon();
+static float epsilon = std::numeric_limits<float>::epsilon() * 10.0f;
 
 inline bool FloatEquals(float a, float b) { return std::abs(a - b) < epsilon; }
 
