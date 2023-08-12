@@ -1,9 +1,5 @@
 {
-    "cmake.configureSettings": {
-        "CMAKE_TOOLCHAIN_FILE": "./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake"
-    },
     "cmake.clearOutputBeforeBuild": true,
-    "cmake.buildDirectory": "${workspaceRoot}/Build/${buildType}",
     "[c]": {
         "editor.rulers": [120]
     },

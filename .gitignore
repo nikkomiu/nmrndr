@@ -1,4 +1,6 @@
 /Build/
 /Binaries/
 
+/coverage/
+
 /TestResults/

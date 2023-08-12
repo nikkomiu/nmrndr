@@ -2,15 +2,12 @@ Build:
   stage: build
   image: $CI_REGISTRY_IMAGE/ci-build:latest
   before_script:
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
+  - cmake --preset Test
   script:
-  - cmake --build ./Build/Release --config Release --target all
-  artifacts:
-    paths:
-    - ./Binaries
-    expire_in: 1 day
+  - cmake --build --preset Test
   cache:
     paths:
-    - ./Build/Release
+    - ./Binaries/
+    - ./Build/
     - ./Tools/vcpkg/packages
     policy: pull-push

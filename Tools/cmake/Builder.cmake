@@ -58,6 +58,15 @@ function(nm_build)
             /W4 /WX
         >
     )
+
+    # Add code coverage flags if building in test mode and not an executable
+    if(NOT ${ARG_PKG_TYPE} STREQUAL "EXE" AND "${WITH_COVERAGE}" STREQUAL "ON")
+        message(STATUS "Building ${PKG_NAME} with code coverage")
+
+        # TODO: Add support for code coverage on Windows
+        target_compile_options(${PKG_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
+        target_link_libraries(${PKG_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
+    endif()
 endfunction()
 
 function(nm_test)
@@ -89,6 +98,10 @@ function(nm_test)
 
             ${ARG_LINK_LIBRARIES}
     )
+
+    # TODO: Add support for code coverage on Windows
+    target_compile_options(${PKG_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
+    target_link_libraries(${PKG_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
 
     target_include_directories(${PKG_NAME} PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Public>

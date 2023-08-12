@@ -1,0 +1,102 @@
+{
+  "version": 7,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "Default",
+      "displayName": "Default",
+      "description": "Default config",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/Build",
+      "toolchainFile": "${sourceDir}/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "${presetName}",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "Debug",
+      "displayName": "Debug",
+      "description": "Debug configuration",
+      "inherits": "Default"
+    },
+    {
+      "name": "Test",
+      "displayName": "Test",
+      "description": "Test configuration",
+      "inherits": "Default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "WITH_COVERAGE": "ON"
+      }
+    },
+    {
+      "name": "Release",
+      "displayName": "Release",
+      "description": "Release configuration",
+      "inherits": "Default"
+    },
+    {
+      "name": "RelWithDebInfo",
+      "displayName": "RelWithDebInfo",
+      "description": "RelWithDebInfo configuration",
+      "inherits": "Default"
+    },
+    {
+      "name": "MinSizeRel",
+      "displayName": "MinSizeRel",
+      "description": "MinSizeRel config",
+      "inherits": "Default"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "Debug",
+      "displayName": "Debug",
+      "description": "Debug build",
+      "configurePreset": "Debug"
+    },
+    {
+      "name": "Test",
+      "displayName": "Test",
+      "description": "Test build",
+      "configurePreset": "Test"
+    },
+    {
+      "name": "Release",
+      "displayName": "Release",
+      "description": "Release build",
+      "configurePreset": "Release"
+    },
+    {
+      "name": "RelWithDebInfo",
+      "displayName": "RelWithDebInfo",
+      "description": "RelWithDebInfo build",
+      "configurePreset": "RelWithDebInfo"
+    },
+    {
+      "name": "MinSizeRel",
+      "displayName": "MinSizeRel",
+      "description": "MinSizeRel build",
+      "configurePreset": "MinSizeRel"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "Test",
+      "configurePreset": "Test",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    }
+  ]
+}

@@ -2,12 +2,12 @@ Cpp Check:
   stage: test
   image: $CI_REGISTRY_IMAGE/ci-build:latest
   before_script:
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
+  - cmake --preset Test
   script:
-  - cmake --build ./Build/Release --config Release --target CppCheck
+  - cmake --build --preset Test --target CppCheck
   cache:
     paths:
-    - ./Build/Release
+    - ./Build/
     - ./Tools/vcpkg/packages
     policy: pull
 
@@ -15,12 +15,12 @@ Clang Check:
   stage: test
   image: $CI_REGISTRY_IMAGE/ci-build:latest
   before_script:
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
+  - cmake --preset Test
   script:
-  - cmake --build ./Build/Release --config Release --target ClangCheckDryRun
+  - cmake --build --preset Test --target ClangCheckDryRun
   cache:
     paths:
-    - ./Build/Release
+    - ./Build/
     - ./Tools/vcpkg/packages
     policy: pull
 
@@ -28,11 +28,11 @@ Clang Format:
   stage: test
   image: $CI_REGISTRY_IMAGE/ci-build:latest
   before_script:
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
+  - cmake --preset Test
   script:
-  - cmake --build ./Build/Release --config Release --target ClangFormatDryRun
+  - cmake --build --preset Test --target ClangFormatDryRun
   cache:
     paths:
-    - ./Build/Release
+    - ./Build/
     - ./Tools/vcpkg/packages
     policy: pull
