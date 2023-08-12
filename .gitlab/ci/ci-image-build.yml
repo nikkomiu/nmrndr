@@ -1,5 +1,5 @@
-ci build:
-  stage: build-ci-image
+CI Build Image:
+  stage: pre-build
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]

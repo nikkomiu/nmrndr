@@ -5,7 +5,7 @@ include:
   - local: '.gitlab/ci/test.yml'
 
 stages:
-- build-ci-image
+- pre-build
 - build
 - test
 
