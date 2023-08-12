@@ -117,7 +117,9 @@ function(nm_test)
 
     add_custom_command(
         TARGET ${PKG_NAME}Coverage
-        COMMAND llvm-profdata merge -o ${CMAKE_CURRENT_BINARY_DIR}/${PKG_NAME}.profdata ${CMAKE_CURRENT_BINARY_DIR}/default.profraw
-        COMMAND llvm-cov show -format html -o ${CMAKE_SOURCE_DIR}/coverage/${PKG_NAME} ${CMAKE_CURRENT_BINARY_DIR}/${PKG_NAME} -instr-profile=${CMAKE_CURRENT_BINARY_DIR}/${PKG_NAME}.profdata
+        COMMAND llvm-profdata merge -o ${PKG_NAME}.profdata default.profraw
+        COMMAND llvm-cov show -format html -o ${CMAKE_SOURCE_DIR}/coverage/${PKG_NAME} ${PKG_NAME} -instr-profile=${PKG_NAME}.profdata
+        COMMAND llvm-cov export -format=lcov ./${PKG_NAME} -instr-profile=${PKG_NAME}.profdata > ${CMAKE_SOURCE_DIR}/coverage/${PKG_NAME}.info
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 endfunction()
