@@ -1,100 +1,13 @@
+include:
+  - local: '.gitlab/ci/ci-image-build.yml'
+  - local: '.gitlab/ci/build.yml'
+  - local: '.gitlab/ci/analyze.yml'
+  - local: '.gitlab/ci/test.yml'
+
 stages:
 - build-ci-image
 - build
 - test
 
-include:
-  - local: '.gitlab/ci/ci-image-build.yml'
-
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
-
-build:
-  stage: build
-  image: $CI_REGISTRY_IMAGE/ci-build:latest
-  before_script:
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
-  script:
-  - cmake --build ./Build/Release --config Release --target all
-  artifacts:
-    paths:
-    - ./Binaries
-    expire_in: 1 day
-  cache:
-    paths:
-    - ./Build/Release
-    - ./Tools/vcpkg/packages
-    policy: pull-push
-
-Test NMMath:
-  stage: test
-  image: $CI_REGISTRY_IMAGE/ci-build:latest
-  before_script:
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
-  script:
-  - ./Build/Release/Test/UnitNMM/TestUnitNMMath --gtest_output=xml:TestResults/UnitNMMath.xml
-  artifacts:
-    when: always
-    reports:
-      junit: ./TestResults/UnitNMMath.xml
-  cache:
-    paths:
-    - ./Build/Release
-    - ./Tools/vcpkg/packages
-    policy: pull
-
-Test NMCore:
-  stage: test
-  image: $CI_REGISTRY_IMAGE/ci-build:latest
-  before_script:
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
-  script:
-  - ./Build/Release/Test/UnitCore/TestUnitNMCore --gtest_output=xml:TestResults/UnitNMCore.xml
-  artifacts:
-    when: always
-    reports:
-      junit: ./TestResults/UnitNMCore.xml
-  cache:
-    paths:
-    - ./Build/Release
-    - ./Tools/vcpkg/packages
-    policy: pull
-
-Cpp Check:
-  stage: test
-  image: $CI_REGISTRY_IMAGE/ci-build:latest
-  before_script:
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
-  script:
-  - cmake --build ./Build/Release --config Release --target CppCheck
-  cache:
-    paths:
-    - ./Build/Release
-    - ./Tools/vcpkg/packages
-    policy: pull
-
-Clang Check:
-  stage: test
-  image: $CI_REGISTRY_IMAGE/ci-build:latest
-  before_script:
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
-  script:
-  - cmake --build ./Build/Release --config Release --target ClangCheckDryRun
-  cache:
-    paths:
-    - ./Build/Release
-    - ./Tools/vcpkg/packages
-    policy: pull
-
-Clang Format:
-  stage: test
-  image: $CI_REGISTRY_IMAGE/ci-build:latest
-  before_script:
-  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
-  script:
-  - cmake --build ./Build/Release --config Release --target ClangFormatDryRun
-  cache:
-    paths:
-    - ./Build/Release
-    - ./Tools/vcpkg/packages
-    policy: pull

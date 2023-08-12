@@ -1,0 +1,33 @@
+Test NMMath:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/ci-build:latest
+  before_script:
+  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
+  script:
+  - ./Build/Release/Test/UnitNMM/TestUnitNMMath --gtest_output=xml:TestResults/UnitNMMath.xml
+  artifacts:
+    when: always
+    reports:
+      junit: ./TestResults/UnitNMMath.xml
+  cache:
+    paths:
+    - ./Build/Release
+    - ./Tools/vcpkg/packages
+    policy: pull
+
+Test NMCore:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/ci-build:latest
+  before_script:
+  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
+  script:
+  - ./Build/Release/Test/UnitCore/TestUnitNMCore --gtest_output=xml:TestResults/UnitNMCore.xml
+  artifacts:
+    when: always
+    reports:
+      junit: ./TestResults/UnitNMCore.xml
+  cache:
+    paths:
+    - ./Build/Release
+    - ./Tools/vcpkg/packages
+    policy: pull
