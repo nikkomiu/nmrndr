@@ -3,22 +3,11 @@ stages:
 - build
 - test
 
+include:
+  - local: '.gitlab/ci/ci-image-build.yml'
+
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
-
-ci build:
-  stage: build-ci-image
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"auth\":\"$(printf "%s:%s" ${CI_DEPENDENCY_PROXY_USER} "${CI_DEPENDENCY_PROXY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/ci-build.Dockerfile --destination $CI_REGISTRY_IMAGE/ci-build:latest
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-      changes:
-        - ci-build.Dockerfile
-        - .gitlab-ci.yml
 
 build:
   stage: build
@@ -37,20 +26,34 @@ build:
     - ./Tools/vcpkg/packages
     policy: pull-push
 
-ctest:
+math test:
   stage: test
   image: $CI_REGISTRY_IMAGE/ci-build:latest
-  variables:
-    CMAKE_CTEST_ARGUMENTS: "--gtest_output=xml:./TestResults/ctest.xml"
   before_script:
   - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
   script:
-  - cd Build/Release
-  - ctest --output-on-failure
+  - ./Build/Release/Test/UnitNMM/TestUnitNMMath --gtest_output=xml:TestResults/UnitNMMath.xml
   artifacts:
     when: always
     reports:
-      junit: ./TestResults/ctest.xml
+      junit: ./TestResults/UnitNMMath.xml
+  cache:
+    paths:
+    - ./Build/Release
+    - ./Tools/vcpkg/packages
+    policy: pull
+
+core test:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/ci-build:latest
+  before_script:
+  - cmake -DCMAKE_TOOLCHAIN_FILE=./Tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -S . -B ./Build/Release -G Ninja
+  script:
+  - ./Build/Release/Test/UnitCore/TestUnitNMCore --gtest_output=xml:TestResults/UnitNMCore.xml
+  artifacts:
+    when: always
+    reports:
+      junit: ./TestResults/UnitNMCore.xml
   cache:
     paths:
     - ./Build/Release
