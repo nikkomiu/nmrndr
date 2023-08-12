@@ -15,6 +15,7 @@
       "binaryDir": "${sourceDir}/Build",
       "toolchainFile": "${sourceDir}/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake",
       "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "CMAKE_BUILD_TYPE": "${presetName}",
         "CMAKE_CXX_COMPILER": "clang++"
       }
