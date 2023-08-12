@@ -13,7 +13,7 @@ CTest:
     paths:
     - ./Build/coverage
     reports:
-      junit: ./TestResults/ctest_junit.xml
+      junit: ./Build/ctest_junit.xml
   cache:
     paths:
     - ./Build/
