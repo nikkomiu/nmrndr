@@ -25,7 +25,7 @@ Test Unit NMM:
   - cmake --preset Test
   script:
   - cmake --build --preset Test
-  - cmake --build --preset Test --target TestUnitNMCoreCoverage
+  - cmake --build --preset Test --target TestUnitNMMathCoverage
   artifacts:
     when: always
     paths:
