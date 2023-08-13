@@ -324,6 +324,16 @@ public:
         });
     }
 
+    static NMMatrix Shearing(float xy, float xz, float yx, float yz, float zx, float zy)
+    {
+        return NMMatrix(4, 4, {
+            1.0f, xy, xz, 0.0f,
+            yx, 1.0f, yz, 0.0f,
+            zx, zy, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+        });
+    }
+
 protected:
 
     std::size_t width;

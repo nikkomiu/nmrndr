@@ -201,10 +201,7 @@ TEST_F(NMMatrixTest, OperatorMultiply_Tuple)
     NMTuple result = matrix * tuple;
 
     // Then
-    ASSERT_EQ(result.GetX(), 18.0f);
-    ASSERT_EQ(result.GetY(), 24.0f);
-    ASSERT_EQ(result.GetZ(), 33.0f);
-    ASSERT_EQ(result.GetW(), 1.0f);
+    ASSERT_EQ(result, NMTuple(18.0f, 24.0f, 33.0f, 1.0f));
 }
 
 // Scenario: Multiplying by a translation matrix
@@ -218,9 +215,7 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point)
     NMPoint result = transform * point;
 
     // Then
-    ASSERT_EQ(result.GetX(), 2.0f);
-    ASSERT_EQ(result.GetY(), 1.0f);
-    ASSERT_EQ(result.GetZ(), 7.0f);
+    ASSERT_EQ(result, NMPoint(2.0f, 1.0f, 7.0f));
 }
 
 // Scenario: Multiplying by the inverse of a translation matrix
@@ -235,9 +230,7 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_Inverse)
     NMPoint result = inverse * point;
 
     // Then
-    ASSERT_EQ(result.GetX(), -8.0f);
-    ASSERT_EQ(result.GetY(), 7.0f);
-    ASSERT_EQ(result.GetZ(), 3.0f);
+    ASSERT_EQ(result, NMPoint(-8.0f, 7.0f, 3.0f));
 }
 
 // Scenario: Translation does not affect vectors
@@ -251,9 +244,7 @@ TEST_F(NMMatrixTest, OperatorMultiply_Vector)
     NMVector result = transform * vector;
 
     // Then
-    ASSERT_EQ(result.GetX(), -3.0f);
-    ASSERT_EQ(result.GetY(), 4.0f);
-    ASSERT_EQ(result.GetZ(), 5.0f);
+    ASSERT_EQ(result, NMVector(-3.0f, 4.0f, 5.0f));
 }
 
 // Scenario: A scaling matrix applied to a point
@@ -267,9 +258,7 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_Scaling)
     NMPoint result = transform * point;
 
     // Then
-    ASSERT_EQ(result.GetX(), -8.0f);
-    ASSERT_EQ(result.GetY(), 18.0f);
-    ASSERT_EQ(result.GetZ(), 32.0f);
+    ASSERT_EQ(result, NMPoint(-8.0f, 18.0f, 32.0f));
 }
 
 // Scenario: A scaling matrix applied to a vector
@@ -283,9 +272,7 @@ TEST_F(NMMatrixTest, OperatorMultiply_Vector_Scaling)
     NMVector result = transform * vector;
 
     // Then
-    ASSERT_EQ(result.GetX(), -8.0f);
-    ASSERT_EQ(result.GetY(), 18.0f);
-    ASSERT_EQ(result.GetZ(), 32.0f);
+    ASSERT_EQ(result, NMVector(-8.0f, 18.0f, 32.0f));
 }
 
 // Scenario: A scaling matrix applied to a vector
@@ -299,9 +286,7 @@ TEST_F(NMMatrixTest, OperatorMultiply_Vector_Scaling_Inverse)
     NMVector result = transform * vector;
 
     // Then
-    ASSERT_EQ(result.GetX(), -8.0f);
-    ASSERT_EQ(result.GetY(), 18.0f);
-    ASSERT_EQ(result.GetZ(), 32.0f);
+    ASSERT_EQ(result, NMVector(-8.0f, 18.0f, 32.0f));
 }
 
 // Scenario: Multiplying by the inverse of a scaling matrix
@@ -316,9 +301,7 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_Scaling_Inverse)
     NMVector result = inverse * vector;
 
     // Then
-    ASSERT_EQ(result.GetX(), -2.0f);
-    ASSERT_EQ(result.GetY(), 2.0f);
-    ASSERT_EQ(result.GetZ(), 2.0f);
+    ASSERT_EQ(result, NMVector(-2.0f, 2.0f, 2.0f));
 }
 
 // Scenario: Reflection is scaling by a negative value
@@ -332,9 +315,7 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_Reflection)
     NMPoint result = transform * point;
 
     // Then
-    ASSERT_EQ(result.GetX(), -2.0f);
-    ASSERT_EQ(result.GetY(), 3.0f);
-    ASSERT_EQ(result.GetZ(), 4.0f);
+    ASSERT_EQ(result, NMPoint(-2.0f, 3.0f, 4.0f));
 }
 
 // Scenario: Rotating a point around the x axis
@@ -350,13 +331,8 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_RotationX)
     NMPoint result2 = fullQuarter * point;
 
     // Then
-    ASSERT_FLOAT_EQ(result1.GetX(), 0.0f);
-    ASSERT_FLOAT_EQ(result1.GetY(), std::sqrt(2.0f) / 2.0f);
-    ASSERT_FLOAT_EQ(result1.GetZ(), std::sqrt(2.0f) / 2.0f);
-
-    ASSERT_FLOAT_EQ(result2.GetX(), 0.0f);
-    ASSERT_TRUE(std::abs(result2.GetY() - 0.0f) < 5.0E-8); // diff: 0.000000043711388
-    ASSERT_FLOAT_EQ(result2.GetZ(), 1.0f);
+    ASSERT_EQ(result1, NMPoint(0.0f, std::sqrt(2.0f) / 2.0f, std::sqrt(2.0f) / 2.0f));
+    ASSERT_EQ(result2, NMPoint(0.0f, 0.0f, 1.0f));
 }
 
 // Scenario: The inverse of an x-rotation rotates in the opposite direction
@@ -371,9 +347,7 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_RotationX_Inverse)
     NMPoint result = inverse * point;
 
     // Then
-    ASSERT_FLOAT_EQ(result.GetX(), 0.0f);
-    ASSERT_FLOAT_EQ(result.GetY(), std::sqrt(2.0f) / 2.0f);
-    ASSERT_FLOAT_EQ(result.GetZ(), -std::sqrt(2.0f) / 2.0f);
+    ASSERT_EQ(result, NMPoint(0.0f, std::sqrt(2.0f) / 2.0f, -std::sqrt(2.0f) / 2.0f));
 }
 
 // Scenario: Rotating a point around the y axis
@@ -389,13 +363,8 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_RotationY)
     NMPoint result2 = fullQuarter * point;
 
     // Then
-    ASSERT_FLOAT_EQ(result1.GetX(), std::sqrt(2.0f) / 2.0f);
-    ASSERT_FLOAT_EQ(result1.GetY(), 0.0f);
-    ASSERT_FLOAT_EQ(result1.GetZ(), std::sqrt(2.0f) / 2.0f);
-
-    ASSERT_FLOAT_EQ(result2.GetX(), 1.0f);
-    ASSERT_FLOAT_EQ(result2.GetY(), 0.0f);
-    ASSERT_TRUE(std::abs(result2.GetZ() - 0.0f) < 5.0E-8); // diff: 0.000000043711388
+    ASSERT_EQ(result1, NMPoint(std::sqrt(2.0f) / 2.0f, 0.0f, std::sqrt(2.0f) / 2.0f));
+    ASSERT_EQ(result2, NMPoint(1.0f, 0.0f, 0.0f));
 }
 
 // Scenario: Rotating a point around the z axis
@@ -411,13 +380,129 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_RotationZ)
     NMPoint result2 = fullQuarter * point;
 
     // Then
-    ASSERT_FLOAT_EQ(result1.GetX(), -std::sqrt(2.0f) / 2.0f);
-    ASSERT_FLOAT_EQ(result1.GetY(), std::sqrt(2.0f) / 2.0f);
-    ASSERT_FLOAT_EQ(result1.GetZ(), 0.0f);
+    ASSERT_EQ(result1, NMPoint(-std::sqrt(2.0f) / 2.0f, std::sqrt(2.0f) / 2.0f, 0.0f));
+    ASSERT_EQ(result2, NMPoint(-1.0f, 0.0f, 0.0f));
+}
 
-    ASSERT_FLOAT_EQ(result2.GetX(), -1.0f);
-    ASSERT_TRUE(std::abs(result2.GetX() - -1.0f) < 5.0E-8); // diff: 0.000000043711388
-    ASSERT_FLOAT_EQ(result2.GetZ(), 0.0f);
+// Scenario: A shearing transformation moves x in proportion to y
+TEST_F(NMMatrixTest, OperatorMultiply_Point_ShearingXY)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Shearing(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+    NMPoint point(2.0f, 3.0f, 4.0f);
+
+    // When
+    NMPoint result = transform * point;
+
+    // Then
+    ASSERT_EQ(result, NMPoint(5.0f, 3.0f, 4.0f));
+}
+
+// Scenario: A shearing transformation moves x in proportion to z
+TEST_F(NMMatrixTest, OperatorMultiply_Point_ShearingXZ)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Shearing(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+    NMPoint point(2.0f, 3.0f, 4.0f);
+
+    // When
+    NMPoint result = transform * point;
+
+    // Then
+    ASSERT_EQ(result, NMPoint(6.0f, 3.0f, 4.0f));
+}
+
+// Scenario: A shearing transformation moves y in proportion to x
+TEST_F(NMMatrixTest, OperatorMultiply_Point_ShearingYX)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Shearing(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f);
+    NMPoint point(2.0f, 3.0f, 4.0f);
+
+    // When
+    NMPoint result = transform * point;
+
+    // Then
+    ASSERT_EQ(result, NMPoint(2.0f, 5.0f, 4.0f));
+}
+
+// Scenario: A shearing transformation moves y in proportion to z
+TEST_F(NMMatrixTest, OperatorMultiply_Point_ShearingYZ)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Shearing(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+    NMPoint point(2.0f, 3.0f, 4.0f);
+
+    // When
+    NMPoint result = transform * point;
+
+    // Then
+    ASSERT_EQ(result, NMPoint(2.0f, 7.0f, 4.0f));
+}
+
+// Scenario: A shearing transformation moves z in proportion to x
+TEST_F(NMMatrixTest, OperatorMultiply_Point_ShearingZX)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Shearing(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    NMPoint point(2.0f, 3.0f, 4.0f);
+
+    // When
+    NMPoint result = transform * point;
+
+    // Then
+    ASSERT_EQ(result, NMPoint(2.0f, 3.0f, 6.0f));
+}
+
+// Scenario: A shearing transformation moves z in proportion to y
+TEST_F(NMMatrixTest, OperatorMultiply_Point_ShearingZY)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Shearing(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+    NMPoint point(2.0f, 3.0f, 4.0f);
+
+    // When
+    NMPoint result = transform * point;
+
+    // Then
+    ASSERT_EQ(result, NMPoint(2.0f, 3.0f, 7.0f));
+}
+
+// Scenario: Individual transformations are applied in sequence
+TEST_F(NMMatrixTest, OperatorMultiply_Point_TransformSequence)
+{
+    // Given
+    NMPoint point(1.0f, 0.0f, 1.0f);
+    NMMatrix a = NMMatrix::RotationX(M_PI / 2.0f);
+    NMMatrix b = NMMatrix::Scaling(5.0f, 5.0f, 5.0f);
+    NMMatrix c = NMMatrix::Translation(10.0f, 5.0f, 7.0f);
+
+    // When
+    NMPoint result1 = a * point;
+    NMPoint result2 = b * result1;
+    NMPoint result3 = c * result2;
+
+    // Then
+    ASSERT_EQ(result1, NMPoint(1.0f, -1.0f, 0.0f));
+    ASSERT_EQ(result2, NMPoint(5.0f, -5.0f, 0.0f));
+    ASSERT_EQ(result3, NMPoint(15.0f, 0.0f, 7.0f));
+}
+
+// Scenario: Chained transformations must be applied in reverse order
+TEST_F(NMMatrixTest, OperatorMultiply_Point_TransformSequence_Chained)
+{
+    // Given
+    NMPoint point(1.0f, 0.0f, 1.0f);
+    NMMatrix a = NMMatrix::RotationX(M_PI / 2.0f);
+    NMMatrix b = NMMatrix::Scaling(5.0f, 5.0f, 5.0f);
+    NMMatrix c = NMMatrix::Translation(10.0f, 5.0f, 7.0f);
+
+    // When
+    NMMatrix t = c * b * a;
+    NMPoint result = t * point;
+
+    // Then
+    ASSERT_EQ(result, NMPoint(15.0f, 0.0f, 7.0f));
 }
 
 TEST_F(NMMatrixTest, StreamInsertionOperator)
