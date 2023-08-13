@@ -207,6 +207,219 @@ TEST_F(NMMatrixTest, OperatorMultiply_Tuple)
     ASSERT_EQ(result.GetW(), 1.0f);
 }
 
+// Scenario: Multiplying by a translation matrix
+TEST_F(NMMatrixTest, OperatorMultiply_Point)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Translation(5.0f, -3.0f, 2.0f);
+    NMPoint point(-3.0f, 4.0f, 5.0f);
+
+    // When
+    NMPoint result = transform * point;
+
+    // Then
+    ASSERT_EQ(result.GetX(), 2.0f);
+    ASSERT_EQ(result.GetY(), 1.0f);
+    ASSERT_EQ(result.GetZ(), 7.0f);
+}
+
+// Scenario: Multiplying by the inverse of a translation matrix
+TEST_F(NMMatrixTest, OperatorMultiply_Point_Inverse)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Translation(5.0f, -3.0f, 2.0f);
+    NMMatrix inverse = transform.Inverse();
+    NMPoint point(-3.0f, 4.0f, 5.0f);
+
+    // When
+    NMPoint result = inverse * point;
+
+    // Then
+    ASSERT_EQ(result.GetX(), -8.0f);
+    ASSERT_EQ(result.GetY(), 7.0f);
+    ASSERT_EQ(result.GetZ(), 3.0f);
+}
+
+// Scenario: Translation does not affect vectors
+TEST_F(NMMatrixTest, OperatorMultiply_Vector)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Translation(5.0f, -3.0f, 2.0f);
+    NMVector vector(-3.0f, 4.0f, 5.0f);
+
+    // When
+    NMVector result = transform * vector;
+
+    // Then
+    ASSERT_EQ(result.GetX(), -3.0f);
+    ASSERT_EQ(result.GetY(), 4.0f);
+    ASSERT_EQ(result.GetZ(), 5.0f);
+}
+
+// Scenario: A scaling matrix applied to a point
+TEST_F(NMMatrixTest, OperatorMultiply_Point_Scaling)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Scaling(2.0f, 3.0f, 4.0f);
+    NMPoint point(-4.0f, 6.0f, 8.0f);
+
+    // When
+    NMPoint result = transform * point;
+
+    // Then
+    ASSERT_EQ(result.GetX(), -8.0f);
+    ASSERT_EQ(result.GetY(), 18.0f);
+    ASSERT_EQ(result.GetZ(), 32.0f);
+}
+
+// Scenario: A scaling matrix applied to a vector
+TEST_F(NMMatrixTest, OperatorMultiply_Vector_Scaling)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Scaling(2.0f, 3.0f, 4.0f);
+    NMVector vector(-4.0f, 6.0f, 8.0f);
+
+    // When
+    NMVector result = transform * vector;
+
+    // Then
+    ASSERT_EQ(result.GetX(), -8.0f);
+    ASSERT_EQ(result.GetY(), 18.0f);
+    ASSERT_EQ(result.GetZ(), 32.0f);
+}
+
+// Scenario: A scaling matrix applied to a vector
+TEST_F(NMMatrixTest, OperatorMultiply_Vector_Scaling_Inverse)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Scaling(2.0f, 3.0f, 4.0f);
+    NMVector vector(-4.0f, 6.0f, 8.0f);
+
+    // When
+    NMVector result = transform * vector;
+
+    // Then
+    ASSERT_EQ(result.GetX(), -8.0f);
+    ASSERT_EQ(result.GetY(), 18.0f);
+    ASSERT_EQ(result.GetZ(), 32.0f);
+}
+
+// Scenario: Multiplying by the inverse of a scaling matrix
+TEST_F(NMMatrixTest, OperatorMultiply_Point_Scaling_Inverse)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Scaling(2.0f, 3.0f, 4.0f);
+    NMMatrix inverse = transform.Inverse();
+    NMVector vector(-4.0f, 6.0f, 8.0f);
+
+    // When
+    NMVector result = inverse * vector;
+
+    // Then
+    ASSERT_EQ(result.GetX(), -2.0f);
+    ASSERT_EQ(result.GetY(), 2.0f);
+    ASSERT_EQ(result.GetZ(), 2.0f);
+}
+
+// Scenario: Reflection is scaling by a negative value
+TEST_F(NMMatrixTest, OperatorMultiply_Point_Reflection)
+{
+    // Given
+    NMMatrix transform = NMMatrix::Scaling(-1.0f, 1.0f, 1.0f);
+    NMPoint point(2.0f, 3.0f, 4.0f);
+
+    // When
+    NMPoint result = transform * point;
+
+    // Then
+    ASSERT_EQ(result.GetX(), -2.0f);
+    ASSERT_EQ(result.GetY(), 3.0f);
+    ASSERT_EQ(result.GetZ(), 4.0f);
+}
+
+// Scenario: Rotating a point around the x axis
+TEST_F(NMMatrixTest, OperatorMultiply_Point_RotationX)
+{
+    // Given
+    NMPoint point(0.0f, 1.0f, 0.0f);
+    NMMatrix halfQuarter = NMMatrix::RotationX(M_PI / 4.0f);
+    NMMatrix fullQuarter = NMMatrix::RotationX(M_PI / 2.0f);
+
+    // When
+    NMPoint result1 = halfQuarter * point;
+    NMPoint result2 = fullQuarter * point;
+
+    // Then
+    ASSERT_FLOAT_EQ(result1.GetX(), 0.0f);
+    ASSERT_FLOAT_EQ(result1.GetY(), std::sqrt(2.0f) / 2.0f);
+    ASSERT_FLOAT_EQ(result1.GetZ(), std::sqrt(2.0f) / 2.0f);
+
+    ASSERT_FLOAT_EQ(result2.GetX(), 0.0f);
+    ASSERT_TRUE(std::abs(result2.GetY() - 0.0f) < 5.0E-8); // diff: 0.000000043711388
+    ASSERT_FLOAT_EQ(result2.GetZ(), 1.0f);
+}
+
+// Scenario: The inverse of an x-rotation rotates in the opposite direction
+TEST_F(NMMatrixTest, OperatorMultiply_Point_RotationX_Inverse)
+{
+    // Given
+    NMPoint point(0.0f, 1.0f, 0.0f);
+    NMMatrix halfQuarter = NMMatrix::RotationX(M_PI / 4.0f);
+    NMMatrix inverse = halfQuarter.Inverse();
+
+    // When
+    NMPoint result = inverse * point;
+
+    // Then
+    ASSERT_FLOAT_EQ(result.GetX(), 0.0f);
+    ASSERT_FLOAT_EQ(result.GetY(), std::sqrt(2.0f) / 2.0f);
+    ASSERT_FLOAT_EQ(result.GetZ(), -std::sqrt(2.0f) / 2.0f);
+}
+
+// Scenario: Rotating a point around the y axis
+TEST_F(NMMatrixTest, OperatorMultiply_Point_RotationY)
+{
+    // Given
+    NMPoint point(0.0f, 0.0f, 1.0f);
+    NMMatrix halfQuarter = NMMatrix::RotationY(M_PI / 4.0f);
+    NMMatrix fullQuarter = NMMatrix::RotationY(M_PI / 2.0f);
+
+    // When
+    NMPoint result1 = halfQuarter * point;
+    NMPoint result2 = fullQuarter * point;
+
+    // Then
+    ASSERT_FLOAT_EQ(result1.GetX(), std::sqrt(2.0f) / 2.0f);
+    ASSERT_FLOAT_EQ(result1.GetY(), 0.0f);
+    ASSERT_FLOAT_EQ(result1.GetZ(), std::sqrt(2.0f) / 2.0f);
+
+    ASSERT_FLOAT_EQ(result2.GetX(), 1.0f);
+    ASSERT_FLOAT_EQ(result2.GetY(), 0.0f);
+    ASSERT_TRUE(std::abs(result2.GetZ() - 0.0f) < 5.0E-8); // diff: 0.000000043711388
+}
+
+// Scenario: Rotating a point around the z axis
+TEST_F(NMMatrixTest, OperatorMultiply_Point_RotationZ)
+{
+    // Given
+    NMPoint point(0.0f, 1.0f, 0.0f);
+    NMMatrix halfQuarter = NMMatrix::RotationZ(M_PI / 4.0f);
+    NMMatrix fullQuarter = NMMatrix::RotationZ(M_PI / 2.0f);
+
+    // When
+    NMPoint result1 = halfQuarter * point;
+    NMPoint result2 = fullQuarter * point;
+
+    // Then
+    ASSERT_FLOAT_EQ(result1.GetX(), -std::sqrt(2.0f) / 2.0f);
+    ASSERT_FLOAT_EQ(result1.GetY(), std::sqrt(2.0f) / 2.0f);
+    ASSERT_FLOAT_EQ(result1.GetZ(), 0.0f);
+
+    ASSERT_FLOAT_EQ(result2.GetX(), -1.0f);
+    ASSERT_TRUE(std::abs(result2.GetX() - -1.0f) < 5.0E-8); // diff: 0.000000043711388
+    ASSERT_FLOAT_EQ(result2.GetZ(), 0.0f);
+}
+
 TEST_F(NMMatrixTest, StreamInsertionOperator)
 {
     // Given

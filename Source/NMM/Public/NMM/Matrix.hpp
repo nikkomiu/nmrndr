@@ -97,6 +97,20 @@ public:
         return NMTuple(resultMatrix.Get(0, 0), resultMatrix.Get(0, 1), resultMatrix.Get(0, 2), resultMatrix.Get(0, 3));
     }
 
+    NMPoint operator*(const NMPoint& point) const
+    {
+        if (width != 4 || height != 4)
+        {
+            return NMPoint();
+        }
+
+        NMMatrix pointMatrix(1, 4, {point.GetX(), point.GetY(), point.GetZ(), 1.0f});
+
+        auto resultMatrix = *this * pointMatrix;
+
+        return NMPoint(resultMatrix.Get(0, 0), resultMatrix.Get(0, 1), resultMatrix.Get(0, 2));
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const NMMatrix& matrix)
     {
         os << std::setprecision(3) << std::fixed;
@@ -258,6 +272,56 @@ public:
     {
         return NMMatrix(
             4, 4, {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f});
+    }
+
+    static NMMatrix Translation(float x, float y, float z)
+    {
+        return NMMatrix(4, 4, {
+            1.0f, 0.0f, 0.0f, x,
+            0.0f, 1.0f, 0.0f, y,
+            0.0f, 0.0f, 1.0f, z,
+            0.0f, 0.0f, 0.0f, 1.0f
+        });
+    }
+
+    static NMMatrix Scaling(float x, float y, float z)
+    {
+        return NMMatrix(4, 4, {
+            x, 0.0f, 0.0f, 0.0f,
+            0.0f, y, 0.0f, 0.0f,
+            0.0f, 0.0f, z, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+        });
+    }
+
+    static NMMatrix RotationX(float radians)
+    {
+        return NMMatrix(4, 4, {
+            1.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, std::cos(radians), -std::sin(radians), 0.0f,
+            0.0f, std::sin(radians), std::cos(radians), 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+        });
+    }
+
+    static NMMatrix RotationY(float radians)
+    {
+        return NMMatrix(4, 4, {
+            std::cos(radians), 0.0f, std::sin(radians), 0.0f,
+            0.0f, 1.0f, 0.0f, 0.0f,
+            -std::sin(radians), 0.0f, std::cos(radians), 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+        });
+    }
+
+    static NMMatrix RotationZ(float radians)
+    {
+        return NMMatrix(4, 4, {
+            std::cos(radians), -std::sin(radians), 0.0f, 0.0f,
+            std::sin(radians), std::cos(radians), 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+        });
     }
 
 protected:
