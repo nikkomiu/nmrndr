@@ -37,9 +37,10 @@ find_package(GTest CONFIG REQUIRED)
 # ###################################################################### #
 # Load Projects                                                          #
 # ###################################################################### #
-add_subdirectory(Source/NMM)
+add_subdirectory(Source/Math)
 add_subdirectory(Source/Core)
-add_subdirectory(Source/App)
+add_subdirectory(Source/TrajectoryExample)
+add_subdirectory(Source/RotMatClockExample)
 
 if(BUILD_TESTING)
     add_subdirectory(Test)

@@ -13,7 +13,7 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        "Build/{Debug,Release}/{.cmake,**/CMakeFiles/,Testing,vcpkg_installed,.ninja*,build.ninja,**/cmake_install.cmake,**/CMakeCache.txt,**/CTestTestfile.cmake,DartConfiguration.tcl}": true,
+        "Build/{.cmake,**/CMakeFiles/,Testing,vcpkg_installed,.ninja*,build.ninja,**/cmake_install.cmake,**/CMakeCache.txt,**/CTestTestfile.cmake,DartConfiguration.tcl,*.plist}": true,
         "Tools/vcpkg/{.github,angle,docs,ports,toolsrc,triplets,versions}/": true,
         "Tools/vcpkg/*.{gitattributes,gitignore,vcpkg-root,bat,sh,md,txt,nix}": true,
         "Tools/vcpkg/scripts/{*.*,angle,azure-pipelines,boost,buildsystems,detect_compiler,get_cmake_vars,ifw,msys,posh-vcpkg,templates,test_ports,toolchains}": true
