@@ -276,62 +276,38 @@ public:
 
     static NMMatrix Translation(float x, float y, float z)
     {
-        return NMMatrix(4, 4, {
-            1.0f, 0.0f, 0.0f, x,
-            0.0f, 1.0f, 0.0f, y,
-            0.0f, 0.0f, 1.0f, z,
-            0.0f, 0.0f, 0.0f, 1.0f
-        });
+        return NMMatrix(4, 4, {1.0f, 0.0f, 0.0f, x, 0.0f, 1.0f, 0.0f, y, 0.0f, 0.0f, 1.0f, z, 0.0f, 0.0f, 0.0f, 1.0f});
     }
 
     static NMMatrix Scaling(float x, float y, float z)
     {
-        return NMMatrix(4, 4, {
-            x, 0.0f, 0.0f, 0.0f,
-            0.0f, y, 0.0f, 0.0f,
-            0.0f, 0.0f, z, 0.0f,
-            0.0f, 0.0f, 0.0f, 1.0f
-        });
+        return NMMatrix(4, 4, {x, 0.0f, 0.0f, 0.0f, 0.0f, y, 0.0f, 0.0f, 0.0f, 0.0f, z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f});
     }
 
     static NMMatrix RotationX(float radians)
     {
-        return NMMatrix(4, 4, {
-            1.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, std::cos(radians), -std::sin(radians), 0.0f,
-            0.0f, std::sin(radians), std::cos(radians), 0.0f,
-            0.0f, 0.0f, 0.0f, 1.0f
-        });
+        return NMMatrix(4, 4,
+                        {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, std::cos(radians), -std::sin(radians), 0.0f, 0.0f,
+                         std::sin(radians), std::cos(radians), 0.0f, 0.0f, 0.0f, 0.0f, 1.0f});
     }
 
     static NMMatrix RotationY(float radians)
     {
-        return NMMatrix(4, 4, {
-            std::cos(radians), 0.0f, std::sin(radians), 0.0f,
-            0.0f, 1.0f, 0.0f, 0.0f,
-            -std::sin(radians), 0.0f, std::cos(radians), 0.0f,
-            0.0f, 0.0f, 0.0f, 1.0f
-        });
+        return NMMatrix(4, 4,
+                        {std::cos(radians), 0.0f, std::sin(radians), 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -std::sin(radians),
+                         0.0f, std::cos(radians), 0.0f, 0.0f, 0.0f, 0.0f, 1.0f});
     }
 
     static NMMatrix RotationZ(float radians)
     {
-        return NMMatrix(4, 4, {
-            std::cos(radians), -std::sin(radians), 0.0f, 0.0f,
-            std::sin(radians), std::cos(radians), 0.0f, 0.0f,
-            0.0f, 0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 1.0f
-        });
+        return NMMatrix(4, 4,
+                        {std::cos(radians), -std::sin(radians), 0.0f, 0.0f, std::sin(radians), std::cos(radians), 0.0f,
+                         0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f});
     }
 
     static NMMatrix Shearing(float xy, float xz, float yx, float yz, float zx, float zy)
     {
-        return NMMatrix(4, 4, {
-            1.0f, xy, xz, 0.0f,
-            yx, 1.0f, yz, 0.0f,
-            zx, zy, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 1.0f
-        });
+        return NMMatrix(4, 4, {1.0f, xy, xz, 0.0f, yx, 1.0f, yz, 0.0f, zx, zy, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f});
     }
 
 protected:

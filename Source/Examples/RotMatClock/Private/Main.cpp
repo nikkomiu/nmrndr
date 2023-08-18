@@ -1,8 +1,8 @@
 #include <cstdint>
 #include <fstream>
 
-#include "NMM/Matrix.hpp"
 #include "Canvas.hpp"
+#include "NMM/Matrix.hpp"
 
 int main(int /* argc */, char** /* argv */)
 {

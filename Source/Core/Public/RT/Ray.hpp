@@ -6,8 +6,12 @@
 class NMRay
 {
 public:
+
     NMRay() = default;
-    NMRay(const NMPoint& initialOrigin, const NMVector& initalDirection) : origin(initialOrigin), direction(initalDirection) {}
+    NMRay(const NMPoint& initialOrigin, const NMVector& initalDirection)
+        : origin(initialOrigin), direction(initalDirection)
+    {
+    }
 
     const NMPoint& GetOrigin() const { return origin; }
     const NMVector& GetDirection() const { return direction; }

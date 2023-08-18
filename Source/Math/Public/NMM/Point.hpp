@@ -65,10 +65,7 @@ public:
     }
 
     // TODO: Test this method
-    float DotProduct(const NMPoint &other) const
-    {
-        return x * other.x + y * other.y + z * other.z;
-    }
+    float DotProduct(const NMPoint &other) const { return x * other.x + y * other.y + z * other.z; }
 
 protected:
 
