@@ -64,6 +64,12 @@ public:
         return os;
     }
 
+    // TODO: Test this method
+    float DotProduct(const NMPoint &other) const
+    {
+        return x * other.x + y * other.y + z * other.z;
+    }
+
 protected:
 
     float x;

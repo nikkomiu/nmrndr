@@ -54,9 +54,9 @@ void NMVector::operator/=(float scalar)
 
 void NMVector::Normalize() { *this /= Magnitude(); }
 
-float NMVector::DotProduct(const NMVector &other) const
+float NMVector::DotProduct(const NMPoint &point) const
 {
-    return x * other.GetX() + y * other.GetY() + z * other.GetZ();
+    return x * point.GetX() + y * point.GetY() + z * point.GetZ();
 }
 
 NMVector NMVector::CrossProduct(const NMVector &other) const

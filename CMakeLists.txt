@@ -5,6 +5,8 @@ project(NMRndr VERSION 1.0.0)
 # ###################################################################### #
 # Setup Options                                                          #
 # ###################################################################### #
+set(BUILD_TOOLS ON)
+set(BUILD_EXAMPLES ON)
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/Binaries)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
@@ -39,8 +41,14 @@ find_package(GTest CONFIG REQUIRED)
 # ###################################################################### #
 add_subdirectory(Source/Math)
 add_subdirectory(Source/Core)
-add_subdirectory(Source/TrajectoryExample)
-add_subdirectory(Source/RotMatClockExample)
+
+if(BUILD_TOOLS)
+    add_subdirectory(Source/Tools)
+endif()
+
+if(BUILD_EXAMPLES)
+    add_subdirectory(Source/Examples)
+endif()
 
 if(BUILD_TESTING)
     add_subdirectory(Test)

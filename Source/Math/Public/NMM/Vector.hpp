@@ -52,7 +52,14 @@ public:
 
     void Normalize();
 
-    float DotProduct(const NMVector &other) const;
+    float DotProduct(const NMVector &other) const
+    {
+        return x * other.x + y * other.y + z * other.z;
+    }
+
+    // TODO: Test this method
+    float DotProduct(const NMPoint& point) const;
+
     NMVector CrossProduct(const NMVector &other) const;
 
 protected:
