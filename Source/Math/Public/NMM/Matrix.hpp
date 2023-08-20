@@ -177,7 +177,7 @@ public:
         }
     }
 
-    float Determinant()
+    float Determinant() const
     {
         if (width != height)
         {
@@ -198,9 +198,9 @@ public:
         return determinant;
     }
 
-    inline bool IsInvertible() { return !nmmath::FloatEquals(Determinant(), 0.0f); }
+    inline bool IsInvertible() const { return !nmmath::FloatEquals(Determinant(), 0.0f); }
 
-    NMMatrix Inverse()
+    NMMatrix Inverse() const
     {
         if (!IsInvertible())
         {
@@ -222,7 +222,7 @@ public:
         return NMMatrix(width, height, resultData);
     }
 
-    NMMatrix Submatrix(std::size_t row, std::size_t column)
+    NMMatrix Submatrix(std::size_t row, std::size_t column) const
     {
         if (width != height)
         {
@@ -253,9 +253,9 @@ public:
         return NMMatrix(width - 1, height - 1, resultData);
     }
 
-    float Minor(std::size_t row, std::size_t column) { return Submatrix(row, column).Determinant(); }
+    float Minor(std::size_t row, std::size_t column) const { return Submatrix(row, column).Determinant(); }
 
-    float Cofactor(std::size_t row, std::size_t column)
+    float Cofactor(std::size_t row, std::size_t column) const
     {
         auto minor = Minor(row, column);
         if ((row + column) % 2 == 1)

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "NMM/Matrix.hpp"
 #include "NMM/Point.hpp"
 #include "NMM/Vector.hpp"
 
@@ -17,6 +18,8 @@ public:
     const NMVector& GetDirection() const { return direction; }
 
     NMPoint Position(float t) const { return origin + direction * t; }
+
+    NMRay Transformed(const NMMatrix& transform) const { return NMRay(transform * origin, transform * direction); }
 
 protected:
 

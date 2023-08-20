@@ -43,3 +43,35 @@ TEST_F(RayTest, RayPosition)
     EXPECT_EQ(ray.Position(-1.0f), NMPoint(1.0f, 3.0f, 4.0f));
     EXPECT_EQ(ray.Position(2.5f), NMPoint(4.5f, 3.0f, 4.0f));
 }
+
+// Scenario: Translating a ray
+TEST_F(RayTest, RayTranslation)
+{
+    // Given
+    NMRay ray = NMRay(NMPoint(1.0f, 2.0f, 3.0f), NMVector(0.0f, 1.0f, 0.0f));
+    NMMatrix transform = NMMatrix::Translation(3.0f, 4.0f, 5.0f);
+
+    // When
+    NMRay transformedRay = ray.Transformed(transform);
+
+    // Then
+    EXPECT_NE(&ray, &transformedRay);
+    EXPECT_EQ(transformedRay.GetOrigin(), NMPoint(4.0f, 6.0f, 8.0f));
+    EXPECT_EQ(transformedRay.GetDirection(), NMVector(0.0f, 1.0f, 0.0f));
+}
+
+// Scenario: Scaling a ray
+TEST_F(RayTest, RayScaling)
+{
+    // Given
+    NMRay ray = NMRay(NMPoint(1.0f, 2.0f, 3.0f), NMVector(0.0f, 1.0f, 0.0f));
+    NMMatrix transform = NMMatrix::Scaling(2.0f, 3.0f, 4.0f);
+
+    // When
+    NMRay transformedRay = ray.Transformed(transform);
+
+    // Then
+    EXPECT_NE(&ray, &transformedRay);
+    EXPECT_EQ(transformedRay.GetOrigin(), NMPoint(2.0f, 6.0f, 12.0f));
+    EXPECT_EQ(transformedRay.GetDirection(), NMVector(0.0f, 3.0f, 0.0f));
+}

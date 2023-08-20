@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "NMM/Matrix.hpp"
 #include "NMM/Point.hpp"
 #include "NMM/Vector.hpp"
 #include "RT/Ray.hpp"
@@ -12,13 +13,18 @@ public:
 
     NMSphere() = default;
 
+    inline NMMatrix GetTransform() const { return transform; }
     inline float GetRadius() const { return radius; }
     inline const NMPoint& GetOrigin() const { return origin; }
 
+    inline void SetTransform(const NMMatrix& newTransform) { transform = newTransform; }
+
     std::vector<float> Intersect(const NMRay& ray) const
     {
-        NMVector sphereToRay = ray.GetOrigin() - origin;
-        NMVector rayDirection = ray.GetDirection();
+        NMRay transformedRay = ray.Transformed(transform.Inverse());
+
+        NMVector sphereToRay = transformedRay.GetOrigin() - origin;
+        NMVector rayDirection = transformedRay.GetDirection();
         float a = rayDirection.DotProduct(rayDirection);
         float b = 2.0f * rayDirection.DotProduct(sphereToRay);
         float c = sphereToRay.DotProduct(sphereToRay) - 1.0f;
@@ -36,6 +42,8 @@ public:
     }
 
 protected:
+
+    NMMatrix transform = NMMatrix::Identity4x4();
 
     NMPoint origin = NMPoint(0.0f, 0.0f, 0.0f);
     float radius = 1.0f;
