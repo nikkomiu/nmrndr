@@ -4,8 +4,8 @@
 
 #include "Canvas.hpp"
 #include "Primitive/Sphere.hpp"
-#include "RT/Ray.hpp"
 #include "RT/IntersectionList.hpp"
+#include "RT/Ray.hpp"
 
 class NMWorld
 {
