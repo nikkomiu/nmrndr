@@ -6,6 +6,8 @@
 #include <vector>
 
 #include "NMM/Tuple.hpp"
+#include "NMM/Point.hpp"
+#include "NMM/Vector.hpp"
 #include "NMM/Util.hpp"
 
 class NMMatrix
@@ -111,6 +113,20 @@ public:
         return NMPoint(resultMatrix.Get(0, 0), resultMatrix.Get(0, 1), resultMatrix.Get(0, 2));
     }
 
+    NMVector operator*(const NMVector& vector) const
+    {
+        if (width != 4 || height != 4)
+        {
+            return NMVector();
+        }
+
+        NMMatrix vectorMatrix(1, 4, {vector.GetX(), vector.GetY(), vector.GetZ(), 0.0f});
+
+        NMMatrix resultMatrix = *this * vectorMatrix;
+
+        return NMVector(resultMatrix.Get(0, 0), resultMatrix.Get(0, 1), resultMatrix.Get(0, 2));
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const NMMatrix& matrix)
     {
         os << std::setprecision(3) << std::fixed;
@@ -175,6 +191,15 @@ public:
                 std::swap(data[y * width + x], data[x * width + y]);
             }
         }
+    }
+
+    inline NMMatrix Transposed() const
+    {
+        NMMatrix result(width, height, data);
+
+        result.Transpose();
+
+        return result;
     }
 
     float Determinant() const

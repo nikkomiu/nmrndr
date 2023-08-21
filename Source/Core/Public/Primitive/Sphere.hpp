@@ -41,6 +41,16 @@ public:
         return std::vector<float>{t1, t2};
     }
 
+    NMVector NormalAt(const NMPoint& worldPoint) const
+    {
+        NMMatrix inverseTransform = transform.Inverse();
+        NMPoint objectPoint = inverseTransform * worldPoint;
+        NMVector objectNormal = objectPoint - origin;
+        NMVector worldNormal = inverseTransform.Transposed() * objectNormal;
+
+        return worldNormal.Normalized();
+    }
+
 protected:
 
     NMMatrix transform = NMMatrix::Identity4x4();

@@ -129,7 +129,11 @@ function(nm_test)
     )
 
     if("${WITH_COVERAGE}" STREQUAL "ON")
-        add_custom_target(${PKG_NAME}Coverage
+        set_target_properties(${PKG_NAME} PROPERTIES
+            EXCLUDE_FROM_ALL TRUE
+        )
+
+        add_custom_target(${PKG_NAME}Coverage ALL
             COMMAND $<TARGET_FILE:${PKG_NAME}> --gtest_output=xml:${CMAKE_CURRENT_BINARY_DIR}/default.xml
             DEPENDS ${PKG_NAME}
         )
