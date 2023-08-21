@@ -6,8 +6,8 @@
 #include "NMM/Matrix.hpp"
 #include "NMM/Point.hpp"
 #include "NMM/Vector.hpp"
-#include "RT/Ray.hpp"
 #include "RT/Intersection.hpp"
+#include "RT/Ray.hpp"
 
 class NMSphere
 {
