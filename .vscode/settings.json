@@ -6,6 +6,7 @@
     "[cpp]": {
         "editor.rulers": [120]
     },
+    "coverage-gutters.coverageBaseDir": "Build/coverage/**",
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,

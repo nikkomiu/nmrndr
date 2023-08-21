@@ -128,15 +128,18 @@ function(nm_test)
         TEST_PREFIX "${ARG_PKG_TYPE}/${ARG_PKG_NAME}/"
     )
 
-    add_custom_target(${PKG_NAME}Coverage
-        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${PKG_NAME} --gtest_output=xml:${CMAKE_CURRENT_BINARY_DIR}/default.xml
-    )
+    if("${WITH_COVERAGE}" STREQUAL "ON")
+        add_custom_target(${PKG_NAME}Coverage
+            COMMAND $<TARGET_FILE:${PKG_NAME}> --gtest_output=xml:${CMAKE_CURRENT_BINARY_DIR}/default.xml
+            DEPENDS ${PKG_NAME}
+        )
 
-    add_custom_command(
-        TARGET ${PKG_NAME}Coverage
-        COMMAND llvm-profdata merge -o ${PKG_NAME}.profdata default.profraw
-        COMMAND llvm-cov show -format html -o ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME} ${PKG_NAME} -instr-profile=${PKG_NAME}.profdata
-        COMMAND llvm-cov export -format=lcov ./${PKG_NAME} -instr-profile=${PKG_NAME}.profdata > ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}.info
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    )
+        add_custom_command(
+            TARGET ${PKG_NAME}Coverage
+            COMMAND llvm-profdata merge -o ${PKG_NAME}.profdata default.profraw
+            COMMAND llvm-cov show -format html -o ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME} ${PKG_NAME} -instr-profile=${PKG_NAME}.profdata
+            COMMAND llvm-cov export -format=lcov ./${PKG_NAME} -instr-profile=${PKG_NAME}.profdata > ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/lcov.info
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        )
+    endif()
 endfunction()

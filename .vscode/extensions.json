@@ -2,6 +2,7 @@
     "recommendations": [
         "ms-vscode.cpptools",
         "editorconfig.editorconfig",
-        "ms-vscode.cmake-tools"
+        "ms-vscode.cmake-tools",
+        "ryanluker.vscode-coverage-gutters"
     ]
 }
