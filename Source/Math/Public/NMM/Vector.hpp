@@ -26,16 +26,47 @@ public:
     }
 
     NMPoint operator+(const NMPoint &point) const;
-    NMVector operator+(const NMVector &vector) const;
-    NMVector operator-(const NMVector &vector) const;
-    NMVector operator-() const;
-    NMVector operator*(float scalar) const;
-    NMVector operator/(float scalar) const;
+    NMVector operator+(const NMVector &vector) const
+    {
+        return NMVector(x + vector.GetX(), y + vector.GetY(), z + vector.GetZ());
+    }
 
-    void operator+=(const NMVector &vector);
-    void operator-=(const NMVector &vector);
-    void operator*=(float scalar);
-    void operator/=(float scalar);
+    NMVector operator-(const NMVector &vector) const
+    {
+        return NMVector(x - vector.GetX(), y - vector.GetY(), z - vector.GetZ());
+    }
+
+    NMVector operator-() const { return NMVector(-x, -y, -z); }
+    NMVector operator*(float scalar) const { return NMVector(x * scalar, y * scalar, z * scalar); }
+    NMVector operator/(float scalar) const { return NMVector(x / scalar, y / scalar, z / scalar); }
+
+    void operator+=(const NMVector &vector)
+    {
+        x += vector.x;
+        y += vector.y;
+        z += vector.z;
+    }
+
+    void operator-=(const NMVector &vector)
+    {
+        x -= vector.x;
+        y -= vector.y;
+        z -= vector.z;
+    }
+
+    void operator*=(float scalar)
+    {
+        x *= scalar;
+        y *= scalar;
+        z *= scalar;
+    }
+
+    void operator/=(float scalar)
+    {
+        x /= scalar;
+        y /= scalar;
+        z /= scalar;
+    }
 
     friend std::ostream &operator<<(std::ostream &os, const NMVector &vector)
     {
@@ -50,14 +81,24 @@ public:
 
     inline NMVector Normalized() const { return *this / Magnitude(); }
 
-    void Normalize();
+    inline void Normalize() { *this /= Magnitude(); }
 
-    float DotProduct(const NMVector &other) const { return x * other.x + y * other.y + z * other.z; }
+    inline float DotProduct(const NMVector &other) const { return x * other.x + y * other.y + z * other.z; }
 
     // TODO: Test this method
     float DotProduct(const NMPoint &point) const;
 
-    NMVector CrossProduct(const NMVector &other) const;
+    NMVector CrossProduct(const NMVector &other) const
+    {
+        return NMVector(y * other.GetZ() - z * other.GetY(), z * other.GetX() - x * other.GetZ(),
+                        x * other.GetY() - y * other.GetX());
+    }
+
+
+    NMVector Reflect(const NMVector &normal) const
+    {
+        return *this - normal * 2.0f * DotProduct(normal);
+    }
 
 protected:
 

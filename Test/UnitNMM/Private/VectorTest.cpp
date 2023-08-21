@@ -348,3 +348,31 @@ TEST_F(NMVectorTest, CrossProduct)
     EXPECT_EQ(result1, NMVector(-1.0f, 2.0f, -1.0f));
     EXPECT_EQ(result2, NMVector(1.0f, -2.0f, 1.0f));
 }
+
+// Scenario: Reflecting a vector approaching at 45°
+TEST_F(NMVectorTest, Reflect_45)
+{
+    // Given
+    NMVector vector(1.0f, -1.0f, 0.0f);
+    NMVector normal(0.0f, 1.0f, 0.0f);
+
+    // When
+    NMVector result = vector.Reflect(normal);
+
+    // Then
+    EXPECT_EQ(result, NMVector(1.0f, 1.0f, 0.0f));
+}
+
+// Scenario: Reflecting a vector off a slanted surface
+TEST_F(NMVectorTest, Reflect_Slanted)
+{
+    // Given
+    NMVector vector(0.0f, -1.0f, 0.0f);
+    NMVector normal(std::sqrt(2.0f) / 2.0f, std::sqrt(2.0f) / 2.0f, 0.0f);
+
+    // When
+    NMVector result = vector.Reflect(normal);
+
+    // Then
+    EXPECT_EQ(result, NMVector(1.0f, 0.0f, 0.0f));
+}
