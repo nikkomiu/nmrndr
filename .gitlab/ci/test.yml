@@ -9,7 +9,7 @@ Test Unit NMCore:
   artifacts:
     when: always
     paths:
-    - ./coverage
+    - ./Build/coverage
     reports:
       junit: ./Build/Test/UnitCore/default.xml
   cache:
@@ -29,7 +29,7 @@ Test Unit NMM:
   artifacts:
     when: always
     paths:
-    - ./coverage
+    - ./Build/coverage
     reports:
       junit: ./Build/Test/UnitNMM/default.xml
   cache:
