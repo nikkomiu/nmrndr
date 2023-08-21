@@ -33,12 +33,12 @@ public:
             Sort();
         }
 
-        if (intersections[0].t >= 0)
+        if (intersections.empty() || intersections[0].t < 0)
         {
-            return &intersections[0];
+            return nullptr;
         }
 
-        return nullptr;
+        return &intersections[0];
     }
 
 protected:

@@ -13,6 +13,14 @@ public:
 
     NMWorld(std::size_t canvasSize) : canvas(NMCanvas(canvasSize, canvasSize)) {}
 
+    void Setup()
+    {
+        // Set the sphere's material
+        NMMaterial sphereMaterial = NMMaterial();
+        sphereMaterial.SetColor(NMColor(1.0f, 0.2f, 1.0f));
+        sphere.SetMaterial(sphereMaterial);
+    }
+
     void Run()
     {
         float pixelSizeHeight = wallHeight / static_cast<float>(canvas.GetHeight());
@@ -31,14 +39,19 @@ public:
                 NMRay ray = NMRay(rayOrigin, (position - rayOrigin).Normalized());
                 std::vector<SNMIntersection> intersections = sphere.Intersect(ray);
                 SNMIntersectionList intersectionList = SNMIntersectionList(intersections);
-                if (intersectionList.Hit() != nullptr)
+                SNMIntersection* hit = intersectionList.Hit();
+                if (hit != nullptr)
                 {
-                    canvas.WritePixel(x, y, hitColor);
+                    NMPoint hitPoint = ray.Position(hit->t);
+                    NMVector normal = sphere.NormalAt(hitPoint);
+                    NMVector eye = -ray.GetDirection();
+                    NMColor color = sphere.GetMaterial().Lighting(pointLight, hitPoint, eye, normal);
+                    canvas.WritePixel(x, y, color);
                 }
             }
         }
 
-        std::ofstream file("shadow_sphere.ppm");
+        std::ofstream file("render_sphere.ppm");
         if (!file.is_open())
         {
             std::cerr << "Failed to open file" << std::endl;
@@ -54,6 +67,7 @@ protected:
 
     NMCanvas canvas;
     NMSphere sphere = NMSphere();
+    NMPointLight pointLight = NMPointLight(NMPoint(-10.0f, 10.0f, -10.0f), NMColor(1.0f, 1.0f, 1.0f));
 
     float wallZ = 10.0f;
 
@@ -61,6 +75,4 @@ protected:
     float wallHeight = 7.0f;
 
     NMPoint rayOrigin = NMPoint(0.0f, 0.0f, -5.0f);
-
-    NMColor hitColor = NMColor(1.0f, 0.0f, 0.0f);
 };

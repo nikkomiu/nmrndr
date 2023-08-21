@@ -94,11 +94,7 @@ public:
                         x * other.GetY() - y * other.GetX());
     }
 
-
-    NMVector Reflect(const NMVector &normal) const
-    {
-        return *this - normal * 2.0f * DotProduct(normal);
-    }
+    NMVector Reflect(const NMVector &normal) const { return *this - normal * 2.0f * DotProduct(normal); }
 
 protected:
 

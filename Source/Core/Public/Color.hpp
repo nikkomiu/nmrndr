@@ -21,7 +21,10 @@ public:
     inline int GetClampedGreen() const { return static_cast<int>(nmmath::Clamp(g, 0.0f, 1.0f) * 255.0f); }
     inline int GetClampedBlue() const { return static_cast<int>(nmmath::Clamp(b, 0.0f, 1.0f) * 255.0f); }
 
-    bool operator==(const NMColor& other) const { return r == other.r && g == other.g && b == other.b; }
+    bool operator==(const NMColor& other) const
+    {
+        return nmmath::FloatEquals(r, other.r) && nmmath::FloatEquals(g, other.g) && nmmath::FloatEquals(b, other.b);
+    }
 
     NMColor operator+(const NMColor& color) const { return NMColor(r + color.r, g + color.g, b + color.b); }
 

@@ -2,10 +2,12 @@
 
 #include <vector>
 
+#include "Material.hpp"
 #include "NMM/Matrix.hpp"
 #include "NMM/Point.hpp"
 #include "NMM/Vector.hpp"
 #include "RT/Ray.hpp"
+#include "RT/Intersection.hpp"
 
 class NMSphere
 {
@@ -19,7 +21,7 @@ public:
 
     inline void SetTransform(const NMMatrix& newTransform) { transform = newTransform; }
 
-    std::vector<float> Intersect(const NMRay& ray) const
+    std::vector<SNMIntersection> Intersect(const NMRay& ray)
     {
         NMRay transformedRay = ray.Transformed(transform.Inverse());
 
@@ -32,13 +34,16 @@ public:
 
         if (discriminant < 0)
         {
-            return std::vector<float>();
+            return std::vector<SNMIntersection>();
         }
 
         float t1 = static_cast<float>(-b - sqrt(discriminant)) / (2.0f * a);
         float t2 = static_cast<float>(-b + sqrt(discriminant)) / (2.0f * a);
 
-        return std::vector<float>{t1, t2};
+        SNMIntersection int1 = SNMIntersection(t1, this);
+        SNMIntersection int2 = SNMIntersection(t2, this);
+
+        return std::vector<SNMIntersection>{int1, int2};
     }
 
     NMVector NormalAt(const NMPoint& worldPoint) const
@@ -51,10 +56,15 @@ public:
         return worldNormal.Normalized();
     }
 
+    inline const NMMaterial& GetMaterial() const { return material; }
+    inline void SetMaterial(const NMMaterial& newMaterial) { material = newMaterial; }
+
 protected:
 
     NMMatrix transform = NMMatrix::Identity4x4();
 
     NMPoint origin = NMPoint(0.0f, 0.0f, 0.0f);
     float radius = 1.0f;
+
+    NMMaterial material;
 };

@@ -26,12 +26,12 @@ TEST_F(NMSphereTest, SphereIntersect_TwoPoints)
     NMSphere sphere;
 
     // When
-    std::vector<float> t = sphere.Intersect(ray);
+    std::vector<SNMIntersection> t = sphere.Intersect(ray);
 
     // Then
     EXPECT_EQ(t.size(), 2);
-    EXPECT_EQ(t[0], 4.0f);
-    EXPECT_EQ(t[1], 6.0f);
+    EXPECT_EQ(t[0].t, 4.0f);
+    EXPECT_EQ(t[1].t, 6.0f);
 }
 
 // Scenario: A ray intersects a sphere at a tangent
@@ -42,12 +42,12 @@ TEST_F(NMSphereTest, SphereIntersect_Tangent)
     NMSphere sphere;
 
     // When
-    std::vector<float> t = sphere.Intersect(ray);
+    std::vector<SNMIntersection> t = sphere.Intersect(ray);
 
     // Then
     EXPECT_EQ(t.size(), 2);
-    EXPECT_EQ(t[0], 5.0f);
-    EXPECT_EQ(t[1], 5.0f);
+    EXPECT_EQ(t[0].t, 5.0f);
+    EXPECT_EQ(t[1].t, 5.0f);
 }
 
 // Scenario: A ray misses a sphere
@@ -58,7 +58,7 @@ TEST_F(NMSphereTest, SphereIntersect_Miss)
     NMSphere sphere;
 
     // When
-    std::vector<float> t = sphere.Intersect(ray);
+    std::vector<SNMIntersection> t = sphere.Intersect(ray);
 
     // Then
     EXPECT_EQ(t.size(), 0);
@@ -72,12 +72,12 @@ TEST_F(NMSphereTest, SphereIntersect_Inside)
     NMSphere sphere;
 
     // When
-    std::vector<float> t = sphere.Intersect(ray);
+    std::vector<SNMIntersection> t = sphere.Intersect(ray);
 
     // Then
     EXPECT_EQ(t.size(), 2);
-    EXPECT_EQ(t[0], -1.0f);
-    EXPECT_EQ(t[1], 1.0f);
+    EXPECT_EQ(t[0].t, -1.0f);
+    EXPECT_EQ(t[1].t, 1.0f);
 }
 
 // Scenario: A sphere is behind a ray
@@ -88,12 +88,12 @@ TEST_F(NMSphereTest, SphereIntersect_Behind)
     NMSphere sphere;
 
     // When
-    std::vector<float> t = sphere.Intersect(ray);
+    std::vector<SNMIntersection> t = sphere.Intersect(ray);
 
     // Then
     EXPECT_EQ(t.size(), 2);
-    EXPECT_EQ(t[0], -6.0f);
-    EXPECT_EQ(t[1], -4.0f);
+    EXPECT_EQ(t[0].t, -6.0f);
+    EXPECT_EQ(t[1].t, -4.0f);
 }
 
 // Scenario: A sphere's default transformation
@@ -129,12 +129,12 @@ TEST_F(NMSphereTest, SphereIntersect_Scaled)
     sphere.SetTransform(NMMatrix::Scaling(2.0f, 2.0f, 2.0f));
 
     // When
-    std::vector<float> t = sphere.Intersect(ray);
+    std::vector<SNMIntersection> t = sphere.Intersect(ray);
 
     // Then
     EXPECT_EQ(t.size(), 2);
-    EXPECT_EQ(t[0], 3.0f);
-    EXPECT_EQ(t[1], 7.0f);
+    EXPECT_EQ(t[0].t, 3.0f);
+    EXPECT_EQ(t[1].t, 7.0f);
 }
 
 // Scenario: Intersecting a translated sphere with a ray
@@ -146,7 +146,7 @@ TEST_F(NMSphereTest, SphereIntersect_Translated)
     sphere.SetTransform(NMMatrix::Translation(5.0f, 0.0f, 0.0f));
 
     // When
-    std::vector<float> t = sphere.Intersect(ray);
+    std::vector<SNMIntersection> t = sphere.Intersect(ray);
 
     // Then
     EXPECT_EQ(t.size(), 0);
@@ -243,4 +243,32 @@ TEST_F(NMSphereTest, SphereNormal_Transformed)
 
     // Then
     EXPECT_EQ(normal, NMVector(0.0f, 0.970143f, -0.242536f));
+}
+
+// Scenario: A sphere has a default material
+TEST_F(NMSphereTest, SphereMaterial_Default)
+{
+    // Given
+    NMSphere sphere;
+
+    // When
+    NMMaterial material = sphere.GetMaterial();
+
+    // Then
+    EXPECT_EQ(material, NMMaterial());
+}
+
+// Scenario: A sphere may be assigned a material
+TEST_F(NMSphereTest, SphereMaterial_Assigned)
+{
+    // Given
+    NMSphere sphere;
+    NMMaterial material;
+    material.SetAmbient(1.0f);
+
+    // When
+    sphere.SetMaterial(material);
+
+    // Then
+    EXPECT_EQ(sphere.GetMaterial(), material);
 }

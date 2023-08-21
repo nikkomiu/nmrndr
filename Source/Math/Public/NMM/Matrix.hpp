@@ -5,10 +5,10 @@
 #include <limits>
 #include <vector>
 
-#include "NMM/Tuple.hpp"
 #include "NMM/Point.hpp"
-#include "NMM/Vector.hpp"
+#include "NMM/Tuple.hpp"
 #include "NMM/Util.hpp"
+#include "NMM/Vector.hpp"
 
 class NMMatrix
 {
