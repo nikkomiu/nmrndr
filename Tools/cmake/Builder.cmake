@@ -1,3 +1,6 @@
+# set(NM_USE_EXE_PREFIX ON)
+# set(NM_PKG_PREFIX "NM_")
+
 function(nm_build)
     set(options "")
     set(oneValueArgs PKG_PREFIX PKG_NAME PKG_TYPE IDE_FOLDER)
@@ -6,7 +9,11 @@ function(nm_build)
 
     # set default PKG_PREFIX if not specified
     if(NOT ARG_PKG_PREFIX)
-        set(ARG_PKG_PREFIX "NM")
+        if(NOT NM_PKG_PREFIX)
+            set(ARG_PKG_PREFIX "NM")
+        else()
+            set(ARG_PKG_PREFIX ${NM_PKG_PREFIX})
+        endif()
     endif()
 
     # set default IDE folder if not specified
@@ -29,6 +36,16 @@ function(nm_build)
 
     if(${ARG_PKG_TYPE} STREQUAL "EXE")
         add_executable(${PKG_NAME} ${SOURCES})
+
+        if(NOT _USE_EXE_PREFIX)
+            set_target_properties(${PKG_NAME} PROPERTIES
+                OUTPUT_NAME ${ARG_PKG_NAME}
+            )
+        else()
+            set_target_properties(${PKG_NAME} PROPERTIES
+                OUTPUT_NAME ${PKG_NAME}
+            )
+        endif()
     else()
         add_library(${PKG_NAME} ${ARG_PKG_TYPE} ${SOURCES})
     endif()

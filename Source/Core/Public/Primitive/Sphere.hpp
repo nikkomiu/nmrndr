@@ -35,8 +35,8 @@ public:
             return std::vector<float>();
         }
 
-        float t1 = (-b - sqrt(discriminant)) / (2.0f * a);
-        float t2 = (-b + sqrt(discriminant)) / (2.0f * a);
+        float t1 = static_cast<float>(-b - sqrt(discriminant)) / (2.0f * a);
+        float t2 = static_cast<float>(-b + sqrt(discriminant)) / (2.0f * a);
 
         return std::vector<float>{t1, t2};
     }

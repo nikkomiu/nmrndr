@@ -26,10 +26,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include(CTest)
 include(GenerateExportHeader)
 include(GoogleTest)
-include(Tools/cmake/Builder.cmake)
-include(Tools/cmake/ClangFormat.cmake)
-include(Tools/cmake/CppCheck.cmake)
 include(Tools/cmake/Git.cmake)
+include(Tools/cmake/Builder.cmake)
 
 # ###################################################################### #
 # Load Required Packages                                                 #
@@ -41,6 +39,8 @@ find_package(GTest CONFIG REQUIRED)
 # ###################################################################### #
 add_subdirectory(Source/Math)
 add_subdirectory(Source/Core)
+
+add_subdirectory(Tools)
 
 if(BUILD_TOOLS)
     add_subdirectory(Source/Tools)
