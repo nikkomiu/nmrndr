@@ -1042,3 +1042,68 @@ TEST_F(NMMatrixTest, Identity4x4)
 
     ASSERT_EQ(result, matrix);
 }
+
+// Scenario: The transformation matrix for the default orientation
+TEST_F(NMMatrixTest, ViewTransform_DefaultOrientation)
+{
+    // Given
+    NMPoint from(0.0f, 0.0f, 0.0f);
+    NMPoint to(0.0f, 0.0f, -1.0f);
+    NMVector up(0.0f, 1.0f, 0.0f);
+
+    // When
+    NMMatrix t = NMMatrix::ViewTransform(from, to, up);
+
+    // Then
+    ASSERT_EQ(t, NMMatrix::Identity4x4());
+}
+
+// Scenario: A view transformation matrix looking in positive z direction
+TEST_F(NMMatrixTest, ViewTransform_PositiveZDirection)
+{
+    // Given
+    NMPoint from(0.0f, 0.0f, 0.0f);
+    NMPoint to(0.0f, 0.0f, 1.0f);
+    NMVector up(0.0f, 1.0f, 0.0f);
+
+    // When
+    NMMatrix t = NMMatrix::ViewTransform(from, to, up);
+
+    // Then
+    ASSERT_EQ(t, NMMatrix::Scaling(-1.0f, 1.0f, -1.0f));
+}
+
+// Scenario: The view transformation moves the world
+TEST_F(NMMatrixTest, ViewTransform_MoveWorld)
+{
+    // Given
+    NMPoint from(0.0f, 0.0f, 8.0f);
+    NMPoint to(0.0f, 0.0f, 0.0f);
+    NMVector up(0.0f, 1.0f, 0.0f);
+
+    // When
+    NMMatrix t = NMMatrix::ViewTransform(from, to, up);
+
+    // Then
+    ASSERT_EQ(t, NMMatrix::Translation(0.0f, 0.0f, -8.0f));
+}
+
+// Scenario: An arbitrary view transformation
+TEST_F(NMMatrixTest, ViewTransform_Arbitrary)
+{
+    // Given
+    NMPoint from(1.0f, 3.0f, 2.0f);
+    NMPoint to(4.0f, -2.0f, 8.0f);
+    NMVector up(1.0f, 1.0f, 0.0f);
+
+    // When
+    NMMatrix t = NMMatrix::ViewTransform(from, to, up);
+
+    // Then
+    ASSERT_EQ(t, NMMatrix(4, 4, {
+        -0.50709f, 0.50709f,  0.67612f, -2.36643f,
+        0.76772f,  0.60609f,  0.12122f, -2.82843f,
+        -0.35857f, 0.59761f, -0.71714f,  0.00000f,
+        0.00000f,  0.00000f,  0.00000f,  1.00000f,
+    }));
+}

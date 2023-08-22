@@ -32,7 +32,7 @@ TEST_F(WorldTest, DefaultWorld)
     ASSERT_EQ(pointLight.GetPosition(), NMPoint(-10.0f, 10.0f, -10.0f));
     ASSERT_EQ(pointLight.GetColor(), NMColor(1.0f, 1.0f, 1.0f));
 
-    INMIntersectionObject* sphere = world.GetObject(0);
+    std::shared_ptr<INMIntersectionObject> sphere = world.GetObject(0);
     ASSERT_EQ(sphere->GetTransform(), NMMatrix::Identity4x4());
     ASSERT_EQ(sphere->GetMaterial(), NMMaterial(NMColor(0.8f, 1.0f, 0.6f), 0.1f, 0.7f, 0.2f, 200.0f));
 
@@ -70,9 +70,9 @@ TEST_F(WorldTest, PrecomputeState)
     SNMIntersectionState state = world.PrepareState(intersections[0], ray);
 
     // Then
-    INMIntersectionObject* sphere = world.GetObject(0);
+    std::shared_ptr<INMIntersectionObject> sphere = world.GetObject(0);
     const INMIntersectionObject* stateObject = state.object;
-    ASSERT_TRUE(stateObject == sphere);
+    ASSERT_TRUE(stateObject == sphere.get());
     ASSERT_EQ(state.point, NMPoint(0.0f, 0.0f, -1.0f));
     ASSERT_EQ(state.eyeVector, NMVector(0.0f, 0.0f, -1.0f));
     ASSERT_EQ(state.normalVector, NMVector(0.0f, 0.0f, -1.0f));
@@ -132,10 +132,10 @@ TEST_F(WorldTest, ShadingIntersectionInside)
 {
     // Given
     NMWorld world = NMWorld::Default();
-    world.SetPointLight(0, NMPointLight(NMPoint(0.0f, 0.25f, 0.0f), NMColor(1.0f, 1.0f, 1.0f)));
+    world.SetLight(0, NMPointLight(NMPoint(0.0f, 0.25f, 0.0f), NMColor(1.0f, 1.0f, 1.0f)));
     NMRay ray(NMPoint(0.0f, 0.0f, 0.0f), NMVector(0.0f, 0.0f, 1.0f));
-    INMIntersectionObject* shape = world.GetObject(1);
-    SNMIntersection intersection(0.5f, shape);
+    std::shared_ptr<INMIntersectionObject> shape = world.GetObject(1);
+    SNMIntersection intersection(0.5f, shape.get());
 
     // When
     SNMIntersectionState state = world.PrepareState(intersection, ray);
@@ -168,7 +168,6 @@ TEST_F(WorldTest, ColorHit)
 
     // When
     NMColor color = world.ColorAt(ray);
-    std::cout << "Color(" << color.GetRed() << ", " << color.GetGreen() << ", " << color.GetBlue() << ")" << std::endl;
 
     // Then
     ASSERT_EQ(color, NMColor(0.380661f, 0.475827f, 0.285496f));
@@ -179,9 +178,9 @@ TEST_F(WorldTest, ColorBehind)
 {
     // Given
     NMWorld world = NMWorld::Default();
-    INMIntersectionObject* outer = world.GetObject(0);
+    std::shared_ptr<INMIntersectionObject> outer = world.GetObject(0);
     outer->SetMaterial(NMMaterial(NMColor(0.8f, 1.0f, 0.6f), 1.0f, 0.7f, 0.2f, 200.0f));
-    INMIntersectionObject* inner = world.GetObject(1);
+    std::shared_ptr<INMIntersectionObject> inner = world.GetObject(1);
     inner->SetMaterial(NMMaterial(NMColor(0.8f, 1.0f, 0.6f), 1.0f, 0.7f, 0.2f, 200.0f));
     NMRay ray(NMPoint(0.0f, 0.0f, 0.75f), NMVector(0.0f, 0.0f, -1.0f));
 

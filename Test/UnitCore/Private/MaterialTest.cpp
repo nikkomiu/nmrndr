@@ -214,7 +214,6 @@ TEST_F(NMMaterialTest, Lighting_EyeOppositeSurface_LightOffset45)
 
     // When
     NMColor result = material.Lighting(light, position, eyev, normalv);
-    std::cout << "(" << result.GetRed() << ", " << result.GetGreen() << ", " << result.GetBlue() << ")" << std::endl;
 
     // Then
     ASSERT_EQ(result, NMColor(0.736396f, 0.736396f, 0.736396f));

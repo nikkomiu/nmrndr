@@ -6,6 +6,7 @@ int main(int /* argc */, char** /* argv */)
 
     world.Setup();
     world.Run();
+    world.Save("render_sphere.ppm");
 
     return 0;
 }

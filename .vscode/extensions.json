@@ -3,6 +3,7 @@
         "ms-vscode.cpptools",
         "editorconfig.editorconfig",
         "ms-vscode.cmake-tools",
-        "ryanluker.vscode-coverage-gutters"
+        "ryanluker.vscode-coverage-gutters",
+        "ms-vscode.cpptools-extension-pack"
     ]
 }

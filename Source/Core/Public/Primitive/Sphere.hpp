@@ -16,6 +16,8 @@ public:
 
     NMSphere() = default;
 
+    virtual ~NMSphere() = default;
+
     virtual bool operator==(const INMIntersectionObject& other) const override
     {
         const NMSphere& otherSphere = static_cast<const NMSphere&>(other);

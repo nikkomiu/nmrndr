@@ -4,7 +4,8 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 set(NM_PKG_PREFIX "EXAMPLE_NM")
 
-add_subdirectory(RotMatClock)
-add_subdirectory(Trajectory)
-add_subdirectory(ShadowSphere)
-add_subdirectory(RenderSphere)
+add_subdirectory(0_Trajectory)
+add_subdirectory(1_RotMatClock)
+add_subdirectory(2_ShadowSphere)
+add_subdirectory(3_RenderSphere)
+add_subdirectory(4_FirstScene)

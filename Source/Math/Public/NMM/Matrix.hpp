@@ -335,6 +335,19 @@ public:
         return NMMatrix(4, 4, {1.0f, xy, xz, 0.0f, yx, 1.0f, yz, 0.0f, zx, zy, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f});
     }
 
+    static NMMatrix ViewTransform(NMPoint from, NMPoint to, NMVector up)
+    {
+        auto forward = (to - from).Normalized();
+        auto left = forward.CrossProduct(up.Normalized());
+        auto trueUp = left.CrossProduct(forward);
+
+        NMMatrix orientation(4, 4,
+                             {left.GetX(), left.GetY(), left.GetZ(), 0.0f, trueUp.GetX(), trueUp.GetY(), trueUp.GetZ(),
+                              0.0f, -forward.GetX(), -forward.GetY(), -forward.GetZ(), 0.0f, 0.0f, 0.0f, 0.0f, 1.0f});
+
+        return orientation * Translation(-from.GetX(), -from.GetY(), -from.GetZ());
+    }
+
 protected:
 
     std::size_t width;

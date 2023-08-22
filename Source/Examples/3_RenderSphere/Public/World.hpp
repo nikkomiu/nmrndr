@@ -50,8 +50,11 @@ public:
                 }
             }
         }
+    }
 
-        std::ofstream file("render_sphere.ppm");
+    void Save(std::string filename)
+    {
+        std::ofstream file(filename);
         if (!file.is_open())
         {
             std::cerr << "Failed to open file" << std::endl;

@@ -4,7 +4,6 @@ Test Unit NMCore:
   before_script:
   - cmake --preset Test
   script:
-  - cmake --build --preset Test
   - cmake --build --preset Test --target TestUnitNMCoreCoverage
   artifacts:
     when: always
@@ -24,7 +23,6 @@ Test Unit NMM:
   before_script:
   - cmake --preset Test
   script:
-  - cmake --build --preset Test
   - cmake --build --preset Test --target TestUnitNMMathCoverage
   artifacts:
     when: always

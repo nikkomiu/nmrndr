@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 
 #include "Color.hpp"
@@ -24,12 +25,12 @@ public:
         world.pointLights.push_back(NMPointLight(NMPoint(-10.0f, 10.0f, -10.0f), NMColor(1.0f, 1.0f, 1.0f)));
 
         // Create a unit sphere
-        NMSphere* outerSphere = new NMSphere();
+        std::shared_ptr<NMSphere> outerSphere = std::make_shared<NMSphere>();
         outerSphere->SetMaterial(NMMaterial(NMColor(0.8f, 1.0f, 0.6f), 0.1f, 0.7f, 0.2f, 200.0f));
         world.objects.push_back(outerSphere);
 
         // Create an inner sphere
-        NMSphere* innerSphere = new NMSphere();
+        std::shared_ptr<NMSphere> innerSphere = std::make_shared<NMSphere>();
         innerSphere->SetTransform(NMMatrix::Scaling(0.5f, 0.5f, 0.5f));
         world.objects.push_back(innerSphere);
 
@@ -38,19 +39,23 @@ public:
 
     inline NMPointLight GetPointLight(std::size_t index) const { return pointLights[index]; }
 
-    inline void SetPointLight(std::size_t index, const NMPointLight& light) { pointLights[index] = light; }
-
     inline std::size_t GetPointLightCount() const { return pointLights.size(); }
 
-    inline INMIntersectionObject* GetObject(std::size_t index) const { return objects[index]; }
+    inline void AddLight(const NMPointLight& light) { pointLights.push_back(light); }
+
+    inline void SetLight(std::size_t index, const NMPointLight& light) { pointLights[index] = light; }
+
+    inline std::shared_ptr<INMIntersectionObject> GetObject(std::size_t index) const { return objects[index]; }
 
     inline std::size_t GetObjectCount() const { return objects.size(); }
+
+    inline void AddObject(std::shared_ptr<INMIntersectionObject> object) { objects.push_back(object); }
 
     SNMIntersectionList Intersect(const NMRay& ray) const
     {
         SNMIntersectionList intersections;
 
-        for (INMIntersectionObject* object : objects)
+        for (std::shared_ptr<INMIntersectionObject> object : objects)
         {
             intersections.Append(object->Intersect(ray));
         }
@@ -108,5 +113,5 @@ public:
 protected:
 
     std::vector<NMPointLight> pointLights;
-    std::vector<INMIntersectionObject*> objects;
+    std::vector<std::shared_ptr<INMIntersectionObject>> objects;
 };

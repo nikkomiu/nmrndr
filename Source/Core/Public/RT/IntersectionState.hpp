@@ -12,6 +12,7 @@ public:
 
     SNMIntersectionState() = default;
 
+    // TODO: move World.hpp#PrepareState() here
     SNMIntersectionState(const SNMIntersection& intersection)
     {
         t = intersection.t;

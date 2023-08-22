@@ -116,6 +116,16 @@ function(nm_test)
             ${ARG_LINK_LIBRARIES}
     )
 
+    # TODO: enable warnings for tests
+    # target_compile_options(${PKG_NAME} PRIVATE
+    #     $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
+    #         -Wall -Werror -pedantic-errors -Wextra -Wconversion -Wsign-conversion
+    #     >
+    #     $<$<CXX_COMPILER_ID:MSVC>:
+    #         /W4 /WX
+    #     >
+    # )
+
     # TODO: Add support for code coverage on Windows
     target_compile_options(${PKG_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
     target_link_libraries(${PKG_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
