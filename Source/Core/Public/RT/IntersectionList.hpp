@@ -26,6 +26,12 @@ public:
         isSorted = false;
     }
 
+    inline void Append(std::vector<SNMIntersection> newIntersections)
+    {
+        intersections.insert(intersections.end(), newIntersections.begin(), newIntersections.end());
+        isSorted = false;
+    }
+
     SNMIntersection* Hit()
     {
         if (!isSorted)
@@ -41,13 +47,13 @@ public:
         return &intersections[0];
     }
 
-protected:
-
-    bool isSorted = false;
-    std::vector<SNMIntersection> intersections;
-
     void Sort()
     {
+        if (isSorted)
+        {
+            return;
+        }
+
         std::sort(intersections.begin(), intersections.end(),
                   [](const SNMIntersection& a, const SNMIntersection& b)
                   {
@@ -66,4 +72,9 @@ protected:
                   });
         isSorted = true;
     }
+
+protected:
+
+    bool isSorted = false;
+    std::vector<SNMIntersection> intersections;
 };

@@ -22,6 +22,14 @@ public:
                && nmmath::FloatEquals(shininess, other.shininess);
     }
 
+    friend std::ostream &operator<<(std::ostream &os, const NMMaterial &material)
+    {
+        os << "Mat(" << material.color << ", " << std::setprecision(2) << std::fixed << "Ambient("
+           << material.ambient << "), Diffuse(" << material.diffuse << "), Specular("
+           << material.specular << "), Shininess(" << std::setprecision(0) << material.shininess << "))";
+        return os;
+    }
+
     inline const NMColor &GetColor() const { return color; }
     inline float GetAmbient() const { return ambient; }
     inline float GetDiffuse() const { return diffuse; }

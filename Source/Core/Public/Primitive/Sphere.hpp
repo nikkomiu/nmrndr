@@ -8,20 +8,27 @@
 #include "NMM/Vector.hpp"
 #include "RT/Intersection.hpp"
 #include "RT/Ray.hpp"
+#include "RT/IIntersectionObject.hpp"
 
-class NMSphere
+class NMSphere : public INMIntersectionObject
 {
 public:
 
     NMSphere() = default;
 
-    inline NMMatrix GetTransform() const { return transform; }
+    virtual bool operator==(const INMIntersectionObject& other) const override
+    {
+        const NMSphere& otherSphere = static_cast<const NMSphere&>(other);
+        return transform == otherSphere.transform && origin == otherSphere.origin && radius == otherSphere.radius;
+    }
+
+    inline virtual NMMatrix GetTransform() const override { return transform; }
     inline float GetRadius() const { return radius; }
     inline const NMPoint& GetOrigin() const { return origin; }
 
     inline void SetTransform(const NMMatrix& newTransform) { transform = newTransform; }
 
-    std::vector<SNMIntersection> Intersect(const NMRay& ray)
+    virtual std::vector<SNMIntersection> Intersect(const NMRay& ray) override
     {
         NMRay transformedRay = ray.Transformed(transform.Inverse());
 
@@ -46,7 +53,7 @@ public:
         return std::vector<SNMIntersection>{int1, int2};
     }
 
-    NMVector NormalAt(const NMPoint& worldPoint) const
+    virtual NMVector NormalAt(const NMPoint& worldPoint) const override
     {
         NMMatrix inverseTransform = transform.Inverse();
         NMPoint objectPoint = inverseTransform * worldPoint;
@@ -56,8 +63,8 @@ public:
         return worldNormal.Normalized();
     }
 
-    inline const NMMaterial& GetMaterial() const { return material; }
-    inline void SetMaterial(const NMMaterial& newMaterial) { material = newMaterial; }
+    inline virtual const NMMaterial& GetMaterial() const override { return material; }
+    inline virtual void SetMaterial(const NMMaterial& newMaterial) override { material = newMaterial; }
 
 protected:
 

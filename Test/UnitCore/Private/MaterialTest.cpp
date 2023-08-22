@@ -63,6 +63,19 @@ TEST_F(NMMaterialTest, EqualityOperator_NotEqual)
     ASSERT_FALSE(material1 == material2);
 }
 
+TEST_F(NMMaterialTest, StreamInsertionOperator)
+{
+    // Given
+    NMMaterial material(NMColor(1, 1, 1), 0.1f, 0.9f, 0.9f, 200.0f);
+    std::stringstream stream;
+
+    // When
+    stream << material;
+
+    // Then
+    ASSERT_EQ(stream.str(), "Mat(rgb(255, 255, 255), Ambient(0.10), Diffuse(0.90), Specular(0.90), Shininess(200))");
+}
+
 TEST_F(NMMaterialTest, Assign_Color)
 {
     // Given
