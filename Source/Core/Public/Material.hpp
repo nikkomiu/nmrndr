@@ -24,9 +24,9 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const NMMaterial &material)
     {
-        os << "Mat(" << material.color << ", " << std::setprecision(2) << std::fixed << "Ambient("
-           << material.ambient << "), Diffuse(" << material.diffuse << "), Specular("
-           << material.specular << "), Shininess(" << std::setprecision(0) << material.shininess << "))";
+        os << "Mat(" << material.color << ", " << std::setprecision(2) << std::fixed << "Ambient(" << material.ambient
+           << "), Diffuse(" << material.diffuse << "), Specular(" << material.specular << "), Shininess("
+           << std::setprecision(0) << material.shininess << "))";
         return os;
     }
 

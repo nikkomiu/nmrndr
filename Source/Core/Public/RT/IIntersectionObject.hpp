@@ -14,9 +14,9 @@ class INMIntersectionObject
 public:
 
     virtual NMMatrix GetTransform() const = 0;
-    virtual const NMMaterial& GetMaterial() const = 0;
+    virtual const NMMaterial &GetMaterial() const = 0;
 
-    virtual void SetMaterial(const NMMaterial& newMaterial) = 0;
+    virtual void SetMaterial(const NMMaterial &newMaterial) = 0;
 
     // TODO: find a way to make const
     virtual std::vector<SNMIntersection> Intersect(const NMRay &ray) = 0;

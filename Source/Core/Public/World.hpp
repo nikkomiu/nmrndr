@@ -36,32 +36,17 @@ public:
         return world;
     }
 
-    inline NMPointLight GetPointLight(int index) const
-    {
-        return pointLights[index];
-    }
+    inline NMPointLight GetPointLight(std::size_t index) const { return pointLights[index]; }
 
-    inline void SetPointLight(int index, const NMPointLight& light)
-    {
-        pointLights[index] = light;
-    }
+    inline void SetPointLight(std::size_t index, const NMPointLight& light) { pointLights[index] = light; }
 
-    inline int GetPointLightCount() const
-    {
-        return pointLights.size();
-    }
+    inline std::size_t GetPointLightCount() const { return pointLights.size(); }
 
-    inline INMIntersectionObject* GetObject(int index) const
-    {
-        return objects[index];
-    }
+    inline INMIntersectionObject* GetObject(std::size_t index) const { return objects[index]; }
 
-    inline int GetObjectCount() const
-    {
-        return objects.size();
-    }
+    inline std::size_t GetObjectCount() const { return objects.size(); }
 
-    SNMIntersectionList Intersect(const NMRay &ray) const
+    SNMIntersectionList Intersect(const NMRay& ray) const
     {
         SNMIntersectionList intersections;
 
@@ -75,7 +60,7 @@ public:
         return intersections;
     }
 
-    SNMIntersectionState PrepareState(const SNMIntersection &intersection, const NMRay &ray) const
+    SNMIntersectionState PrepareState(const SNMIntersection& intersection, const NMRay& ray) const
     {
         SNMIntersectionState state(intersection);
 

@@ -2,9 +2,9 @@
 
 #include "NMM/Point.hpp"
 #include "NMM/Vector.hpp"
+#include "RT/IIntersectionObject.hpp"
 #include "RT/Intersection.hpp"
 #include "RT/Ray.hpp"
-#include "RT/IIntersectionObject.hpp"
 
 struct SNMIntersectionState
 {
@@ -12,7 +12,7 @@ public:
 
     SNMIntersectionState() = default;
 
-    SNMIntersectionState(const SNMIntersection &intersection)
+    SNMIntersectionState(const SNMIntersection& intersection)
     {
         t = intersection.t;
         object = intersection.object;
