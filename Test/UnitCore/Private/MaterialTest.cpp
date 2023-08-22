@@ -161,7 +161,7 @@ TEST_F(NMMaterialTest, Lighting_EyeBetweenLightAndSurface)
     NMPointLight light(NMPoint(0, 0, -10), NMColor(1, 1, 1));
 
     // When
-    NMColor result = material.Lighting(light, position, eyev, normalv);
+    NMColor result = material.Lighting(light, position, eyev, normalv, false);
 
     // Then
     ASSERT_EQ(result, NMColor(1.9f, 1.9f, 1.9f));
@@ -187,7 +187,7 @@ TEST_F(NMMaterialTest, Lighting_EyeBetweenLightAndSurface_EyeOffset45)
     NMPointLight light(NMPoint(0, 0, -10), NMColor(1, 1, 1));
 
     // When
-    NMColor result = material.Lighting(light, position, eyev, normalv);
+    NMColor result = material.Lighting(light, position, eyev, normalv, false);
 
     // Then
     ASSERT_EQ(result, NMColor(1.0f, 1.0f, 1.0f));
@@ -213,7 +213,7 @@ TEST_F(NMMaterialTest, Lighting_EyeOppositeSurface_LightOffset45)
     NMPointLight light(NMPoint(0, 10, -10), NMColor(1, 1, 1));
 
     // When
-    NMColor result = material.Lighting(light, position, eyev, normalv);
+    NMColor result = material.Lighting(light, position, eyev, normalv, false);
 
     // Then
     ASSERT_EQ(result, NMColor(0.736396f, 0.736396f, 0.736396f));
@@ -239,7 +239,7 @@ TEST_F(NMMaterialTest, Lighting_EyeInPathOfReflectionVector)
     NMPointLight light(NMPoint(0, 10, -10), NMColor(1, 1, 1));
 
     // When
-    NMColor result = material.Lighting(light, position, eyev, normalv);
+    NMColor result = material.Lighting(light, position, eyev, normalv, false);
 
     // Then
     ASSERT_EQ(result, NMColor(1.636385f, 1.636385f, 1.636385f));
@@ -265,7 +265,31 @@ TEST_F(NMMaterialTest, Lighting_LightBehindSurface)
     NMPointLight light(NMPoint(0, 0, 10), NMColor(1, 1, 1));
 
     // When
-    NMColor result = material.Lighting(light, position, eyev, normalv);
+    NMColor result = material.Lighting(light, position, eyev, normalv, false);
+
+    // Then
+    ASSERT_EQ(result, NMColor(0.1f, 0.1f, 0.1f));
+}
+
+// Scenario: Lighting with the surface in shadow
+//   Given eyev ← vector(0, 0, -1)
+//   And normalv ← vector(0, 0, -1)
+//   And light ← point_light(point(0, 0, -10), color(1, 1, 1))
+//   And in_shadow ← true
+//   When result ← lighting(m, light, position, eyev, normalv, in_shadow)
+//   Then result = color(0.1, 0.1, 0.1)
+TEST_F(NMMaterialTest, Lighting_SurfaceInShadow)
+{
+    // Given
+    NMMaterial material;
+    NMPoint position(0, 0, 0);
+    NMVector eyev(0, 0, -1);
+    NMVector normalv(0, 0, -1);
+    NMPointLight light(NMPoint(0, 0, -10), NMColor(1, 1, 1));
+    bool inShadow = true;
+
+    // When
+    NMColor result = material.Lighting(light, position, eyev, normalv, inShadow);
 
     // Then
     ASSERT_EQ(result, NMColor(0.1f, 0.1f, 0.1f));

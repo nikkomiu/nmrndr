@@ -131,7 +131,7 @@ TEST_F(IntersectionListTest, Append)
     SNMIntersectionList intersectionList = SNMIntersectionList({ intersection1 });
 
     // When
-    intersectionList.Append({ intersection2, intersection3 });
+    intersectionList.Add({ intersection2, intersection3 });
 
     // Then
     EXPECT_EQ(intersectionList.Size(), 3);

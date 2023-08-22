@@ -43,7 +43,7 @@ public:
     inline void SetShininess(float newShininess) { shininess = newShininess; }
 
     NMColor Lighting(const NMPointLight &light, const NMPoint &point, const NMVector &eyeVector,
-                     const NMVector &normalVector) const
+                     const NMVector &normalVector, bool inShadow) const
     {
         // Combine the surface color with the light's color/intensity
         NMColor effectiveColor = color * light.GetColor();
@@ -58,7 +58,7 @@ public:
         // light vector and the normal vector. A negative number means the
         // light is on the other side of the surface.
         float lightDotNormal = lightVector.DotProduct(normalVector);
-        if (lightDotNormal < 0)
+        if (lightDotNormal < 0 || inShadow)
         {
             return ambientColor;
         }

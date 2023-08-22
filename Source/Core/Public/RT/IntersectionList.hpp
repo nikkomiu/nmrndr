@@ -26,7 +26,7 @@ public:
         isSorted = false;
     }
 
-    inline void Append(std::vector<SNMIntersection> newIntersections)
+    inline void Add(std::vector<SNMIntersection> newIntersections)
     {
         intersections.insert(intersections.end(), newIntersections.begin(), newIntersections.end());
         isSorted = false;

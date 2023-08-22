@@ -25,10 +25,10 @@ public:
     }
 
     inline virtual NMMatrix GetTransform() const override { return transform; }
+    inline virtual void SetTransform(const NMMatrix& newTransform) override { transform = newTransform; }
+
     inline float GetRadius() const { return radius; }
     inline const NMPoint& GetOrigin() const { return origin; }
-
-    inline void SetTransform(const NMMatrix& newTransform) { transform = newTransform; }
 
     virtual std::vector<SNMIntersection> Intersect(const NMRay& ray) override
     {

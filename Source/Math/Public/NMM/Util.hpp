@@ -5,9 +5,11 @@
 
 namespace nmmath
 {
-static float epsilon = std::numeric_limits<float>::epsilon() * 10.0f;
+static constexpr float rayEpsilon = 0.005f;
 
-inline bool FloatEquals(float a, float b) { return std::abs(a - b) < epsilon; }
+static constexpr float floatEpsilon = std::numeric_limits<float>::epsilon() * 10.0f;
+
+inline bool FloatEquals(float a, float b) { return std::abs(a - b) < floatEpsilon; }
 
 inline float Clamp(float value, float min, float max)
 {

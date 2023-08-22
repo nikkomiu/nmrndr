@@ -111,6 +111,24 @@ TEST_F(WorldTest, HitInside)
     ASSERT_EQ(state.normalVector, NMVector(0.0f, 0.0f, -1.0f));
 }
 
+// Scenario: The hit should offset the point
+TEST_F(WorldTest, HitOffset)
+{
+    // Given
+    NMWorld world;
+    NMRay ray(NMPoint(0.0f, 0.0f, -5.0f), NMVector(0.0f, 0.0f, 1.0f));
+    NMSphere sphere;
+    sphere.SetTransform(NMMatrix::Translation(0.0f, 0.0f, 1.0f));
+    SNMIntersection intersection(5.0f, &sphere);
+
+    // When
+    SNMIntersectionState state = world.PrepareState(intersection, ray);
+
+    // Then
+    ASSERT_TRUE(state.overPoint.GetZ() < -nmmath::rayEpsilon / 2.0f);
+    ASSERT_TRUE(state.point.GetZ() > state.overPoint.GetZ());
+}
+
 // Scenario: Shading an intersection
 TEST_F(WorldTest, ShadingIntersection)
 {
@@ -142,7 +160,32 @@ TEST_F(WorldTest, ShadingIntersectionInside)
     NMColor color = world.ShadeHit(state);
 
     // Then
-    ASSERT_EQ(color, NMColor(0.904984f, 0.904984f, 0.904984f));
+    ASSERT_EQ(color, NMColor(0.1f, 0.1f, 0.1f));
+}
+
+// Scenario: ShadeHit() is given an intersection in shadow
+TEST_F(WorldTest, ShadingIntersectionShadow)
+{
+    // Given
+    NMWorld world;
+    world.AddLight(NMPointLight(NMPoint(0.0f, 0.0f, -10.0f), NMColor(1.0f, 1.0f, 1.0f)));
+
+    std::shared_ptr<INMIntersectionObject> s1 = std::make_shared<NMSphere>();
+    s1->SetTransform(NMMatrix::Translation(0.0f, 0.0f, 10.0f));
+    world.AddObject(s1);
+
+    std::shared_ptr<INMIntersectionObject> s2 = std::make_shared<NMSphere>();
+    world.AddObject(s2);
+
+    NMRay ray(NMPoint(0.0f, 0.0f, 5.0f), NMVector(0.0f, 0.0f, 1.0f));
+    SNMIntersection intersection(4.0f, s2.get());
+
+    // When
+    SNMIntersectionState state = world.PrepareState(intersection, ray);
+    NMColor color = world.ShadeHit(state);
+
+    // Then
+    ASSERT_EQ(color, NMColor(0.1f, 0.1f, 0.1f));
 }
 
 // Scenario: The color when a ray misses
@@ -189,4 +232,60 @@ TEST_F(WorldTest, ColorBehind)
 
     // Then
     ASSERT_EQ(color, inner->GetMaterial().GetColor());
+}
+
+// Scenario: There is no shadow when nothing is collinear with point and light
+TEST_F(WorldTest, NoShadow)
+{
+    // Given
+    NMWorld world = NMWorld::Default();
+    NMPoint point = NMPoint(0.0f, 10.0f, 0.0f);
+
+    // When
+    bool isInShadow = world.IsShadowed(point);
+
+    // Then
+    ASSERT_FALSE(isInShadow);
+}
+
+// Scenario: The shadow when an object is between the point and the light
+TEST_F(WorldTest, Shadow)
+{
+    // Given
+    NMWorld world = NMWorld::Default();
+    NMPoint point = NMPoint(10.0f, -10.0f, 10.0f);
+
+    // When
+    bool isInShadow = world.IsShadowed(point);
+
+    // Then
+    ASSERT_TRUE(isInShadow);
+}
+
+// Scenario: There is no shadow when an object is behind the light
+TEST_F(WorldTest, NoShadowBehindLight)
+{
+    // Given
+    NMWorld world = NMWorld::Default();
+    NMPoint point = NMPoint(-20.0f, 20.0f, -20.0f);
+
+    // When
+    bool isInShadow = world.IsShadowed(point);
+
+    // Then
+    ASSERT_FALSE(isInShadow);
+}
+
+// Scenario: There is no shadow when an object is behind the point
+TEST_F(WorldTest, NoShadowBehindPoint)
+{
+    // Given
+    NMWorld world = NMWorld::Default();
+    NMPoint point = NMPoint(-2.0f, 2.0f, -2.0f);
+
+    // When
+    bool isInShadow = world.IsShadowed(point);
+
+    // Then
+    ASSERT_FALSE(isInShadow);
 }

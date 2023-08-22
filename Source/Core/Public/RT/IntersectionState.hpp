@@ -22,6 +22,7 @@ public:
     float t;
     const INMIntersectionObject* object;
     NMPoint point;
+    NMPoint overPoint;
     NMVector eyeVector;
     NMVector normalVector;
     bool isInside = false;

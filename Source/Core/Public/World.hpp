@@ -43,7 +43,15 @@ public:
 
     inline void AddLight(const NMPointLight& light) { pointLights.push_back(light); }
 
-    inline void SetLight(std::size_t index, const NMPointLight& light) { pointLights[index] = light; }
+    inline void SetLight(std::size_t index, const NMPointLight& light)
+    {
+        if (index >= pointLights.size())
+        {
+            return;
+        }
+
+        pointLights[index] = light;
+    }
 
     inline std::shared_ptr<INMIntersectionObject> GetObject(std::size_t index) const { return objects[index]; }
 
@@ -57,7 +65,7 @@ public:
 
         for (std::shared_ptr<INMIntersectionObject> object : objects)
         {
-            intersections.Append(object->Intersect(ray));
+            intersections.Add(object->Intersect(ray));
         }
 
         intersections.Sort();
@@ -73,6 +81,7 @@ public:
         state.point = ray.Position(state.t);
         state.eyeVector = -ray.GetDirection();
         state.normalVector = state.object->NormalAt(state.point);
+        state.overPoint = state.point + (state.normalVector * nmmath::rayEpsilon);
 
         if (state.normalVector.DotProduct(state.eyeVector) < 0.0f)
         {
@@ -83,13 +92,35 @@ public:
         return state;
     }
 
+    bool IsShadowed(const NMPoint& point) const
+    {
+        // TODO: support multiple lights (pass the light in as a reference)
+        NMVector vector = pointLights[0].GetPosition() - point;
+        float distance = vector.Magnitude();
+        NMVector direction = vector.Normalized();
+
+        NMRay ray(point, direction);
+        SNMIntersectionList intersections = Intersect(ray);
+
+        SNMIntersection* intersection = intersections.Hit();
+
+        if (intersection == nullptr || intersection->t >= distance)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     NMColor ShadeHit(const SNMIntersectionState& state) const
     {
         NMColor color = NMColor(0.0f, 0.0f, 0.0f);
 
+        bool isShadowed = IsShadowed(state.overPoint);
         for (NMPointLight light : pointLights)
         {
-            color += state.object->GetMaterial().Lighting(light, state.point, state.eyeVector, state.normalVector);
+            color += state.object->GetMaterial().Lighting(light, state.point, state.eyeVector, state.normalVector,
+                                                          isShadowed);
         }
 
         return color;
