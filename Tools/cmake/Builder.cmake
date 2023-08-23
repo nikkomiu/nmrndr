@@ -155,5 +155,11 @@ function(nm_test)
             COMMAND llvm-cov export -format=lcov ./${PKG_NAME} -instr-profile=${PKG_NAME}.profdata > ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/lcov.info
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
+
+        add_custom_target(${PKG_NAME}Cobertura
+            DEPENDS ${PKG_NAME}Coverage
+            COMMAND lcov_cobertura ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/lcov.info --base-dir ${CMAKE_SOURCE_DIR} --output ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/cobertura.xml
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        )
     endif()
 endfunction()

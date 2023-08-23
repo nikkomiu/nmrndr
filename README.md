@@ -6,13 +6,19 @@ Ray Traced Renderer
 
 ### Dependencies
 
-- CMake v3.27
+- Clang
 - Ninja Build
+- CMake v3.27
+- curl
+- zip
+- unzip
+- tar
+- cppcheck
 
 #### Installing on Arch Linux
 
 ```bash
-pacman -S cmake ninja clang curl zip unzip tar cppcheck
+pacman -S cmake ninja clang curl zip unzip tar cppcheck llvm
 ```
 
 ### Submodules

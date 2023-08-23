@@ -4,13 +4,16 @@ Test Unit NMCore:
   before_script:
   - cmake --preset Test
   script:
-  - cmake --build --preset Test --target TestUnitNMCoreCoverage
+  - cmake --build --preset Test --target TestUnitNMCoreCobertura
   artifacts:
     when: always
     paths:
     - ./Build/coverage
     reports:
       junit: ./Build/Test/UnitCore/default.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: Build/coverage/**/cobertura.xml
   cache:
     paths:
     - ./Build/
@@ -23,13 +26,16 @@ Test Unit NMM:
   before_script:
   - cmake --preset Test
   script:
-  - cmake --build --preset Test --target TestUnitNMMathCoverage
+  - cmake --build --preset Test --target TestUnitNMMathCobertura
   artifacts:
     when: always
     paths:
     - ./Build/coverage
     reports:
       junit: ./Build/Test/UnitNMM/default.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: Build/coverage/**/cobertura.xml
   cache:
     paths:
     - ./Build/
