@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Color.hpp"
+#include "NMCore/Color.hpp"
 
 class NMColorTest : public ::testing::Test
 {

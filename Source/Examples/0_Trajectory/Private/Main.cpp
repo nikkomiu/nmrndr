@@ -1,7 +1,7 @@
 #include <memory>
 
-#include "Canvas.hpp"
 #include "Environment.hpp"
+#include "NMCore/Canvas.hpp"
 #include "PaperWorld.hpp"
 #include "Projectile.hpp"
 

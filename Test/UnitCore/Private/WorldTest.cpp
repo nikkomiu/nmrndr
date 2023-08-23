@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "World.hpp"
-#include "RT/Intersection.hpp"
+#include "NMCore/World.hpp"
+#include "NMCore/RT/Intersection.hpp"
 
 class WorldTest : public ::testing::Test
 {

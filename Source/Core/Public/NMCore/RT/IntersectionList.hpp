@@ -4,7 +4,7 @@
 #include <set>
 #include <vector>
 
-#include "RT/Intersection.hpp"
+#include "NMCore/RT/Intersection.hpp"
 
 class SNMIntersectionList
 {

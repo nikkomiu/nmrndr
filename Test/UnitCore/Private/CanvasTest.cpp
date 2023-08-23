@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Canvas.hpp"
+#include "NMCore/Canvas.hpp"
 
 class NMCanvasTest : public ::testing::Test
 {

@@ -2,8 +2,8 @@
 
 #include <math.h>
 
-#include "Camera.hpp"
-#include "World.hpp"
+#include "NMCore/Camera.hpp"
+#include "NMCore/World.hpp"
 
 class CameraTest : public ::testing::Test
 {

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "Material.hpp"
-#include "Light/Point.hpp"
+#include "NMCore/Material.hpp"
+#include "NMCore/Light/Point.hpp"
 #include "NMM/Vector.hpp"
 
 class NMMaterialTest : public ::testing::Test

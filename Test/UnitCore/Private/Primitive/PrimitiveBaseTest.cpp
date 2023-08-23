@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Primitive/PrimitiveBase.hpp"
+#include "NMCore/Primitive/PrimitiveBase.hpp"
 
 class NMTestShape : public NMPrimitiveBase
 {

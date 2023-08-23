@@ -3,9 +3,9 @@
 #include <chrono>
 #include <fstream>
 
-#include "Camera.hpp"
-#include "Primitive/Sphere.hpp"
-#include "World.hpp"
+#include "NMCore/Camera.hpp"
+#include "NMCore/Primitive/Sphere.hpp"
+#include "NMCore/World.hpp"
 
 #define CANVAS_WIDTH 1920
 #define CANVAS_HEIGHT 1080

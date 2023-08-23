@@ -2,8 +2,8 @@
 
 #include "NMM/Point.hpp"
 #include "NMM/Vector.hpp"
-#include "RT/Ray.hpp"
-#include "Primitive/Sphere.hpp"
+#include "NMCore/RT/Ray.hpp"
+#include "NMCore/Primitive/Sphere.hpp"
 
 class RayTest : public ::testing::Test
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Color.hpp"
+#include "NMCore/Color.hpp"
 #include "NMM/Point.hpp"
 
 class NMPointLight

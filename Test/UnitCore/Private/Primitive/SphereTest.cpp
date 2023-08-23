@@ -2,7 +2,7 @@
 
 #include "NMM/Point.hpp"
 #include "NMM/Vector.hpp"
-#include "Primitive/Sphere.hpp"
+#include "NMCore/Primitive/Sphere.hpp"
 
 #define ASSERT_INHERITS_FROM(base, derived) \
     static_assert(std::is_base_of<base, derived>::value, \

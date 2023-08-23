@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Canvas.hpp"
+#include "NMCore/Canvas.hpp"
 #include "World.hpp"
 
 class NMPaperWorld : public NMWorld

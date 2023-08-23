@@ -1,7 +1,7 @@
 #include <cstdint>
 #include <fstream>
 
-#include "Canvas.hpp"
+#include "NMCore/Canvas.hpp"
 #include "NMM/Matrix.hpp"
 
 int main(int /* argc */, char** /* argv */)

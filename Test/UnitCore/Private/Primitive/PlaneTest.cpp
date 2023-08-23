@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Primitive/Plane.hpp"
+#include "NMCore/Primitive/Plane.hpp"
 
 class NMPlaneTest : public ::testing::Test
 {

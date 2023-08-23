@@ -1,4 +1,4 @@
-#include "Canvas.hpp"
+#include "NMCore/Canvas.hpp"
 
 #include <cstdint>
 #include <iostream>

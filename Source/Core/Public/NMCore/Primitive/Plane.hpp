@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Primitive/PrimitiveBase.hpp"
+#include "NMCore/Primitive/PrimitiveBase.hpp"
 
 class NMPlane : public NMPrimitiveBase
 {
@@ -27,7 +27,7 @@ public:
         }
 
         float t = -localRay.GetOrigin().GetY() / localRay.GetDirection().GetY();
-        return std::vector<SNMIntersection>({ SNMIntersection(t, this) });
+        return std::vector<SNMIntersection>({SNMIntersection(t, this)});
     }
 
     inline virtual NMVector LocalNormalAt(const NMPoint& /* localPoint */) const override

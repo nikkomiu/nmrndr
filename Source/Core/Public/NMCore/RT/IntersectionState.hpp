@@ -1,9 +1,9 @@
 #pragma once
 
+#include "NMCore/RT/Intersection.hpp"
+#include "NMCore/RT/Ray.hpp"
 #include "NMM/Point.hpp"
 #include "NMM/Vector.hpp"
-#include "RT/Intersection.hpp"
-#include "RT/Ray.hpp"
 
 struct SNMIntersectionState
 {

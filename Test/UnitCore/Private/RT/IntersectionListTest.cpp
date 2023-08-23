@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-#include "Primitive/Sphere.hpp"
-#include "RT/Intersection.hpp"
-#include "RT/IntersectionList.hpp"
+#include "NMCore/Primitive/Sphere.hpp"
+#include "NMCore/RT/Intersection.hpp"
+#include "NMCore/RT/IntersectionList.hpp"
 
 class IntersectionListTest : public ::testing::Test
 {

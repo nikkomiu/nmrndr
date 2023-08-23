@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Primitive/PrimitiveBase.hpp"
+#include "NMCore/Primitive/PrimitiveBase.hpp"
 
 class NMSphere : public NMPrimitiveBase
 {

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Material.hpp"
+#include "NMCore/Material.hpp"
+#include "NMCore/RT/Intersection.hpp"
+#include "NMCore/RT/Ray.hpp"
 #include "NMM/Matrix.hpp"
 #include "NMM/Point.hpp"
 #include "NMM/Vector.hpp"
-#include "RT/Intersection.hpp"
-#include "RT/Ray.hpp"
 
 class NMPrimitiveBase
 {
@@ -16,8 +16,7 @@ public:
 
     virtual bool operator==(const NMPrimitiveBase& other) const
     {
-        return transform == other.transform &&
-            material == other.material;
+        return transform == other.transform && material == other.material;
     }
 
     inline virtual NMMatrix GetTransform() const { return transform; }

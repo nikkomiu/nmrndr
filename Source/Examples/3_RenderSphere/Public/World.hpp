@@ -2,10 +2,10 @@
 
 #include <fstream>
 
-#include "Canvas.hpp"
-#include "Primitive/Sphere.hpp"
-#include "RT/IntersectionList.hpp"
-#include "RT/Ray.hpp"
+#include "NMCore/Canvas.hpp"
+#include "NMCore/Primitive/Sphere.hpp"
+#include "NMCore/RT/IntersectionList.hpp"
+#include "NMCore/RT/Ray.hpp"
 
 class NMWorld
 {

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Light/Point.hpp"
+#include "NMCore/Light/Point.hpp"
 
 class NMPointLightTest : public ::testing::Test
 {
