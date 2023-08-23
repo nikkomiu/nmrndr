@@ -9,8 +9,6 @@ public:
     NMTestShape() = default;
     virtual ~NMTestShape() = default;
 
-    virtual bool operator==(const NMPrimitiveBase& other) const override { return true; }
-
     NMRay lastLocalIntersectRay;
 
 protected:
@@ -25,6 +23,52 @@ protected:
 class NMPrimitiveBaseTest : public ::testing::Test
 {
 };
+
+// Scenario: Equality of two shapes
+TEST_F(NMPrimitiveBaseTest, PrimitiveBase_EqualityOperator)
+{
+    // Given
+    NMTestShape shape1;
+    NMTestShape shape2;
+
+    // When
+    bool result = shape1 == shape2;
+
+    // Then
+    EXPECT_TRUE(result);
+}
+
+// Scenario: Equality of two shapes with different transforms
+TEST_F(NMPrimitiveBaseTest, PrimitiveBase_EqualityOperator_FailsWithTransform)
+{
+    // Given
+    NMTestShape shape1;
+    NMTestShape shape2;
+    shape2.SetTransform(NMMatrix::Translation(0.0f, 1.0f, 0.0f));
+
+    // When
+    bool result = shape1 == shape2;
+
+    // Then
+    EXPECT_FALSE(result);
+}
+
+// Scenario: Equality of two shapes with different materials
+TEST_F(NMPrimitiveBaseTest, PrimitiveBase_EqualityOperator_FailsWithMaterial)
+{
+    // Given
+    NMTestShape shape1;
+    NMTestShape shape2;
+    NMMaterial material = NMMaterial();
+    material.SetAmbient(1.0f);
+    shape2.SetMaterial(material);
+
+    // When
+    bool result = shape1 == shape2;
+
+    // Then
+    EXPECT_FALSE(result);
+}
 
 // Scenario: The default transformation
 TEST_F(NMPrimitiveBaseTest, PrimitiveBase_DefaultTransformation)
