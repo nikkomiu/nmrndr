@@ -8,7 +8,6 @@
 #include "NMM/Point.hpp"
 #include "NMM/Vector.hpp"
 #include "Primitive/Sphere.hpp"
-#include "RT/IIntersectionObject.hpp"
 #include "RT/IntersectionList.hpp"
 #include "RT/IntersectionState.hpp"
 
@@ -53,17 +52,17 @@ public:
         pointLights[index] = light;
     }
 
-    inline std::shared_ptr<INMIntersectionObject> GetObject(std::size_t index) const { return objects[index]; }
+    inline std::shared_ptr<NMPrimitiveBase> GetObject(std::size_t index) const { return objects[index]; }
 
     inline std::size_t GetObjectCount() const { return objects.size(); }
 
-    inline void AddObject(std::shared_ptr<INMIntersectionObject> object) { objects.push_back(object); }
+    inline void AddObject(std::shared_ptr<NMPrimitiveBase> object) { objects.push_back(object); }
 
     SNMIntersectionList Intersect(const NMRay& ray) const
     {
         SNMIntersectionList intersections;
 
-        for (std::shared_ptr<INMIntersectionObject> object : objects)
+        for (std::shared_ptr<NMPrimitiveBase> object : objects)
         {
             intersections.Add(object->Intersect(ray));
         }
@@ -144,5 +143,5 @@ public:
 protected:
 
     std::vector<NMPointLight> pointLights;
-    std::vector<std::shared_ptr<INMIntersectionObject>> objects;
+    std::vector<std::shared_ptr<NMPrimitiveBase>> objects;
 };

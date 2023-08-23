@@ -2,7 +2,6 @@
 
 #include "NMM/Point.hpp"
 #include "NMM/Vector.hpp"
-#include "RT/IIntersectionObject.hpp"
 #include "RT/Intersection.hpp"
 #include "RT/Ray.hpp"
 
@@ -20,7 +19,7 @@ public:
     }
 
     float t;
-    const INMIntersectionObject* object;
+    NMPrimitiveBase* object;
     NMPoint point;
     NMPoint overPoint;
     NMVector eyeVector;

@@ -32,7 +32,7 @@ TEST_F(WorldTest, DefaultWorld)
     ASSERT_EQ(pointLight.GetPosition(), NMPoint(-10.0f, 10.0f, -10.0f));
     ASSERT_EQ(pointLight.GetColor(), NMColor(1.0f, 1.0f, 1.0f));
 
-    std::shared_ptr<INMIntersectionObject> sphere = world.GetObject(0);
+    std::shared_ptr<NMPrimitiveBase> sphere = world.GetObject(0);
     ASSERT_EQ(sphere->GetTransform(), NMMatrix::Identity4x4());
     ASSERT_EQ(sphere->GetMaterial(), NMMaterial(NMColor(0.8f, 1.0f, 0.6f), 0.1f, 0.7f, 0.2f, 200.0f));
 
@@ -70,8 +70,8 @@ TEST_F(WorldTest, PrecomputeState)
     SNMIntersectionState state = world.PrepareState(intersections[0], ray);
 
     // Then
-    std::shared_ptr<INMIntersectionObject> sphere = world.GetObject(0);
-    const INMIntersectionObject* stateObject = state.object;
+    std::shared_ptr<NMPrimitiveBase> sphere = world.GetObject(0);
+    const NMPrimitiveBase* stateObject = state.object;
     ASSERT_TRUE(stateObject == sphere.get());
     ASSERT_EQ(state.point, NMPoint(0.0f, 0.0f, -1.0f));
     ASSERT_EQ(state.eyeVector, NMVector(0.0f, 0.0f, -1.0f));
@@ -152,7 +152,7 @@ TEST_F(WorldTest, ShadingIntersectionInside)
     NMWorld world = NMWorld::Default();
     world.SetLight(0, NMPointLight(NMPoint(0.0f, 0.25f, 0.0f), NMColor(1.0f, 1.0f, 1.0f)));
     NMRay ray(NMPoint(0.0f, 0.0f, 0.0f), NMVector(0.0f, 0.0f, 1.0f));
-    std::shared_ptr<INMIntersectionObject> shape = world.GetObject(1);
+    std::shared_ptr<NMPrimitiveBase> shape = world.GetObject(1);
     SNMIntersection intersection(0.5f, shape.get());
 
     // When
@@ -170,11 +170,11 @@ TEST_F(WorldTest, ShadingIntersectionShadow)
     NMWorld world;
     world.AddLight(NMPointLight(NMPoint(0.0f, 0.0f, -10.0f), NMColor(1.0f, 1.0f, 1.0f)));
 
-    std::shared_ptr<INMIntersectionObject> s1 = std::make_shared<NMSphere>();
+    std::shared_ptr<NMPrimitiveBase> s1 = std::make_shared<NMSphere>();
     s1->SetTransform(NMMatrix::Translation(0.0f, 0.0f, 10.0f));
     world.AddObject(s1);
 
-    std::shared_ptr<INMIntersectionObject> s2 = std::make_shared<NMSphere>();
+    std::shared_ptr<NMPrimitiveBase> s2 = std::make_shared<NMSphere>();
     world.AddObject(s2);
 
     NMRay ray(NMPoint(0.0f, 0.0f, 5.0f), NMVector(0.0f, 0.0f, 1.0f));
@@ -221,9 +221,9 @@ TEST_F(WorldTest, ColorBehind)
 {
     // Given
     NMWorld world = NMWorld::Default();
-    std::shared_ptr<INMIntersectionObject> outer = world.GetObject(0);
+    std::shared_ptr<NMPrimitiveBase> outer = world.GetObject(0);
     outer->SetMaterial(NMMaterial(NMColor(0.8f, 1.0f, 0.6f), 1.0f, 0.7f, 0.2f, 200.0f));
-    std::shared_ptr<INMIntersectionObject> inner = world.GetObject(1);
+    std::shared_ptr<NMPrimitiveBase> inner = world.GetObject(1);
     inner->SetMaterial(NMMaterial(NMColor(0.8f, 1.0f, 0.6f), 1.0f, 0.7f, 0.2f, 200.0f));
     NMRay ray(NMPoint(0.0f, 0.0f, 0.75f), NMVector(0.0f, 0.0f, -1.0f));
 

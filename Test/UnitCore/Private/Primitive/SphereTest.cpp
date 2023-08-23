@@ -4,6 +4,10 @@
 #include "NMM/Vector.hpp"
 #include "Primitive/Sphere.hpp"
 
+#define ASSERT_INHERITS_FROM(base, derived) \
+    static_assert(std::is_base_of<base, derived>::value, \
+    #derived " must inherit from " #base)
+
 class NMSphereTest : public ::testing::Test
 {
 };
@@ -16,6 +20,12 @@ TEST_F(NMSphereTest, SphereCreation_Default)
     // Then
     EXPECT_EQ(sphere.GetRadius(), 1.0f);
     EXPECT_EQ(sphere.GetOrigin(), NMPoint(0.0f, 0.0f, 0.0f));
+}
+
+// Scenario: A Sphere inherits from PrimitiveBase
+TEST_F(NMSphereTest, SphereCreation_PrimitiveBase)
+{
+    ASSERT_INHERITS_FROM(NMPrimitiveBase, NMSphere);
 }
 
 // Scenario: A ray intersects a sphere at two points
@@ -94,30 +104,6 @@ TEST_F(NMSphereTest, SphereIntersect_Behind)
     EXPECT_EQ(t.size(), 2);
     EXPECT_EQ(t[0].t, -6.0f);
     EXPECT_EQ(t[1].t, -4.0f);
-}
-
-// Scenario: A sphere's default transformation
-TEST_F(NMSphereTest, SphereTransformation_Default)
-{
-    // Given
-    NMSphere sphere;
-
-    // Then
-    EXPECT_EQ(sphere.GetTransform(), NMMatrix::Identity4x4());
-}
-
-// Scenario: Changing a sphere's transformation
-TEST_F(NMSphereTest, SphereTransformation_Change)
-{
-    // Given
-    NMSphere sphere;
-    NMMatrix transform = NMMatrix::Translation(2.0f, 3.0f, 4.0f);
-
-    // When
-    sphere.SetTransform(transform);
-
-    // Then
-    EXPECT_EQ(sphere.GetTransform(), transform);
 }
 
 // Scenario: Intersecting a scaled sphere with a ray
@@ -243,32 +229,4 @@ TEST_F(NMSphereTest, SphereNormal_Transformed)
 
     // Then
     EXPECT_EQ(normal, NMVector(0.0f, 0.970143f, -0.242536f));
-}
-
-// Scenario: A sphere has a default material
-TEST_F(NMSphereTest, SphereMaterial_Default)
-{
-    // Given
-    NMSphere sphere;
-
-    // When
-    NMMaterial material = sphere.GetMaterial();
-
-    // Then
-    EXPECT_EQ(material, NMMaterial());
-}
-
-// Scenario: A sphere may be assigned a material
-TEST_F(NMSphereTest, SphereMaterial_Assigned)
-{
-    // Given
-    NMSphere sphere;
-    NMMaterial material;
-    material.SetAmbient(1.0f);
-
-    // When
-    sphere.SetMaterial(material);
-
-    // Then
-    EXPECT_EQ(sphere.GetMaterial(), material);
 }

@@ -1,13 +1,13 @@
 #pragma once
 
-#include "RT/IIntersectionObject.hpp"
+class NMPrimitiveBase;
 
 struct SNMIntersection
 {
     float t;
-    INMIntersectionObject* object;
+    NMPrimitiveBase* object;
 
-    SNMIntersection(float initialT, INMIntersectionObject* initialObject) : t(initialT), object(initialObject) {}
+    SNMIntersection(float initialT, NMPrimitiveBase* initialObject) : t(initialT), object(initialObject) {}
 
     bool operator==(const SNMIntersection& other) const { return t == other.t && object == other.object; }
 };
