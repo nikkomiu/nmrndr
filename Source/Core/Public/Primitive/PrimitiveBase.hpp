@@ -3,9 +3,9 @@
 #include "Material.hpp"
 #include "NMM/Matrix.hpp"
 #include "NMM/Point.hpp"
+#include "NMM/Vector.hpp"
 #include "RT/Intersection.hpp"
 #include "RT/Ray.hpp"
-#include "NMM/Vector.hpp"
 
 class NMPrimitiveBase
 {
@@ -50,8 +50,5 @@ protected:
     NMPoint origin = NMPoint(0.0f, 0.0f, 0.0f);
 
     virtual std::vector<SNMIntersection> LocalIntersect(const NMRay& localRay) = 0;
-    inline virtual NMVector LocalNormalAt(const NMPoint& localPoint) const
-    {
-        return localPoint - origin;
-    }
+    inline virtual NMVector LocalNormalAt(const NMPoint& localPoint) const { return localPoint - origin; }
 };
