@@ -6,6 +6,35 @@ class NMPlaneTest : public ::testing::Test
 {
 };
 
+// Scenario: Equality of two planes
+TEST_F(NMPlaneTest, EqualityOperator)
+{
+    // Given
+    NMPlane plane1;
+    NMPlane plane2;
+
+    // When
+    bool result = plane1 == plane2;
+
+    // Then
+    EXPECT_TRUE(result);
+}
+
+// Scenario: Equality of two planes with different transforms
+TEST_F(NMPlaneTest, EqualityOperator_FailsWithPrimitiveTest)
+{
+    // Given
+    NMPlane plane1;
+    NMPlane plane2;
+    plane2.SetTransform(NMMatrix::Translation(0.0f, 1.0f, 0.0f));
+
+    // When
+    bool result = plane1 == plane2;
+
+    // Then
+    EXPECT_FALSE(result);
+}
+
 // Scenario: The normal of a plance is constant
 TEST_F(NMPlaneTest, Normal_IsConstant)
 {
