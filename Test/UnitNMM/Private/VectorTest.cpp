@@ -334,6 +334,19 @@ TEST_F(NMVectorTest, DotProduct)
     EXPECT_FLOAT_EQ(result, 20.0f);
 }
 
+TEST_F(NMVectorTest, DotProduct_Point)
+{
+    // Given
+    NMVector vector(1.0f, 2.0f, 3.0f);
+    NMPoint point(2.0f, 3.0f, 4.0f);
+
+    // When
+    float result = vector.DotProduct(point);
+
+    // Then
+    EXPECT_FLOAT_EQ(result, 20.0f);
+}
+
 TEST_F(NMVectorTest, CrossProduct)
 {
     // Given

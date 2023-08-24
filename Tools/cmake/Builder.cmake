@@ -156,7 +156,7 @@ function(nm_test)
             BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/${PKG_NAME}.profdata
         )
 
-        # Generate Summary coverage report
+        # Generate Summary coverage report (for GitLab CI coverage percentage)
         add_custom_command(
             TARGET ${PKG_NAME}Coverage
             COMMAND llvm-cov show -o ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME} ${PKG_NAME} -instr-profile=${PKG_NAME}.profdata
@@ -172,17 +172,17 @@ function(nm_test)
         )
 
         # Generate HTML coverage report
-        add_custom_command(
-            TARGET ${PKG_NAME}Coverage
-            COMMAND llvm-cov show -format html -o ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME} ${PKG_NAME} -instr-profile=${PKG_NAME}.profdata
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            BYPRODUCTS ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/index.html
-        )
+        # add_custom_command(
+        #     TARGET ${PKG_NAME}Coverage
+        #     COMMAND llvm-cov show -format html -o ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME} ${PKG_NAME} -instr-profile=${PKG_NAME}.profdata
+        #     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        #     BYPRODUCTS ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/index.html
+        # )
 
-        # Generate Cobertura coverage report
+        # Generate Cobertura coverage report from lcov (for GitLab CI coverage reporting)
         add_custom_target(${PKG_NAME}Cobertura
             DEPENDS ${PKG_NAME}Coverage
-            COMMAND lcov_cobertura ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/lcov.info --base-dir ${CMAKE_SOURCE_DIR} --output ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/cobertura.xml
+            COMMAND ${CMAKE_BINARY_DIR}/lcov_cobertura ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/lcov.info --base-dir ${CMAKE_SOURCE_DIR} --output ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/cobertura.xml
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
     endif()
