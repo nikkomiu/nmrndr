@@ -208,3 +208,16 @@ TEST_F(NMPointTest, StreamInsertionOperator_NaN)
     // Then
     EXPECT_EQ(ss.str(), "(nan, 1.00, 1.00)");
 }
+
+TEST_F(NMPointTest, DotProduct)
+{
+    // Given
+    NMPoint point1(1.0f, 2.0f, 3.0f);
+    NMPoint point2(2.0f, 3.0f, 4.0f);
+
+    // When
+    float result = point1.DotProduct(point2);
+
+    // Then
+    EXPECT_FLOAT_EQ(result, 20.0f);
+}

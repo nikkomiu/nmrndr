@@ -172,12 +172,12 @@ function(nm_test)
         )
 
         # Generate HTML coverage report
-        # add_custom_command(
-        #     TARGET ${PKG_NAME}Coverage
-        #     COMMAND llvm-cov show -format html -o ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME} ${PKG_NAME} -instr-profile=${PKG_NAME}.profdata
-        #     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        #     BYPRODUCTS ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/index.html
-        # )
+        add_custom_command(
+            TARGET ${PKG_NAME}Coverage
+            COMMAND llvm-cov show -format html -o ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME} ${PKG_NAME} -instr-profile=${PKG_NAME}.profdata
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            BYPRODUCTS ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/index.html
+        )
 
         # Generate Cobertura coverage report from lcov (for GitLab CI coverage reporting)
         add_custom_target(${PKG_NAME}Cobertura

@@ -140,6 +140,43 @@ TEST_F(NMMatrixTest, OperatorEquality_NotEqual)
     ASSERT_FALSE(matrix1 == matrix2);
 }
 
+TEST_F(NMMatrixTest, OperatorEquality_InequalWidth)
+{
+    // Given
+    NMMatrix matrix1({
+        {1.0f, 2.0f, 3.0f},
+        {5.0f, 6.0f, 7.0f},
+        {9.0f, 8.0f, 7.0f},
+        {5.0f, 4.0f, 3.0f},
+    });
+    NMMatrix matrix2({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {5.0f, 6.0f, 7.0f, 8.0f},
+        {9.0f, 8.0f, 7.0f, 6.0f},
+        {5.0f, 4.0f, 3.0f, 2.0f},
+    });
+
+    // Then
+    ASSERT_FALSE(matrix1 == matrix2);
+}
+
+TEST_F(NMMatrixTest, OperatorEquality_InequalHeight)
+{
+    // Given
+    NMMatrix matrix1({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {5.0f, 6.0f, 7.0f, 8.0f},
+    });
+    NMMatrix matrix2({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {5.0f, 6.0f, 7.0f, 8.0f},
+        {9.0f, 8.0f, 7.0f, 6.0f},
+    });
+
+    // Then
+    ASSERT_FALSE(matrix1 == matrix2);
+}
+
 TEST_F(NMMatrixTest, OperatorMultiply_Matrix)
 {
     // Given
@@ -185,6 +222,49 @@ TEST_F(NMMatrixTest, OperatorMultiply_Matrix)
     ASSERT_EQ(result.Get(3, 3), 42.0f);
 }
 
+TEST_F(NMMatrixTest, OperatorMultiply_Matrix_NonUniform)
+{
+    // Given
+    NMMatrix matrix1({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {2.0f, 4.0f, 4.0f, 2.0f},
+        {8.0f, 6.0f, 4.0f, 1.0f},
+        {0.0f, 0.0f, 0.0f, 1.0f},
+    });
+    NMMatrix matrix2({
+        {1.0f, 1.0f, 1.0f},
+        {1.0f, 1.0f, 1.0f},
+        {1.0f, 1.0f, 1.0f},
+    });
+
+    // When
+    NMMatrix result = matrix1 * matrix2;
+
+    // Then
+    ASSERT_EQ(result.GetWidth(), 4);
+    ASSERT_EQ(result.GetHeight(), 4);
+
+    ASSERT_EQ(result.Get(0, 0), 0.0f);
+    ASSERT_EQ(result.Get(1, 0), 0.0f);
+    ASSERT_EQ(result.Get(2, 0), 0.0f);
+    ASSERT_EQ(result.Get(3, 0), 0.0f);
+
+    ASSERT_EQ(result.Get(0, 1), 0.0f);
+    ASSERT_EQ(result.Get(1, 1), 0.0f);
+    ASSERT_EQ(result.Get(2, 1), 0.0f);
+    ASSERT_EQ(result.Get(3, 1), 0.0f);
+
+    ASSERT_EQ(result.Get(0, 2), 0.0f);
+    ASSERT_EQ(result.Get(1, 2), 0.0f);
+    ASSERT_EQ(result.Get(2, 2), 0.0f);
+    ASSERT_EQ(result.Get(3, 2), 0.0f);
+
+    ASSERT_EQ(result.Get(0, 3), 0.0f);
+    ASSERT_EQ(result.Get(1, 3), 0.0f);
+    ASSERT_EQ(result.Get(2, 3), 0.0f);
+    ASSERT_EQ(result.Get(3, 3), 0.0f);
+}
+
 TEST_F(NMMatrixTest, OperatorMultiply_Tuple)
 {
     // Given
@@ -202,6 +282,43 @@ TEST_F(NMMatrixTest, OperatorMultiply_Tuple)
 
     // Then
     ASSERT_EQ(result, NMTuple(18.0f, 24.0f, 33.0f, 1.0f));
+}
+
+TEST_F(NMMatrixTest, OperatorMultiply_Tuple_WrongSizeMatrixWidth)
+{
+    // Given
+    NMMatrix matrix({
+        {1.0f, 2.0f, 3.0f},
+        {2.0f, 4.0f, 4.0f},
+        {8.0f, 6.0f, 4.0f},
+        {0.0f, 0.0f, 0.0f},
+    });
+
+    NMTuple tuple(1.0f, 2.0f, 3.0f, 1.0f);
+
+    // When
+    NMTuple result = matrix * tuple;
+
+    // Then
+    ASSERT_EQ(result, NMTuple(0.0f, 0.0f, 0.0f, 0.0f));
+}
+
+TEST_F(NMMatrixTest, OperatorMultiply_Tuple_WrongSizeMatrixHeight)
+{
+    // Given
+    NMMatrix matrix({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {2.0f, 4.0f, 4.0f, 6.0f},
+        {8.0f, 6.0f, 4.0f, 3.0f},
+    });
+
+    NMTuple tuple(1.0f, 2.0f, 3.0f, 1.0f);
+
+    // When
+    NMTuple result = matrix * tuple;
+
+    // Then
+    ASSERT_EQ(result, NMTuple(0.0f, 0.0f, 0.0f, 0.0f));
 }
 
 // Scenario: Multiplying by a translation matrix
@@ -231,6 +348,43 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_Inverse)
 
     // Then
     ASSERT_EQ(result, NMPoint(-8.0f, 7.0f, 3.0f));
+}
+
+TEST_F(NMMatrixTest, OperatorMultiply_Point_WrongSizeMatrixWidth)
+{
+    // Given
+    NMMatrix matrix({
+        {1.0f, 2.0f, 3.0f},
+        {2.0f, 4.0f, 4.0f},
+        {8.0f, 6.0f, 4.0f},
+        {0.0f, 0.0f, 0.0f},
+    });
+
+    NMPoint point(1.0f, 2.0f, 3.0f);
+
+    // When
+    NMPoint result = matrix * point;
+
+    // Then
+    ASSERT_EQ(result, NMPoint(0.0f, 0.0f, 0.0f));
+}
+
+TEST_F(NMMatrixTest, OperatorMultiply_Point_WrongSizeMatrixHeight)
+{
+    // Given
+    NMMatrix matrix({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {2.0f, 4.0f, 4.0f, 6.0f},
+        {8.0f, 6.0f, 4.0f, 3.0f},
+    });
+
+    NMPoint point(1.0f, 2.0f, 3.0f);
+
+    // When
+    NMPoint result = matrix * point;
+
+    // Then
+    ASSERT_EQ(result, NMPoint(0.0f, 0.0f, 0.0f));
 }
 
 // Scenario: Translation does not affect vectors
@@ -287,6 +441,43 @@ TEST_F(NMMatrixTest, OperatorMultiply_Vector_Scaling_Inverse)
 
     // Then
     ASSERT_EQ(result, NMVector(-8.0f, 18.0f, 32.0f));
+}
+
+TEST_F(NMMatrixTest, OperatorMultiply_Vector_WrongSizeWidth)
+{
+    // Given
+    NMMatrix matrix({
+        {1.0f, 2.0f, 3.0f},
+        {2.0f, 4.0f, 4.0f},
+        {8.0f, 6.0f, 4.0f},
+        {0.0f, 0.0f, 0.0f},
+    });
+
+    NMVector vector(1.0f, 2.0f, 3.0f);
+
+    // When
+    NMVector result = matrix * vector;
+
+    // Then
+    ASSERT_EQ(result, NMVector(0.0f, 0.0f, 0.0f));
+}
+
+TEST_F(NMMatrixTest, OperatorMultiply_Vector_WrongSizeHeight)
+{
+    // Given
+    NMMatrix matrix({
+        {1.0f, 2.0f, 3.0f, 4.0f},
+        {2.0f, 4.0f, 4.0f, 6.0f},
+        {8.0f, 6.0f, 4.0f, 3.0f},
+    });
+
+    NMVector vector(1.0f, 2.0f, 3.0f);
+
+    // When
+    NMVector result = matrix * vector;
+
+    // Then
+    ASSERT_EQ(result, NMVector(0.0f, 0.0f, 0.0f));
 }
 
 // Scenario: Multiplying by the inverse of a scaling matrix
@@ -694,7 +885,7 @@ TEST_F(NMMatrixTest, Transpose)
     ASSERT_EQ(matrix, expectedMatrix);
 }
 
-TEST_F(NMMatrixTest, TransposeIdentity)
+TEST_F(NMMatrixTest, Transpose_Identity)
 {
     // Given
     NMMatrix matrix = NMMatrix::Identity4x4();
@@ -707,6 +898,61 @@ TEST_F(NMMatrixTest, TransposeIdentity)
     ASSERT_EQ(matrix.GetHeight(), 4);
 
     ASSERT_EQ(matrix, NMMatrix::Identity4x4());
+}
+
+TEST_F(NMMatrixTest, Transpose_NonSquare)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(4, 2, {
+        0.0f, 9.0f,
+        9.0f, 8.0f,
+        1.0f, 8.0f,
+        0.0f, 0.0f,
+    });
+
+    NMMatrix expectedMatrix = NMMatrix(4, 2, {
+        0.0f, 9.0f,
+        9.0f, 8.0f,
+        1.0f, 8.0f,
+        0.0f, 0.0f,
+    });
+
+    // When
+    matrix.Transpose();
+
+    // Then
+    ASSERT_EQ(matrix.GetWidth(), 4);
+    ASSERT_EQ(matrix.GetHeight(), 2);
+
+    ASSERT_EQ(matrix, expectedMatrix);
+}
+
+TEST_F(NMMatrixTest, Transposed)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(4, 4, {
+        0.0f, 9.0f, 3.0f, 0.0f,
+        9.0f, 8.0f, 0.0f, 8.0f,
+        1.0f, 8.0f, 5.0f, 3.0f,
+        0.0f, 0.0f, 5.0f, 8.0f,
+    });
+
+    NMMatrix expectedMatrix = NMMatrix(4, 4, {
+        0.0f, 9.0f, 1.0f, 0.0f,
+        9.0f, 8.0f, 8.0f, 0.0f,
+        3.0f, 0.0f, 5.0f, 5.0f,
+        0.0f, 8.0f, 3.0f, 8.0f,
+    });
+
+    // When
+    NMMatrix result = matrix.Transposed();
+
+    // Then
+    ASSERT_EQ(result.GetWidth(), 4);
+    ASSERT_EQ(result.GetHeight(), 4);
+
+    ASSERT_EQ(result, expectedMatrix);
+    ASSERT_FALSE(result == matrix);
 }
 
 TEST_F(NMMatrixTest, Determinant_2x2)
@@ -769,6 +1015,22 @@ TEST_F(NMMatrixTest, Determinant_4x4)
     ASSERT_EQ(result3, 210.0f);
     ASSERT_EQ(result4, 51.0f);
     ASSERT_EQ(result5, -4071.0f);
+}
+
+TEST_F(NMMatrixTest, Determinant_NonSquareMatrix)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(4, 3, {
+        1.0f, 2.0f, 3.0f, 4.0f,
+        5.0f, 6.0f, 7.0f, 8.0f,
+        9.0f, 8.0f, 7.0f, 6.0f,
+    });
+
+    // When
+    float result = matrix.Determinant();
+
+    // Then
+    ASSERT_TRUE(std::isnan(result));
 }
 
 TEST_F(NMMatrixTest, IsInvertible)
@@ -916,6 +1178,44 @@ TEST_F(NMMatrixTest, Inverse_Multiply)
     EXPECT_EQ(matrixAB * matrixBInverse, matrixA);
 }
 
+TEST_F(NMMatrixTest, Inverse_NonInvertable)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(4, 4, {
+        -4.0f, 2.0f, -2.0f, -3.0f,
+        9.0f, 6.0f, 2.0f, 6.0f,
+        0.0f, -5.0f, 1.0f, -5.0f,
+        0.0f, 0.0f, 0.0f, 0.0f,
+    });
+
+    // When
+    NMMatrix inverse = matrix.Inverse();
+
+    // Then
+    ASSERT_EQ(inverse.GetWidth(), 4);
+    ASSERT_EQ(inverse.GetHeight(), 4);
+
+    ASSERT_EQ(inverse.Get(0, 0), 0.0f);
+    ASSERT_EQ(inverse.Get(0, 1), 0.0f);
+    ASSERT_EQ(inverse.Get(0, 2), 0.0f);
+    ASSERT_EQ(inverse.Get(0, 3), 0.0f);
+
+    ASSERT_EQ(inverse.Get(1, 0), 0.0f);
+    ASSERT_EQ(inverse.Get(1, 1), 0.0f);
+    ASSERT_EQ(inverse.Get(1, 2), 0.0f);
+    ASSERT_EQ(inverse.Get(1, 3), 0.0f);
+
+    ASSERT_EQ(inverse.Get(2, 0), 0.0f);
+    ASSERT_EQ(inverse.Get(2, 1), 0.0f);
+    ASSERT_EQ(inverse.Get(2, 2), 0.0f);
+    ASSERT_EQ(inverse.Get(2, 3), 0.0f);
+
+    ASSERT_EQ(inverse.Get(3, 0), 0.0f);
+    ASSERT_EQ(inverse.Get(3, 1), 0.0f);
+    ASSERT_EQ(inverse.Get(3, 2), 0.0f);
+    ASSERT_EQ(inverse.Get(3, 3), 0.0f);
+}
+
 TEST_F(NMMatrixTest, Submatrix_4x4)
 {
     // Given
@@ -965,6 +1265,45 @@ TEST_F(NMMatrixTest, Submatrix_3x3)
 
     ASSERT_EQ(result, expectedMatrix);
 }
+
+TEST_F(NMMatrixTest, Submatrix_NonSquare)
+{
+    // Given
+    NMMatrix matrix = NMMatrix(4, 3, {
+        1.0f, 5.0f, 0.0f, 1.0f,
+        -3.0f, 2.0f, 7.0f, 1.0f,
+        0.0f, 6.0f, -3.0f, 1.0f,
+    });
+
+    // When
+    NMMatrix result = matrix.Submatrix(0, 2);
+
+    // Then
+    ASSERT_EQ(result.GetWidth(), 4);
+    ASSERT_EQ(result.GetHeight(), 4);
+
+    ASSERT_EQ(result.GetWidth(), 4);
+    ASSERT_EQ(result.GetHeight(), 4);
+
+    ASSERT_EQ(result.Get(0, 0), 0.0f);
+    ASSERT_EQ(result.Get(0, 1), 0.0f);
+    ASSERT_EQ(result.Get(0, 2), 0.0f);
+    ASSERT_EQ(result.Get(0, 3), 0.0f);
+
+    ASSERT_EQ(result.Get(1, 0), 0.0f);
+    ASSERT_EQ(result.Get(1, 1), 0.0f);
+    ASSERT_EQ(result.Get(1, 2), 0.0f);
+    ASSERT_EQ(result.Get(1, 3), 0.0f);
+
+    ASSERT_EQ(result.Get(2, 0), 0.0f);
+    ASSERT_EQ(result.Get(2, 1), 0.0f);
+    ASSERT_EQ(result.Get(2, 2), 0.0f);
+    ASSERT_EQ(result.Get(2, 3), 0.0f);
+
+    ASSERT_EQ(result.Get(3, 0), 0.0f);
+    ASSERT_EQ(result.Get(3, 1), 0.0f);
+    ASSERT_EQ(result.Get(3, 2), 0.0f);
+    ASSERT_EQ(result.Get(3, 3), 0.0f);}
 
 TEST_F(NMMatrixTest, Minor)
 {
