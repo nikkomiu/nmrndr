@@ -148,14 +148,38 @@ function(nm_test)
             DEPENDS ${PKG_NAME}
         )
 
+        # Generate coverage data from raw profile data
         add_custom_command(
             TARGET ${PKG_NAME}Coverage
             COMMAND llvm-profdata merge -o ${PKG_NAME}.profdata default.profraw
-            COMMAND llvm-cov show -format html -o ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME} ${PKG_NAME} -instr-profile=${PKG_NAME}.profdata
-            COMMAND llvm-cov export -format=lcov ./${PKG_NAME} -instr-profile=${PKG_NAME}.profdata > ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/lcov.info
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/${PKG_NAME}.profdata
+        )
+
+        # Generate Summary coverage report
+        add_custom_command(
+            TARGET ${PKG_NAME}Coverage
+            COMMAND llvm-cov show -o ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME} ${PKG_NAME} -instr-profile=${PKG_NAME}.profdata
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
 
+        # Generate LCOV coverage report
+        add_custom_command(
+            TARGET ${PKG_NAME}Coverage
+            COMMAND llvm-cov export -format=lcov ${PKG_NAME} -instr-profile=${PKG_NAME}.profdata > ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/lcov.info
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            BYPRODUCTS ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/lcov.info
+        )
+
+        # Generate HTML coverage report
+        add_custom_command(
+            TARGET ${PKG_NAME}Coverage
+            COMMAND llvm-cov show -format html -o ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME} ${PKG_NAME} -instr-profile=${PKG_NAME}.profdata
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            BYPRODUCTS ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/index.html
+        )
+
+        # Generate Cobertura coverage report
         add_custom_target(${PKG_NAME}Cobertura
             DEPENDS ${PKG_NAME}Coverage
             COMMAND lcov_cobertura ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/lcov.info --base-dir ${CMAKE_SOURCE_DIR} --output ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/cobertura.xml

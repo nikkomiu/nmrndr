@@ -5,6 +5,9 @@ Test Unit NMCore:
   - cmake --preset Test
   script:
   - cmake --build --preset Test --target TestUnitNMCoreCobertura
+  - cat ./Build/coverage/TestUnitNMCore/index.txt
+  - echo "Total Coverage $(grep -oE 'TOTAL\s+[0-9]+\s+[0-9]+\s+([0-9.]+%)' ./Build/coverage/TestUnitNMCore/index.txt | awk '{ print $4 }')"
+  coverage: /Total Coverage (\d+\.\d+%)/
   artifacts:
     when: always
     paths:
@@ -27,6 +30,9 @@ Test Unit NMM:
   - cmake --preset Test
   script:
   - cmake --build --preset Test --target TestUnitNMMathCobertura
+  - cat ./Build/coverage/TestUnitNMMath/index.txt
+  - echo "Total Coverage $(grep -oE 'TOTAL\s+[0-9]+\s+[0-9]+\s+([0-9.]+%)' ./Build/coverage/TestUnitNMMath/index.txt | awk '{ print $4 }')"
+  coverage: /Total Coverage (\d+\.\d+%)/
   artifacts:
     when: always
     paths:
