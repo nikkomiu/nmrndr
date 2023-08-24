@@ -10,6 +10,7 @@ HTML Coverage:
     paths:
     - ./Build/coverage
   cache:
+    key: build-cache
     paths:
     - ./Build/
     - ./Tools/vcpkg/packages

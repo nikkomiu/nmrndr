@@ -6,6 +6,7 @@ Build:
   script:
   - cmake --build --preset Test
   cache:
+    key: build-cache
     paths:
     - ./Binaries/
     - ./Build/

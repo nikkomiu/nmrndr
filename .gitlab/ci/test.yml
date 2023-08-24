@@ -17,6 +17,7 @@ Test Unit NMCore:
         coverage_format: cobertura
         path: Build/coverage/**/cobertura.xml
   cache:
+    key: build-cache
     paths:
     - ./Build/
     - ./Tools/vcpkg/packages
@@ -41,6 +42,7 @@ Test Unit NMM:
         coverage_format: cobertura
         path: Build/coverage/**/cobertura.xml
   cache:
+    key: build-cache
     paths:
     - ./Build/
     - ./Tools/vcpkg/packages
