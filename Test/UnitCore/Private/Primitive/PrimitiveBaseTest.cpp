@@ -70,6 +70,20 @@ TEST_F(NMPrimitiveBaseTest, PrimitiveBase_EqualityOperator_FailsWithMaterial)
     EXPECT_FALSE(result);
 }
 
+TEST_F(NMPrimitiveBaseTest, PrimitiveBase_EqualityOperator_FailsWithDifferentOrigin)
+{
+    // Given
+    NMTestShape shape1;
+    NMTestShape shape2;
+    shape2.SetOrigin(NMPoint(1.0f, 0.0f, 0.0f));
+
+    // When
+    bool result = shape1 == shape2;
+
+    // Then
+    EXPECT_FALSE(result);
+}
+
 // Scenario: The default transformation
 TEST_F(NMPrimitiveBaseTest, PrimitiveBase_DefaultTransformation)
 {

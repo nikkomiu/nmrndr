@@ -44,6 +44,38 @@ TEST_F(NMSphereTest, SphereIntersect_TwoPoints)
     EXPECT_EQ(t[1].t, 6.0f);
 }
 
+TEST_F(NMSphereTest, EqualityOperator)
+{
+    // Given
+    NMSphere sphere1;
+    NMSphere sphere2;
+
+    // Then
+    EXPECT_TRUE(sphere1 == sphere2);
+}
+
+TEST_F(NMSphereTest, EqualityOperator_DifferentRadius)
+{
+    // Given
+    NMSphere sphere1;
+    NMSphere sphere2;
+    sphere2.SetRadius(2.0f);
+
+    // Then
+    EXPECT_FALSE(sphere1 == sphere2);
+}
+
+TEST_F(NMSphereTest, EqualityOperator_DifferentTransform)
+{
+    // Given
+    NMSphere sphere1;
+    NMSphere sphere2;
+    sphere2.SetTransform(NMMatrix::Translation(1.0f, 0.0f, 0.0f));
+
+    // Then
+    EXPECT_FALSE(sphere1 == sphere2);
+}
+
 // Scenario: A ray intersects a sphere at a tangent
 TEST_F(NMSphereTest, SphereIntersect_Tangent)
 {

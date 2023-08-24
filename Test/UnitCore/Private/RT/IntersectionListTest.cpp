@@ -153,21 +153,25 @@ TEST_F(IntersectionListTest, Sort)
     SNMIntersection intersection2 = SNMIntersection(7.0f, &sphere2);
     SNMIntersection intersection3 = SNMIntersection(-3.0f, &sphere3);
     SNMIntersection intersection4 = SNMIntersection(2.0f, &sphere3);
-    SNMIntersectionList intersectionList = SNMIntersectionList({ intersection1, intersection2, intersection3, intersection4 });
+    SNMIntersection intersection5 = SNMIntersection(-2.0f, &sphere2);
+    SNMIntersectionList intersectionList = SNMIntersectionList({ intersection1, intersection2, intersection3, intersection4, intersection5 });
 
     // When
     intersectionList.Sort();
 
     // Then
     EXPECT_EQ(intersectionList.IsSorted(), true);
-    EXPECT_EQ(intersectionList.Size(), 4);
+    EXPECT_EQ(intersectionList.Size(), 5);
     EXPECT_EQ(intersectionList[0].t, 2.0f);
     EXPECT_EQ(intersectionList[0].object, (void*)&sphere3);
     EXPECT_EQ(intersectionList[1].t, 5.0f);
     EXPECT_EQ(intersectionList[1].object, (void*)&sphere1);
     EXPECT_EQ(intersectionList[2].t, 7.0f);
     EXPECT_EQ(intersectionList[2].object, (void*)&sphere2);
-    EXPECT_EQ(intersectionList[3].t, -3.0f);
+    EXPECT_EQ(intersectionList[3].t, -2.0f);
+    EXPECT_EQ(intersectionList[3].object, (void*)&sphere2);
+    EXPECT_EQ(intersectionList[4].t, -3.0f);
+    EXPECT_EQ(intersectionList[4].object, (void*)&sphere3);
 }
 
 TEST_F(IntersectionListTest, Sort_Sorted)

@@ -25,13 +25,26 @@ TEST_F(NMCanvasTest, CreateCanvas)
 }
 
 // Scenario: Read pixel fails from canvas when out of bounds on x
-TEST_F(NMCanvasTest, ReadPixel_OutOfBounds)
+TEST_F(NMCanvasTest, ReadPixel_OutOfBoundsX)
 {
     // Given
     NMCanvas canvas;
 
     // When
     NMColor color = canvas.ReadPixel(50, 1);
+
+    // Then
+    ASSERT_EQ(color, NMColor(0.0f, 0.0f, 0.0f));
+}
+
+// Scenario: Read pixel fails from canvas when out of bounds on y
+TEST_F(NMCanvasTest, ReadPixel_OutOfBoundsY)
+{
+    // Given
+    NMCanvas canvas;
+
+    // When
+    NMColor color = canvas.ReadPixel(1, 50);
 
     // Then
     ASSERT_EQ(color, NMColor(0.0f, 0.0f, 0.0f));

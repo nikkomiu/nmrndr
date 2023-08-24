@@ -41,6 +41,33 @@ TEST_F(WorldTest, DefaultWorld)
     ASSERT_EQ(sphere->GetMaterial(), NMMaterial());
 }
 
+TEST_F(WorldTest, SetLight)
+{
+    // Given
+    NMWorld world;
+
+    // When
+    world.AddLight(NMPointLight(NMPoint(0.0f, 0.0f, 1.0f), NMColor(1.0f, 0.5f, 1.0f)));
+    world.SetLight(0, NMPointLight(NMPoint(0.0f, 0.0f, 0.0f), NMColor(1.0f, 1.0f, 1.0f)));
+
+    // Then
+    ASSERT_EQ(world.GetPointLightCount(), 1);
+    ASSERT_EQ(world.GetPointLight(0).GetPosition(), NMPoint(0.0f, 0.0f, 0.0f));
+    ASSERT_EQ(world.GetPointLight(0).GetColor(), NMColor(1.0f, 1.0f, 1.0f));
+}
+
+TEST_F(WorldTest, SetLight_OutOfBounds)
+{
+    // Given
+    NMWorld world;
+
+    // When
+    world.SetLight(2, NMPointLight(NMPoint(0.0f, 0.0f, 0.0f), NMColor(1.0f, 1.0f, 1.0f)));
+
+    // Then
+    ASSERT_EQ(world.GetPointLightCount(), 0);
+}
+
 // Scenario: Intersect a world with a ray
 TEST_F(WorldTest, IntersectWorld)
 {

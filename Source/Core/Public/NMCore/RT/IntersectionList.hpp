@@ -67,7 +67,7 @@ public:
                       }
                       else
                       {
-                          return false;
+                          return a.t > b.t;
                       }
                   });
         isSorted = true;

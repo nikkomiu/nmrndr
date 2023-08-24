@@ -16,7 +16,7 @@ public:
 
     virtual bool operator==(const NMPrimitiveBase& other) const
     {
-        return transform == other.transform && material == other.material;
+        return transform == other.transform && material == other.material && origin == other.origin;
     }
 
     inline virtual NMMatrix GetTransform() const { return transform; }
@@ -26,6 +26,7 @@ public:
     inline virtual void SetMaterial(const NMMaterial& newMaterial) { material = newMaterial; }
 
     inline const NMPoint& GetOrigin() const { return origin; }
+    inline void SetOrigin(const NMPoint& newOrigin) { origin = newOrigin; }
 
     inline std::vector<SNMIntersection> Intersect(const NMRay& ray) const
     {

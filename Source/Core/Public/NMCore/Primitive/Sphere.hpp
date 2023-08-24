@@ -14,11 +14,17 @@ public:
 
     virtual bool operator==(const NMPrimitiveBase& other) const override
     {
+        if (!NMPrimitiveBase::operator==(other))
+        {
+            return false;
+        }
+
         const NMSphere& otherSphere = static_cast<const NMSphere&>(other);
-        return transform == otherSphere.transform && origin == otherSphere.origin && radius == otherSphere.radius;
+        return radius == otherSphere.radius;
     }
 
     inline float GetRadius() const { return radius; }
+    inline void SetRadius(float newRadius) { radius = newRadius; }
 
     virtual std::vector<SNMIntersection> LocalIntersect(const NMRay& localRay) const override
     {

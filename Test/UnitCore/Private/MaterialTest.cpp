@@ -53,7 +53,47 @@ TEST_F(NMMaterialTest, EqualityOperator)
     ASSERT_TRUE(material1 == material2);
 }
 
-TEST_F(NMMaterialTest, EqualityOperator_NotEqual)
+TEST_F(NMMaterialTest, EqualityOperator_ColorNotEqual)
+{
+    // Given
+    NMMaterial material1(NMColor(0.9f, 1, 1), 0.1f, 0.9f, 0.9f, 200.0f);
+    NMMaterial material2(NMColor(1, 1, 1), 0.1f, 0.9f, 0.9f, 200.0f);
+
+    // Then
+    ASSERT_FALSE(material1 == material2);
+}
+
+TEST_F(NMMaterialTest, EqualityOperator_AmbientNotEqual)
+{
+    // Given
+    NMMaterial material1(NMColor(1, 1, 1), 0.2f, 0.9f, 0.9f, 200.0f);
+    NMMaterial material2(NMColor(1, 1, 1), 0.1f, 0.9f, 0.9f, 200.0f);
+
+    // Then
+    ASSERT_FALSE(material1 == material2);
+}
+
+TEST_F(NMMaterialTest, EqualityOperator_DiffuseNotEqual)
+{
+    // Given
+    NMMaterial material1(NMColor(1, 1, 1), 0.1f, 0.8f, 0.9f, 200.0f);
+    NMMaterial material2(NMColor(1, 1, 1), 0.1f, 0.9f, 0.9f, 200.0f);
+
+    // Then
+    ASSERT_FALSE(material1 == material2);
+}
+
+TEST_F(NMMaterialTest, EqualityOperator_SpecularNotEqual)
+{
+    // Given
+    NMMaterial material1(NMColor(1, 1, 1), 0.1f, 0.9f, 0.8f, 200.0f);
+    NMMaterial material2(NMColor(1, 1, 1), 0.1f, 0.9f, 0.9f, 200.0f);
+
+    // Then
+    ASSERT_FALSE(material1 == material2);
+}
+
+TEST_F(NMMaterialTest, EqualityOperator_ShininessNotEqual)
 {
     // Given
     NMMaterial material1(NMColor(1, 1, 1), 0.1f, 0.9f, 0.9f, 200.0f);

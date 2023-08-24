@@ -130,7 +130,7 @@ public:
         SNMIntersectionList intersections = Intersect(ray);
         SNMIntersection* intersection = intersections.Hit();
 
-        if (intersection == nullptr || intersection->object == nullptr)
+        if (intersection == nullptr)
         {
             return NMColor(0.0f, 0.0f, 0.0f);
         }

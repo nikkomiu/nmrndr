@@ -66,11 +66,39 @@ TEST_F(NMColorTest, ColorEquality)
     // Given
     NMColor color1(0.0f, 0.0f, 0.0f);
     NMColor color2(0.0f, 0.0f, 0.0f);
-    NMColor color3(0.0f, 0.0f, 1.0f);
 
     // Then
     EXPECT_TRUE(color1 == color2);
-    EXPECT_FALSE(color1 == color3);
+}
+
+TEST_F(NMColorTest, ColorEquality_RNotEqual)
+{
+    // Given
+    NMColor color1(0.0f, 0.0f, 0.0f);
+    NMColor color2(1.0f, 0.0f, 0.0f);
+
+    // Then
+    EXPECT_FALSE(color1 == color2);
+}
+
+TEST_F(NMColorTest, ColorEquality_GNotEqual)
+{
+    // Given
+    NMColor color1(0.0f, 0.0f, 0.0f);
+    NMColor color2(0.0f, 1.0f, 0.0f);
+
+    // Then
+    EXPECT_FALSE(color1 == color2);
+}
+
+TEST_F(NMColorTest, ColorEquality_BNotEqual)
+{
+    // Given
+    NMColor color1(0.0f, 0.0f, 0.0f);
+    NMColor color2(0.0f, 0.0f, 1.0f);
+
+    // Then
+    EXPECT_FALSE(color1 == color2);
 }
 
 TEST_F(NMColorTest, ColorAddition)
