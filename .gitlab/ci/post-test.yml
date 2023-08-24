@@ -5,6 +5,7 @@ HTML Coverage:
   - pacman -Sy --noconfirm lcov
   script:
   - ./Tools/scripts/merge_lcov.sh
+  coverage: /lines......:\s+([0-9.]+)%/
   artifacts:
     when: always
     paths:
