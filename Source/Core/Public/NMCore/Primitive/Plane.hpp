@@ -19,7 +19,7 @@ public:
         return origin == otherPlane.origin;
     }
 
-    inline virtual std::vector<SNMIntersection> LocalIntersect(const NMRay& localRay) override
+    inline virtual std::vector<SNMIntersection> LocalIntersect(const NMRay& localRay) const override
     {
         if (std::abs(localRay.GetDirection().GetY()) < nmmath::floatEpsilon)
         {

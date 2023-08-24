@@ -19,7 +19,7 @@ public:
     }
 
     float t;
-    NMPrimitiveBase* object;
+    const NMPrimitiveBase* object;
     NMPoint point;
     NMPoint overPoint;
     NMVector eyeVector;

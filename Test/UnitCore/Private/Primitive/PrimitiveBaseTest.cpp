@@ -9,11 +9,11 @@ public:
     NMTestShape() = default;
     virtual ~NMTestShape() = default;
 
-    NMRay lastLocalIntersectRay;
+    mutable NMRay lastLocalIntersectRay;
 
 protected:
 
-    virtual std::vector<SNMIntersection> LocalIntersect(const NMRay& localRay) override
+    virtual std::vector<SNMIntersection> LocalIntersect(const NMRay& localRay) const override
     {
         lastLocalIntersectRay = localRay;
         return std::vector<SNMIntersection>();

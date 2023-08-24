@@ -27,8 +27,7 @@ public:
 
     inline const NMPoint& GetOrigin() const { return origin; }
 
-    // TODO: mark const
-    inline std::vector<SNMIntersection> Intersect(const NMRay& ray)
+    inline std::vector<SNMIntersection> Intersect(const NMRay& ray) const
     {
         NMRay localRay = ray.Transformed(transform.Inverse());
         return LocalIntersect(localRay);
@@ -45,7 +44,7 @@ public:
         return worldNormal.Normalized();
     }
 
-    virtual std::vector<SNMIntersection> LocalIntersect(const NMRay& localRay) = 0;
+    virtual std::vector<SNMIntersection> LocalIntersect(const NMRay& localRay) const = 0;
     inline virtual NMVector LocalNormalAt(const NMPoint& localPoint) const { return localPoint - origin; }
 
 protected:

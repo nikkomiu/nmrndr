@@ -20,7 +20,7 @@ public:
 
     inline float GetRadius() const { return radius; }
 
-    virtual std::vector<SNMIntersection> LocalIntersect(const NMRay& localRay) override
+    virtual std::vector<SNMIntersection> LocalIntersect(const NMRay& localRay) const override
     {
         NMVector sphereToRay = localRay.GetOrigin() - origin;
         NMVector rayDirection = localRay.GetDirection();

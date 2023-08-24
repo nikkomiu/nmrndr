@@ -16,7 +16,6 @@ void NMWorld::Run()
 
     while (!ShouldEndPlay())
     {
-        // TODO: calculate delta time
         Tick(0.1f);
 
         Draw();
