@@ -25,6 +25,9 @@ merge_command+=" --output-file $output_info_file"
 # Execute the merge command
 eval "$merge_command"
 
+# Print the total coverage percentage
+lcov --summary $output_info_file | grep 'TOTAL' | awk '{print $2}'
+
 # Generate HTML coverage report
 genhtml "$output_info_file" --output-directory $coverage_output_directory
 
