@@ -5,7 +5,6 @@ project(NMRndr VERSION 1.0.0)
 # ###################################################################### #
 # Setup Options                                                          #
 # ###################################################################### #
-set(BUILD_TOOLS ON)
 set(BUILD_EXAMPLES ON)
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/Binaries)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
@@ -41,10 +40,6 @@ add_subdirectory(Source/Math)
 add_subdirectory(Source/Core)
 
 add_subdirectory(Tools)
-
-if(BUILD_TOOLS)
-    add_subdirectory(Source/Tools)
-endif()
 
 if(BUILD_EXAMPLES)
     add_subdirectory(Source/Examples)
