@@ -3,11 +3,13 @@ include:
   - local: '.gitlab/ci/build.yml'
   - local: '.gitlab/ci/analyze.yml'
   - local: '.gitlab/ci/test.yml'
+  - local: '.gitlab.ci/post-test.yml'
 
 stages:
 - pre-build
 - build
 - test
+- post-test
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive

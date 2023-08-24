@@ -1,5 +1,8 @@
 # NM Rndr
 
+[![pipeline status](https://gitlab.com/nm-apps/nmrndr/badges/main/pipeline.svg)](https://gitlab.com/nm-apps/nmrndr/-/commits/main)
+[![coverage report](https://gitlab.com/nm-apps/nmrndr/badges/main/coverage.svg)](https://gitlab.com/nm-apps/nmrndr/-/commits/main)
+
 Ray Traced Renderer
 
 ## Development

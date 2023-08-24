@@ -1,0 +1,16 @@
+Combined Coverage:
+  stage: post-test
+  image: alpine:latest
+  before_script:
+  - apk add --no-cache lcov
+  script:
+  - ./Tools/Scripts/merge_lcov.sh
+  artifacts:
+    when: always
+    paths:
+    - ./Build/coverage
+  cache:
+    paths:
+    - ./Build/
+    - ./Tools/vcpkg/packages
+    policy: pull
