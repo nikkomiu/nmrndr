@@ -10,9 +10,9 @@ Test Unit NMCore:
   artifacts:
     when: always
     paths:
-    - ./Build/coverage
+    - ./Build/coverage/**/lcov.info
     reports:
-      junit: ./Build/Test/UnitCore/default.xml
+      junit: ./Build/Test/**/default.xml
       coverage_report:
         coverage_format: cobertura
         path: Build/coverage/**/cobertura.xml
@@ -35,9 +35,9 @@ Test Unit NMM:
   artifacts:
     when: always
     paths:
-    - ./Build/coverage
+    - ./Build/coverage/**/lcov.info
     reports:
-      junit: ./Build/Test/UnitNMM/default.xml
+      junit: ./Build/Test/**/default.xml
       coverage_report:
         coverage_format: cobertura
         path: Build/coverage/**/cobertura.xml

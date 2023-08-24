@@ -8,7 +8,7 @@ HTML Coverage:
   artifacts:
     when: always
     paths:
-    - ./Build/coverage
+    - ./coverage
   cache:
     key: build-cache
     paths:

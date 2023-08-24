@@ -4,10 +4,10 @@
 search_directory="Build/coverage"
 
 # Output merged .info file
-output_info_file="Build/coverage/merged.info"
+output_info_file="Build/coverage/total.info"
 
 # Coverage output directory
-coverage_output_directory="Build/coverage/html"
+coverage_output_directory="coverage"
 
 # Find all .info files and store their paths in an array
 info_files=()
