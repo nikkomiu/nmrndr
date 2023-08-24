@@ -56,6 +56,56 @@ TEST_F(NMVectorTest, VectorCreation_FromTuple_Point)
     EXPECT_FLOAT_EQ(vector.GetZ(), 0.0f);
 }
 
+TEST_F(NMVectorTest, EqualityOperator)
+{
+    // Given
+    NMVector vector1(4.3f, -4.2f, 3.1f);
+    NMVector vector2(4.3f, -4.2f, 3.1f);
+
+    // Then
+    EXPECT_TRUE(vector1 == vector2);
+}
+
+TEST_F(NMVectorTest, EqualityOperator_NearEqual)
+{
+    // Given
+    NMVector vector1(4.3f, -4.2f, 3.1f);
+    NMVector vector2(4.3f + std::numeric_limits<float>::epsilon() / 2.0f, -4.2f + std::numeric_limits<float>::epsilon() / 2.0f, 3.1f + std::numeric_limits<float>::epsilon() / 2.0f);
+
+    // Then
+    EXPECT_TRUE(vector1 == vector2);
+}
+
+TEST_F(NMVectorTest, EqualityOperator_XNotEqual)
+{
+    // Given
+    NMVector vector1(4.3f, -4.2f, 3.1f);
+    NMVector vector2(4.4f, -4.2f, 3.1f);
+
+    // Then
+    EXPECT_FALSE(vector1 == vector2);
+}
+
+TEST_F(NMVectorTest, EqualityOperator_YNotEqual)
+{
+    // Given
+    NMVector vector1(4.3f, -4.2f, 3.1f);
+    NMVector vector2(4.3f, -4.3f, 3.1f);
+
+    // Then
+    EXPECT_FALSE(vector1 == vector2);
+}
+
+TEST_F(NMVectorTest, EqualityOperator_ZNotEqual)
+{
+    // Given
+    NMVector vector1(4.3f, -4.2f, 3.1f);
+    NMVector vector2(4.3f, -4.2f, 3.2f);
+
+    // Then
+    EXPECT_FALSE(vector1 == vector2);
+}
+
 TEST_F(NMVectorTest, AddOperator_Point)
 {
     // Given

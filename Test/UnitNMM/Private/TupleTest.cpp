@@ -134,7 +134,37 @@ TEST_F(NMTupleTest, EqualityOperator)
     EXPECT_TRUE(tuple1 == tuple2);
 }
 
-TEST_F(NMTupleTest, EqualityOperator_False)
+TEST_F(NMTupleTest, EqualityOperator_XFalse)
+{
+    // Given
+    NMTuple tuple1(4.3f, -4.2f, 3.1f, 1.0f);
+    NMTuple tuple2(4.2f, -4.2f, 3.1f, 1.0f);
+
+    // Then
+    EXPECT_FALSE(tuple1 == tuple2);
+}
+
+TEST_F(NMTupleTest, EqualityOperator_YFalse)
+{
+    // Given
+    NMTuple tuple1(4.3f, -4.2f, 3.1f, 1.0f);
+    NMTuple tuple2(4.3f, -4.3f, 3.1f, 1.0f);
+
+    // Then
+    EXPECT_FALSE(tuple1 == tuple2);
+}
+
+TEST_F(NMTupleTest, EqualityOperator_ZFalse)
+{
+    // Given
+    NMTuple tuple1(4.3f, -4.2f, 3.1f, 1.0f);
+    NMTuple tuple2(4.3f, -4.2f, 3.2f, 0.0f);
+
+    // Then
+    EXPECT_FALSE(tuple1 == tuple2);
+}
+
+TEST_F(NMTupleTest, EqualityOperator_WFalse)
 {
     // Given
     NMTuple tuple1(4.3f, -4.2f, 3.1f, 1.0f);
@@ -154,7 +184,37 @@ TEST_F(NMTupleTest, EqualityOperator_Point)
     EXPECT_TRUE(tuple == point);
 }
 
-TEST_F(NMTupleTest, EqualityOperator_Point_False)
+TEST_F(NMTupleTest, EqualityOperator_Point_XFalse)
+{
+    // Given
+    NMPoint point(4.3f, -4.2f, 3.1f);
+    NMTuple tuple(4.2f, -4.2f, 3.1f, 1.0f);
+
+    // Then
+    EXPECT_FALSE(tuple == point);
+}
+
+TEST_F(NMTupleTest, EqualityOperator_Point_YFalse)
+{
+    // Given
+    NMPoint point(4.3f, -4.2f, 3.1f);
+    NMTuple tuple(4.3f, -4.3f, 3.1f, 1.0f);
+
+    // Then
+    EXPECT_FALSE(tuple == point);
+}
+
+TEST_F(NMTupleTest, EqualityOperator_Point_ZFalse)
+{
+    // Given
+    NMPoint point(4.3f, -4.2f, 3.1f);
+    NMTuple tuple(4.3f, -4.2f, 3.2f, 1.0f);
+
+    // Then
+    EXPECT_FALSE(tuple == point);
+}
+
+TEST_F(NMTupleTest, EqualityOperator_Point_WFalse)
 {
     // Given
     NMPoint point(4.3f, -4.2f, 3.1f);
@@ -174,7 +234,37 @@ TEST_F(NMTupleTest, EqualityOperator_Vector)
     EXPECT_TRUE(tuple == vector);
 }
 
-TEST_F(NMTupleTest, EqualityOperator_Vector_False)
+TEST_F(NMTupleTest, EqualityOperator_Vector_XFalse)
+{
+    // Given
+    NMVector vector(4.3f, -4.2f, 3.1f);
+    NMTuple tuple(4.2f, -4.2f, 3.1f, 0.0f);
+
+    // Then
+    EXPECT_FALSE(tuple == vector);
+}
+
+TEST_F(NMTupleTest, EqualityOperator_Vector_YFalse)
+{
+    // Given
+    NMVector vector(4.3f, -4.2f, 3.1f);
+    NMTuple tuple(4.3f, -4.3f, 3.1f, 0.0f);
+
+    // Then
+    EXPECT_FALSE(tuple == vector);
+}
+
+TEST_F(NMTupleTest, EqualityOperator_Vector_ZFalse)
+{
+    // Given
+    NMVector vector(4.3f, -4.2f, 3.1f);
+    NMTuple tuple(4.3f, -4.2f, 3.2f, 0.0f);
+
+    // Then
+    EXPECT_FALSE(tuple == vector);
+}
+
+TEST_F(NMTupleTest, EqualityOperator_Vector_WFalse)
 {
     // Given
     NMVector vector(4.3f, -4.2f, 3.1f);

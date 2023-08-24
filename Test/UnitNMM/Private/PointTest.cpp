@@ -53,6 +53,56 @@ TEST_F(NMPointTest, PointCreation_FromTuple_Vector)
     EXPECT_FLOAT_EQ(point.GetZ(), 0.0f);
 }
 
+TEST_F(NMPointTest, EqualityOperator)
+{
+    // Given
+    NMPoint point1(1.0f, 2.0f, 3.0f);
+    NMPoint point2(1.0f, 2.0f, 3.0f);
+
+    // Then
+    EXPECT_TRUE(point1 == point2);
+}
+
+TEST_F(NMPointTest, EqualityOperator_NearEqual)
+{
+    // Given
+    NMPoint point1(1.0f / 3.0f, -2.0f / 3.0f, 1.0f);
+    NMPoint point2(1.0f / 3.0f, -2.0f / 3.0f, 1.0f);
+
+    // Then
+    EXPECT_TRUE(point1 == point2);
+}
+
+TEST_F(NMPointTest, EqualityOperator_XNotEqual)
+{
+    // Given
+    NMPoint point1(1.0f, 2.0f, 3.0f);
+    NMPoint point2(2.0f, 2.0f, 3.0f);
+
+    // Then
+    EXPECT_FALSE(point1 == point2);
+}
+
+TEST_F(NMPointTest, EqualityOperator_YNotEqual)
+{
+    // Given
+    NMPoint point1(1.0f, 2.0f, 3.0f);
+    NMPoint point2(1.0f, 1.0f, 3.0f);
+
+    // Then
+    EXPECT_FALSE(point1 == point2);
+}
+
+TEST_F(NMPointTest, EqualityOperator_ZNotEqual)
+{
+    // Given
+    NMPoint point1(1.0f, 2.0f, 3.0f);
+    NMPoint point2(1.0f, 2.0f, 2.0f);
+
+    // Then
+    EXPECT_FALSE(point1 == point2);
+}
+
 TEST_F(NMPointTest, AddOperator_Vector)
 {
     // Given
