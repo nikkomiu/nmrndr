@@ -156,13 +156,6 @@ function(nm_test)
             BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/${PKG_NAME}.profdata
         )
 
-        # Generate Summary coverage report (for GitLab CI coverage percentage)
-        add_custom_command(
-            TARGET ${PKG_NAME}Coverage
-            COMMAND llvm-cov show -o ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME} ${PKG_NAME} -instr-profile=${PKG_NAME}.profdata
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        )
-
         # Generate LCOV coverage report
         add_custom_command(
             TARGET ${PKG_NAME}Coverage
