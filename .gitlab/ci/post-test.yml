@@ -4,7 +4,7 @@ HTML Coverage:
   before_script:
   - pacman -Sy --noconfirm lcov
   script:
-  - ./Tools/Scripts/merge_lcov.sh
+  - ./Tools/scripts/merge_lcov.sh
   artifacts:
     when: always
     paths:
