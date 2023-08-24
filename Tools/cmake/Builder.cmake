@@ -182,7 +182,7 @@ function(nm_test)
         # Generate Cobertura coverage report from lcov (for GitLab CI coverage reporting)
         add_custom_target(${PKG_NAME}Cobertura
             DEPENDS ${PKG_NAME}Coverage
-            COMMAND ${CMAKE_BINARY_DIR}/lcov_cobertura ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/lcov.info --base-dir ${CMAKE_SOURCE_DIR} --output ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/cobertura.xml
+            COMMAND lcov_cobertura ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/lcov.info --base-dir ${CMAKE_SOURCE_DIR} --output ${CMAKE_BINARY_DIR}/coverage/${PKG_NAME}/cobertura.xml
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         )
     endif()
