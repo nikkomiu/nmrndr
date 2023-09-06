@@ -24,6 +24,109 @@ TEST_F(NMCanvasTest, CreateCanvas)
     }
 }
 
+// Scenario: Can check if canvas is a specific size
+TEST_F(NMCanvasTest, IsSize)
+{
+    // Given
+    NMCanvas canvas;
+
+    // Then
+    ASSERT_TRUE(canvas.IsSize(10, 10));
+    ASSERT_FALSE(canvas.IsSize(20, 20));
+    ASSERT_FALSE(canvas.IsSize(10, 20));
+}
+
+// Scenario: Can check if canvas is a specific size when resized
+TEST_F(NMCanvasTest, IsSize_Resized)
+{
+    // Given
+    NMCanvas canvas;
+
+    // When
+    canvas.Resize(20, 20);
+
+    // Then
+    ASSERT_FALSE(canvas.IsSize(10, 10));
+    ASSERT_TRUE(canvas.IsSize(20, 20));
+}
+
+// Scenario: Can check if canvas is a specific size when custom start size
+TEST_F(NMCanvasTest, IsSize_CustomStartSize)
+{
+    // Given
+    NMCanvas canvas(20, 20);
+
+    // Then
+    ASSERT_FALSE(canvas.IsSize(10, 10));
+    ASSERT_TRUE(canvas.IsSize(20, 20));
+}
+
+// Scenario: Can resize a canvas
+TEST_F(NMCanvasTest, ResizeCanvas)
+{
+    // Given
+    NMCanvas canvas(10, 10);
+
+    // When
+    canvas.Resize(20, 30);
+
+    // Then
+    ASSERT_EQ(canvas.GetWidth(), 20);
+    ASSERT_EQ(canvas.GetHeight(), 30);
+
+    for (int y = 0; y < canvas.GetHeight(); ++y)
+    {
+        for (int x = 0; x < canvas.GetWidth(); ++x)
+        {
+            ASSERT_EQ(canvas.ReadPixel(x, y), NMColor(0.0f, 0.0f, 0.0f));
+        }
+    }
+}
+
+// Scenario: Can resize a canvas to a smaller size
+TEST_F(NMCanvasTest, ResizeCanvas_Smaller)
+{
+    // Given
+    NMCanvas canvas(10, 10);
+
+    // When
+    canvas.Resize(5, 5);
+
+    // Then
+    ASSERT_EQ(canvas.GetWidth(), 5);
+    ASSERT_EQ(canvas.GetHeight(), 5);
+
+    for (int y = 0; y < canvas.GetHeight(); ++y)
+    {
+        for (int x = 0; x < canvas.GetWidth(); ++x)
+        {
+            ASSERT_EQ(canvas.ReadPixel(x, y), NMColor(0.0f, 0.0f, 0.0f));
+        }
+    }
+}
+
+// Scenario: Can resize a canvas when already at that size
+TEST_F(NMCanvasTest, ResizeCanvas_SameSize)
+{
+    // Given
+    NMCanvas canvas(10, 10);
+
+    // When
+    canvas.Resize(10, 10);
+
+    // Then
+    ASSERT_EQ(canvas.GetWidth(), 10);
+    ASSERT_EQ(canvas.GetHeight(), 10);
+
+    for (int y = 0; y < canvas.GetHeight(); ++y)
+    {
+        for (int x = 0; x < canvas.GetWidth(); ++x)
+        {
+            ASSERT_EQ(canvas.ReadPixel(x, y), NMColor(0.0f, 0.0f, 0.0f));
+        }
+    }
+}
+
 // Scenario: Read pixel fails from canvas when out of bounds on x
 TEST_F(NMCanvasTest, ReadPixel_OutOfBoundsX)
 {

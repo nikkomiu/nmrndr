@@ -3,6 +3,7 @@
     "name": "nmrndr",
     "version-string": "1.0.0",
     "dependencies": [
-        "gtest"
+        "gtest",
+        "sdl2"
     ]
 }

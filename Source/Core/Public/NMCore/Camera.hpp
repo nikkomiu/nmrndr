@@ -19,6 +19,8 @@ public:
         UpdatePixelSize();
     }
 
+    ~NMCamera() { }
+
     inline std::size_t GetHSize() const { return hSize; }
     inline std::size_t GetVSize() const { return vSize; }
 
@@ -54,12 +56,27 @@ public:
         return NMRay(origin, direction);
     }
 
-    NMCanvas Render(const NMWorld& world)
+    inline NMCanvas Render(const NMWorld& world, std::size_t threadCount = 0)
     {
         NMCanvas image(hSize, vSize);
+        Render(world, &image, threadCount);
+        return image;
+    }
 
-        std::shared_ptr<ThreadPool> pool = std::make_shared<ThreadPool>(std::thread::hardware_concurrency());
+    void Render(const NMWorld& world, NMCanvas* image, std::size_t threadCount = 0)
+    {
+        if (pool)
+        {
+            printf("Render already in progress\n");
+            return;
+        }
 
+        if (threadCount <= 0)
+        {
+            threadCount = std::thread::hardware_concurrency() + threadCount;
+        }
+
+        pool = new ThreadPool(std::thread::hardware_concurrency());
         for (std::size_t y = 0; y < vSize; ++y)
         {
             for (std::size_t x = 0; x < hSize; ++x)
@@ -69,12 +86,20 @@ public:
                     {
                         NMRay ray = RayForPixel(x, y);
                         NMColor color = world.ColorAt(ray);
-                        image.WritePixel(x, y, color);
+                        image->WritePixel(x, y, color);
                     });
             }
         }
+        delete pool;
+        pool = nullptr;
+    }
 
-        return image;
+    void StopRender()
+    {
+        if (pool)
+        {
+            pool->Cancel();
+        }
     }
 
 protected:
@@ -89,6 +114,8 @@ protected:
     float pixelSize;
 
     NMMatrix transform = NMMatrix::Identity4x4();
+
+    ThreadPool* pool = nullptr;
 
     void UpdatePixelSize()
     {

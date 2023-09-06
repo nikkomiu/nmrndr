@@ -32,12 +32,14 @@ include(Tools/cmake/Builder.cmake)
 # Load Required Packages                                                 #
 # ###################################################################### #
 find_package(GTest CONFIG REQUIRED)
+find_package(SDL2 CONFIG REQUIRED)
 
 # ###################################################################### #
 # Load Projects                                                          #
 # ###################################################################### #
 add_subdirectory(Source/Math)
 add_subdirectory(Source/Core)
+add_subdirectory(Source/SDLApp)
 
 add_subdirectory(Tools)
 

@@ -17,6 +17,27 @@ public:
     inline float GetGreen() const { return g; }
     inline float GetBlue() const { return b; }
 
+    inline float operator[](std::size_t channel)
+    {
+        switch (channel)
+        {
+        case 0:
+            return r;
+
+        case 1:
+            return g;
+
+        case 2:
+            return b;
+
+        case 3:
+            return 1.0f; // alpha channel
+
+        default:
+            return 0.0f;
+        }
+    }
+
     inline int GetClampedRed() const { return static_cast<int>(nmmath::Clamp(r, 0.0f, 1.0f) * 255.0f); }
     inline int GetClampedGreen() const { return static_cast<int>(nmmath::Clamp(g, 0.0f, 1.0f) * 255.0f); }
     inline int GetClampedBlue() const { return static_cast<int>(nmmath::Clamp(b, 0.0f, 1.0f) * 255.0f); }
