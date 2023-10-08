@@ -5,12 +5,12 @@
 #include "NMCore/Camera.hpp"
 #include "NMCore/World.hpp"
 
-class CameraTest : public ::testing::Test
+class NMCameraTest : public ::testing::Test
 {
 };
 
 // Scenario: Constructing a camera
-TEST_F(CameraTest, Construct)
+TEST_F(NMCameraTest, Construct)
 {
     // Given
     int hSize = 160;
@@ -28,7 +28,7 @@ TEST_F(CameraTest, Construct)
 }
 
 // Scenario: The pixel size for a horizontal canvas
-TEST_F(CameraTest, PixelSizeHorizontal)
+TEST_F(NMCameraTest, PixelSizeHorizontal)
 {
     // Given
     NMCamera camera(200, 125, M_PI / 2.0f);
@@ -38,7 +38,7 @@ TEST_F(CameraTest, PixelSizeHorizontal)
 }
 
 // Scenario: The pixel size for a vertical canvas
-TEST_F(CameraTest, PixelSizeVertical)
+TEST_F(NMCameraTest, PixelSizeVertical)
 {
     // Given
     NMCamera camera(125, 200, M_PI / 2.0f);
@@ -48,7 +48,7 @@ TEST_F(CameraTest, PixelSizeVertical)
 }
 
 // Scenario: Constructing a ray through the center of the canvas
-TEST_F(CameraTest, RayThroughCenter)
+TEST_F(NMCameraTest, RayThroughCenter)
 {
     // Given
     NMCamera camera(201, 101, M_PI / 2.0f);
@@ -62,7 +62,7 @@ TEST_F(CameraTest, RayThroughCenter)
 }
 
 // Scenario: Constructing a ray through a corner of the canvas
-TEST_F(CameraTest, RayThroughCorner)
+TEST_F(NMCameraTest, RayThroughCorner)
 {
     // Given
     NMCamera camera(201, 101, M_PI / 2.0f);
@@ -76,7 +76,7 @@ TEST_F(CameraTest, RayThroughCorner)
 }
 
 // Scenario: Constructing a ray when the camera is transformed
-TEST_F(CameraTest, RayWhenTransformed)
+TEST_F(NMCameraTest, RayWhenTransformed)
 {
     // Given
     NMCamera camera(201, 101, M_PI / 2.0f);
@@ -91,7 +91,7 @@ TEST_F(CameraTest, RayWhenTransformed)
 }
 
 // Scenario: Rendering a world with a camera
-TEST_F(CameraTest, Render)
+TEST_F(NMCameraTest, Render)
 {
     // Given
     NMWorld world = NMWorld::Default();

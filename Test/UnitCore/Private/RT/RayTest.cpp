@@ -5,12 +5,12 @@
 #include "NMCore/RT/Ray.hpp"
 #include "NMCore/Primitive/Sphere.hpp"
 
-class RayTest : public ::testing::Test
+class NMRayTest : public ::testing::Test
 {
 };
 
 // Scenario: Creating a default ray
-TEST_F(RayTest, RayCreation_Default)
+TEST_F(NMRayTest, RayCreation_Default)
 {
     // Given
     NMRay ray = NMRay();
@@ -21,7 +21,7 @@ TEST_F(RayTest, RayCreation_Default)
 }
 
 // Scenario: Creating and querying a ray
-TEST_F(RayTest, RayCreation)
+TEST_F(NMRayTest, RayCreation)
 {
     // Given
     NMRay ray = NMRay(NMPoint(1.0f, 2.0f, 3.0f), NMVector(4.0f, 5.0f, 6.0f));
@@ -32,7 +32,7 @@ TEST_F(RayTest, RayCreation)
 }
 
 // Scenario: Computing a point from a distance
-TEST_F(RayTest, RayPosition)
+TEST_F(NMRayTest, RayPosition)
 {
     // Given
     NMRay ray = NMRay(NMPoint(2.0f, 3.0f, 4.0f), NMVector(1.0f, 0.0f, 0.0f));
@@ -45,7 +45,7 @@ TEST_F(RayTest, RayPosition)
 }
 
 // Scenario: Translating a ray
-TEST_F(RayTest, RayTranslation)
+TEST_F(NMRayTest, RayTranslation)
 {
     // Given
     NMRay ray = NMRay(NMPoint(1.0f, 2.0f, 3.0f), NMVector(0.0f, 1.0f, 0.0f));
@@ -61,7 +61,7 @@ TEST_F(RayTest, RayTranslation)
 }
 
 // Scenario: Scaling a ray
-TEST_F(RayTest, RayScaling)
+TEST_F(NMRayTest, RayScaling)
 {
     // Given
     NMRay ray = NMRay(NMPoint(1.0f, 2.0f, 3.0f), NMVector(0.0f, 1.0f, 0.0f));

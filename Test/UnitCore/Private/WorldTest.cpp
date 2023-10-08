@@ -3,12 +3,12 @@
 #include "NMCore/World.hpp"
 #include "NMCore/RT/Intersection.hpp"
 
-class WorldTest : public ::testing::Test
+class NMWorldTest : public ::testing::Test
 {
 };
 
 // Scenario: Create a world
-TEST_F(WorldTest, CreateWorld)
+TEST_F(NMWorldTest, CreateWorld)
 {
     // Given
     NMWorld world;
@@ -19,7 +19,7 @@ TEST_F(WorldTest, CreateWorld)
 }
 
 // Scenario: The default world
-TEST_F(WorldTest, DefaultWorld)
+TEST_F(NMWorldTest, DefaultWorld)
 {
     // Given
     NMWorld world = NMWorld::Default();
@@ -41,7 +41,7 @@ TEST_F(WorldTest, DefaultWorld)
     ASSERT_EQ(sphere->GetMaterial(), NMMaterial());
 }
 
-TEST_F(WorldTest, SetLight)
+TEST_F(NMWorldTest, SetLight)
 {
     // Given
     NMWorld world;
@@ -56,7 +56,7 @@ TEST_F(WorldTest, SetLight)
     ASSERT_EQ(world.GetPointLight(0).GetColor(), NMColor(1.0f, 1.0f, 1.0f));
 }
 
-TEST_F(WorldTest, SetLight_OutOfBounds)
+TEST_F(NMWorldTest, SetLight_OutOfBounds)
 {
     // Given
     NMWorld world;
@@ -69,7 +69,7 @@ TEST_F(WorldTest, SetLight_OutOfBounds)
 }
 
 // Scenario: Intersect a world with a ray
-TEST_F(WorldTest, IntersectWorld)
+TEST_F(NMWorldTest, IntersectWorld)
 {
     // Given
     NMWorld world = NMWorld::Default();
@@ -86,7 +86,7 @@ TEST_F(WorldTest, IntersectWorld)
 }
 
 // Scenario: Precomputing the state of an intersection
-TEST_F(WorldTest, PrecomputeState)
+TEST_F(NMWorldTest, PrecomputeState)
 {
     // Given
     NMWorld world = NMWorld::Default();
@@ -106,7 +106,7 @@ TEST_F(WorldTest, PrecomputeState)
 }
 
 // Scenario: The hit, when an intersection occurs on the outside
-TEST_F(WorldTest, HitOutside)
+TEST_F(NMWorldTest, HitOutside)
 {
     // Given
     NMWorld world = NMWorld::Default();
@@ -121,7 +121,7 @@ TEST_F(WorldTest, HitOutside)
 }
 
 // Scenario: The hit, when an intersection occurs on the inside
-TEST_F(WorldTest, HitInside)
+TEST_F(NMWorldTest, HitInside)
 {
     // Given
     NMWorld world = NMWorld::Default();
@@ -139,7 +139,7 @@ TEST_F(WorldTest, HitInside)
 }
 
 // Scenario: The hit should offset the point
-TEST_F(WorldTest, HitOffset)
+TEST_F(NMWorldTest, HitOffset)
 {
     // Given
     NMWorld world;
@@ -157,7 +157,7 @@ TEST_F(WorldTest, HitOffset)
 }
 
 // Scenario: Shading an intersection
-TEST_F(WorldTest, ShadingIntersection)
+TEST_F(NMWorldTest, ShadingIntersection)
 {
     // Given
     NMWorld world = NMWorld::Default();
@@ -173,7 +173,7 @@ TEST_F(WorldTest, ShadingIntersection)
 }
 
 // Scenario: Shading an intersection from the inside
-TEST_F(WorldTest, ShadingIntersectionInside)
+TEST_F(NMWorldTest, ShadingIntersectionInside)
 {
     // Given
     NMWorld world = NMWorld::Default();
@@ -191,7 +191,7 @@ TEST_F(WorldTest, ShadingIntersectionInside)
 }
 
 // Scenario: ShadeHit() is given an intersection in shadow
-TEST_F(WorldTest, ShadingIntersectionShadow)
+TEST_F(NMWorldTest, ShadingIntersectionShadow)
 {
     // Given
     NMWorld world;
@@ -216,7 +216,7 @@ TEST_F(WorldTest, ShadingIntersectionShadow)
 }
 
 // Scenario: The color when a ray misses
-TEST_F(WorldTest, ColorMiss)
+TEST_F(NMWorldTest, ColorMiss)
 {
     // Given
     NMWorld world = NMWorld::Default();
@@ -230,7 +230,7 @@ TEST_F(WorldTest, ColorMiss)
 }
 
 // Scenario: The color when a ray hits
-TEST_F(WorldTest, ColorHit)
+TEST_F(NMWorldTest, ColorHit)
 {
     // Given
     NMWorld world = NMWorld::Default();
@@ -244,7 +244,7 @@ TEST_F(WorldTest, ColorHit)
 }
 
 // Scenario: The color with an intersection behind the ray
-TEST_F(WorldTest, ColorBehind)
+TEST_F(NMWorldTest, ColorBehind)
 {
     // Given
     NMWorld world = NMWorld::Default();
@@ -262,7 +262,7 @@ TEST_F(WorldTest, ColorBehind)
 }
 
 // Scenario: There is no shadow when nothing is collinear with point and light
-TEST_F(WorldTest, NoShadow)
+TEST_F(NMWorldTest, NoShadow)
 {
     // Given
     NMWorld world = NMWorld::Default();
@@ -276,7 +276,7 @@ TEST_F(WorldTest, NoShadow)
 }
 
 // Scenario: The shadow when an object is between the point and the light
-TEST_F(WorldTest, Shadow)
+TEST_F(NMWorldTest, Shadow)
 {
     // Given
     NMWorld world = NMWorld::Default();
@@ -290,7 +290,7 @@ TEST_F(WorldTest, Shadow)
 }
 
 // Scenario: There is no shadow when an object is behind the light
-TEST_F(WorldTest, NoShadowBehindLight)
+TEST_F(NMWorldTest, NoShadowBehindLight)
 {
     // Given
     NMWorld world = NMWorld::Default();
@@ -304,7 +304,7 @@ TEST_F(WorldTest, NoShadowBehindLight)
 }
 
 // Scenario: There is no shadow when an object is behind the point
-TEST_F(WorldTest, NoShadowBehindPoint)
+TEST_F(NMWorldTest, NoShadowBehindPoint)
 {
     // Given
     NMWorld world = NMWorld::Default();

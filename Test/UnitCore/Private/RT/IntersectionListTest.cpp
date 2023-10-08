@@ -4,12 +4,12 @@
 #include "NMCore/RT/Intersection.hpp"
 #include "NMCore/RT/IntersectionList.hpp"
 
-class IntersectionListTest : public ::testing::Test
+class SNMIntersectionListTest : public ::testing::Test
 {
 };
 
 // Scenario: Intersect sets the object on the intersection
-TEST_F(IntersectionListTest, IntersectionListCreation)
+TEST_F(SNMIntersectionListTest, IntersectionListCreation)
 {
     // Given
     NMSphere sphere1 = NMSphere();
@@ -29,7 +29,7 @@ TEST_F(IntersectionListTest, IntersectionListCreation)
 }
 
 // Scenario: The hit, when all intersections have positive t
-TEST_F(IntersectionListTest, Hit_PositiveT)
+TEST_F(SNMIntersectionListTest, Hit_PositiveT)
 {
     // Given
     NMSphere sphere1 = NMSphere();
@@ -46,7 +46,7 @@ TEST_F(IntersectionListTest, Hit_PositiveT)
 }
 
 // Scenario: The hit, when some intersections have negative t
-TEST_F(IntersectionListTest, Hit_NegativeT)
+TEST_F(SNMIntersectionListTest, Hit_NegativeT)
 {
     // Given
     NMSphere sphere1 = NMSphere();
@@ -63,7 +63,7 @@ TEST_F(IntersectionListTest, Hit_NegativeT)
 }
 
 // Scenario: The hit, when all intersections have negative t
-TEST_F(IntersectionListTest, Hit_AllNegativeT)
+TEST_F(SNMIntersectionListTest, Hit_AllNegativeT)
 {
     // Given
     NMSphere sphere1 = NMSphere();
@@ -80,7 +80,7 @@ TEST_F(IntersectionListTest, Hit_AllNegativeT)
 }
 
 // Scenario: The hit is always the lowest nonnegative intersection
-TEST_F(IntersectionListTest, Hit_LowestNonnegativeT)
+TEST_F(SNMIntersectionListTest, Hit_LowestNonnegativeT)
 {
     // Given
     NMSphere sphere1 = NMSphere();
@@ -99,7 +99,7 @@ TEST_F(IntersectionListTest, Hit_LowestNonnegativeT)
     EXPECT_EQ(*hit, intersection4);
 }
 
-TEST_F(IntersectionListTest, Add)
+TEST_F(SNMIntersectionListTest, Add)
 {
     // Given
     NMSphere sphere1 = NMSphere();
@@ -119,7 +119,7 @@ TEST_F(IntersectionListTest, Add)
     EXPECT_EQ(intersectionList[1].object, (void*)&sphere2);
 }
 
-TEST_F(IntersectionListTest, Append)
+TEST_F(SNMIntersectionListTest, Append)
 {
     // Given
     NMSphere sphere1 = NMSphere();
@@ -143,7 +143,7 @@ TEST_F(IntersectionListTest, Append)
     EXPECT_EQ(intersectionList[2].object, (void*)&sphere3);
 }
 
-TEST_F(IntersectionListTest, Sort)
+TEST_F(SNMIntersectionListTest, Sort)
 {
     // Given
     NMSphere sphere1 = NMSphere();
@@ -174,7 +174,7 @@ TEST_F(IntersectionListTest, Sort)
     EXPECT_EQ(intersectionList[4].object, (void*)&sphere3);
 }
 
-TEST_F(IntersectionListTest, Sort_Sorted)
+TEST_F(SNMIntersectionListTest, Sort_Sorted)
 {
     // Given
     NMSphere sphere1 = NMSphere();

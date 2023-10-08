@@ -3,11 +3,11 @@
 #include "NMCore/Primitive/Sphere.hpp"
 #include "NMCore/RT/Intersection.hpp"
 
-class IntersectionTest : public ::testing::Test
+class SNMIntersectionTest : public ::testing::Test
 {
 };
 
-TEST_F(IntersectionTest, IntersectionCreation)
+TEST_F(SNMIntersectionTest, IntersectionCreation)
 {
     // Given
     NMSphere* sphere = new NMSphere();
@@ -18,7 +18,7 @@ TEST_F(IntersectionTest, IntersectionCreation)
     EXPECT_TRUE(intersection.object == sphere);
 }
 
-TEST_F(IntersectionTest, EqualityOperator)
+TEST_F(SNMIntersectionTest, EqualityOperator)
 {
     // Given
     NMSphere* sphere = new NMSphere();
@@ -29,7 +29,7 @@ TEST_F(IntersectionTest, EqualityOperator)
     EXPECT_TRUE(intersection1 == intersection2);
 }
 
-TEST_F(IntersectionTest, EqualityOperator_DifferentT)
+TEST_F(SNMIntersectionTest, EqualityOperator_DifferentT)
 {
     // Given
     NMSphere* sphere = new NMSphere();
@@ -40,7 +40,7 @@ TEST_F(IntersectionTest, EqualityOperator_DifferentT)
     EXPECT_FALSE(intersection1 == intersection2);
 }
 
-TEST_F(IntersectionTest, EqualityOperator_DifferentObject)
+TEST_F(SNMIntersectionTest, EqualityOperator_DifferentObject)
 {
     // Given
     NMSphere* sphere1 = new NMSphere();
