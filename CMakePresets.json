@@ -24,7 +24,11 @@
       "name": "Debug",
       "displayName": "Debug",
       "description": "Debug configuration",
-      "inherits": "Default"
+      "inherits": "Default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "WITH_COVERAGE": "ON"
+      }
     },
     {
       "name": "Test",
