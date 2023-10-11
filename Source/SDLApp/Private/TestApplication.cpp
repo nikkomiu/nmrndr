@@ -4,6 +4,7 @@
 #include <NMCore/Primitive/Plane.hpp>
 #include <NMCore/Primitive/Sphere.hpp>
 #include <NMCore/Pattern/Stripe.hpp>
+#include <NMCore/Pattern/Gradient.hpp>
 
 TestApplication::TestApplication(std::size_t width, std::size_t height) : Application(width, height) {}
 
@@ -41,7 +42,7 @@ NMWorld TestApplication::LoadWorld()
     std::shared_ptr<NMSphere> middle = std::make_shared<NMSphere>();
     middle->SetTransform(NMMatrix::Translation(-0.5f, 1.0f, 0.5f));
     NMMaterial middleMat = NMMaterial();
-    middleMat.SetPattern<NMStripePattern>(NMColor(0.1f, 1.0f, 0.5f), NMColor(0.5f, 1.0f, 0.1f), NMMatrix::Scaling(0.25f, 0.25f, 0.25f));
+    middleMat.SetPattern<NMGradientPattern>(NMColor(0.1f, 1.0f, 0.5f), NMColor(1.0f, 0.5f, 0.1f), NMMatrix::Translation(1.0f, 1.0f, 1.0f) * NMMatrix::Scaling(2.0f, 2.0f, 2.0f));
     middleMat.SetDiffuse(0.7f);
     middleMat.SetSpecular(0.3f);
     middle->SetMaterial(middleMat);

@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include "NMCore/Pattern/Stripe.hpp"
-#include "NMCore/Primitive/Sphere.hpp"
 
 class NMStripePatternTest : public ::testing::Test
 {
