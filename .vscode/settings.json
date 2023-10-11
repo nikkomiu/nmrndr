@@ -94,6 +94,7 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "*.inc": "cpp",
-        "coroutine": "cpp"
+        "coroutine": "cpp",
+        "shared_mutex": "cpp"
     }
 }

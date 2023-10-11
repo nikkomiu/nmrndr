@@ -2,6 +2,7 @@
 
 #include "NMCore/Material.hpp"
 #include "NMCore/Light/Point.hpp"
+#include "NMCore/Pattern/Stripe.hpp"
 #include "NMM/Vector.hpp"
 
 class NMMaterialTest : public ::testing::Test
@@ -333,4 +334,37 @@ TEST_F(NMMaterialTest, Lighting_SurfaceInShadow)
 
     // Then
     ASSERT_EQ(result, NMColor(0.1f, 0.1f, 0.1f));
+}
+
+// Scenario: Lighting with a pattern applied
+//   Given m.pattern ← stripe_pattern(color(1, 1, 1), color(0, 0, 0))
+//   And m.ambient ← 1
+//   And m.diffuse ← 0
+//   And m.specular ← 0
+//   And eyev ← vector(0, 0, -1)
+//   And normalv ← vector(0, 0, -1)
+//   And light ← point_light(point(0, 0, -10), color(1, 1, 1))
+//   When c1 ← lighting(m, light, point(0.9, 0, 0), eyev, normalv, false)
+//   And c2 ← lighting(m, light, point(1.1, 0, 0), eyev, normalv, false)
+//   Then c1 = color(1, 1, 1)
+//   And c2 = color(0, 0, 0)
+TEST_F(NMMaterialTest, Lighting_PatternApplied)
+{
+    // Given
+    NMMaterial material;
+    material.SetPattern(std::make_shared<NMStripePattern>(NMColor(1, 1, 1), NMColor(0, 0, 0)));
+    material.SetAmbient(1);
+    material.SetDiffuse(0);
+    material.SetSpecular(0);
+    NMVector eyev(0, 0, -1);
+    NMVector normalv(0, 0, -1);
+    NMPointLight light(NMPoint(0, 0, -10), NMColor(1, 1, 1));
+
+    // When
+    NMColor c1 = material.Lighting(light, NMPoint(0.9f, 0, 0), eyev, normalv, false);
+    NMColor c2 = material.Lighting(light, NMPoint(1.1f, 0, 0), eyev, normalv, false);
+
+    // Then
+    ASSERT_EQ(c1, NMColor(1, 1, 1));
+    ASSERT_EQ(c2, NMColor(0, 0, 0));
 }

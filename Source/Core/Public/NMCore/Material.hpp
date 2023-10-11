@@ -1,8 +1,11 @@
 #pragma once
 
+#include <memory>
+
 #include "Color.hpp"
 #include "Light/Point.hpp"
 #include "NMM/Util.hpp"
+#include "Pattern/PatternBase.hpp"
 
 class NMMaterial
 {
@@ -41,12 +44,22 @@ public:
     inline void SetDiffuse(float newDiffuse) { diffuse = newDiffuse; }
     inline void SetSpecular(float newSpecular) { specular = newSpecular; }
     inline void SetShininess(float newShininess) { shininess = newShininess; }
+    inline void SetPattern(std::shared_ptr<NMPatternBase> newPattern) { pattern = newPattern; }
+
+    template<typename T, typename... Args>
+    inline void SetPattern(Args &&... args)
+    {
+        pattern = std::make_shared<T>(std::forward<Args>(args)...);
+    }
 
     NMColor Lighting(const NMPointLight &light, const NMPoint &point, const NMVector &eyeVector,
                      const NMVector &normalVector, bool inShadow) const
     {
+        // If the material has a pattern, use the pattern color instead of the material's color
+        NMColor materialColor = pattern ? pattern->ColorAt(point) : color;
+
         // Combine the surface color with the light's color/intensity
-        NMColor effectiveColor = color * light.GetColor();
+        NMColor effectiveColor = materialColor * light.GetColor();
 
         // Find the direction to the light source
         NMVector lightVector = (light.GetPosition() - point).Normalized();
@@ -90,4 +103,6 @@ protected:
     float diffuse = 0.9f;
     float specular = 0.9f;
     float shininess = 200.0f;
+
+    std::shared_ptr<NMPatternBase> pattern;
 };

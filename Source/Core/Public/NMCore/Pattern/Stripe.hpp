@@ -1,8 +1,8 @@
 #pragma once
 
-#include "NMCore/Pattern/Pattern.hpp"
+#include "NMCore/Pattern/PatternBase.hpp"
 
-class NMStripePattern : NMPattern
+class NMStripePattern : public NMPatternBase
 {
 public:
 
