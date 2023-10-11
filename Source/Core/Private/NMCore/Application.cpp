@@ -22,19 +22,13 @@ NMColor bilinearInterp(NMCanvas* canvas, float x, float y)
     float colChan[3] = {};
     for (std::size_t i = 0; i < 3; i++)
     {
-        colChan[i] = static_cast<float>((1 - alpha) * (1 - beta) * px100[i] +
-            alpha * (1 - beta) * px101[i] +
-            (1 - alpha) * beta * px110[i] +
-            alpha * beta * px111[i]);
+        colChan[i] = static_cast<float>((1 - alpha) * (1 - beta) * px100[i] + alpha * (1 - beta) * px101[i]
+                                        + (1 - alpha) * beta * px110[i] + alpha * beta * px111[i]);
     }
     return NMColor(colChan[0], colChan[1], colChan[2]);
 }
 
-Application::Application(std::size_t width, std::size_t height)
-    : windowWidth(width)
-    , windowHeight(height)
-{
-}
+Application::Application(std::size_t width, std::size_t height) : windowWidth(width), windowHeight(height) {}
 
 Application::~Application()
 {
@@ -65,11 +59,9 @@ int Application::Run()
     NMCamera camera = LoadScene();
 
     // async render
-    std::thread renderThread([&world, &camera, &canvas]() {
-        camera.Render(world, canvas);
-    });
+    std::thread renderThread([&world, &camera, &canvas]() { camera.Render(world, canvas); });
 
-# if DEBUG_DRAW_TIME
+#if DEBUG_DRAW_TIME
     auto startDraw = std::chrono::high_resolution_clock::now();
     auto endDraw = std::chrono::high_resolution_clock::now();
 #endif
@@ -105,9 +97,10 @@ int Application::WindowEventCallback(void* sdlEvent)
     {
         switch (event->window.event)
         {
-        case SDL_WINDOWEVENT_RESIZED:
-            ResizeWindow(static_cast<std::size_t>(event->window.data1), static_cast<std::size_t>(event->window.data2), false);
-            break;
+            case SDL_WINDOWEVENT_RESIZED:
+                ResizeWindow(static_cast<std::size_t>(event->window.data1),
+                             static_cast<std::size_t>(event->window.data2), false);
+                break;
         }
     }
 
@@ -136,12 +129,8 @@ bool Application::Initialize()
 
     uint32_t flags = SDL_WINDOW_SHOWN;
 
-    window = SDL_CreateWindow("NM RNDR",
-        SDL_WINDOWPOS_UNDEFINED,
-        SDL_WINDOWPOS_UNDEFINED,
-        static_cast<int>(windowWidth),
-        static_cast<int>(windowHeight),
-        flags);
+    window = SDL_CreateWindow("NM RNDR", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                              static_cast<int>(windowWidth), static_cast<int>(windowHeight), flags);
     if (!window)
     {
         SDL_Log("Unable to create window: %s", SDL_GetError());
@@ -152,18 +141,21 @@ bool Application::Initialize()
     SDL_SetWindowResizable(window, SDL_TRUE);
 
     // Register callback for this->ResizeWindow()
-    SDL_AddEventWatch([](void* data, SDL_Event* event) -> int {
-        Application* app = static_cast<Application*>(data);
-
-        if (!app)
+    SDL_AddEventWatch(
+        [](void* data, SDL_Event* event) -> int
         {
+            Application* app = static_cast<Application*>(data);
+
+            if (!app)
+            {
+                return 1;
+            }
+
+            app->WindowEventCallback(event);
+
             return 1;
-        }
-
-        app->WindowEventCallback(event);
-
-        return 1;
-    }, this);
+        },
+        this);
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!renderer)
@@ -215,11 +207,9 @@ void Application::DrawFrame(NMCanvas* canvas)
             auto origY = static_cast<float>(y) / scale;
 
             pixelColor = bilinearInterp(canvas, origX, origY);
-            SDL_SetRenderDrawColor(renderer,
-                static_cast<uint8_t>(pixelColor.GetClampedRed()),
-                static_cast<uint8_t>(pixelColor.GetClampedGreen()),
-                static_cast<uint8_t>(pixelColor.GetClampedBlue()),
-                1.0f);
+            SDL_SetRenderDrawColor(renderer, static_cast<uint8_t>(pixelColor.GetClampedRed()),
+                                   static_cast<uint8_t>(pixelColor.GetClampedGreen()),
+                                   static_cast<uint8_t>(pixelColor.GetClampedBlue()), 1.0f);
             SDL_RenderDrawPoint(renderer, static_cast<int>(x), static_cast<int>(y));
         }
     }

@@ -21,20 +21,20 @@ public:
     {
         switch (channel)
         {
-        case 0:
-            return r;
+            case 0:
+                return r;
 
-        case 1:
-            return g;
+            case 1:
+                return g;
 
-        case 2:
-            return b;
+            case 2:
+                return b;
 
-        case 3:
-            return 1.0f; // alpha channel
+            case 3:
+                return 1.0f;  // alpha channel
 
-        default:
-            return 0.0f;
+            default:
+                return 0.0f;
         }
     }
 

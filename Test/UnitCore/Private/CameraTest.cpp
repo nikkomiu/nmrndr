@@ -108,3 +108,103 @@ TEST_F(NMCameraTest, Render)
     // Then
     EXPECT_EQ(canvas.ReadPixel(5, 5), NMColor(0.380661f, 0.475827f, 0.285496f));
 }
+
+// Scenario: Render uses multiple threads
+TEST_F(NMCameraTest, RenderMultiThreaded)
+{
+    // Given
+    NMWorld world = NMWorld::Default();
+    NMCamera camera(11, 11, M_PI / 2.0f);
+    NMPoint from(0.0f, 0.0f, -5.0f);
+    NMPoint to(0.0f, 0.0f, 0.0f);
+    NMVector up(0.0f, 1.0f, 0.0f);
+    camera.SetTransform(NMMatrix::ViewTransform(from, to, up));
+
+    // When
+    NMCanvas canvas = camera.Render(world, 4);
+    NMColor pixelColor = canvas.ReadPixel(5, 5);
+
+    // Then
+    EXPECT_EQ(canvas.ReadPixel(5, 5), NMColor(0.380661f, 0.475827f, 0.285496f));
+}
+
+// Scenario: Render throws an error if already rendering
+TEST_F(NMCameraTest, Render_WhenAlreadyRendering)
+{
+    // Given
+    NMWorld world = NMWorld::Default();
+    NMCamera camera(11, 11, M_PI / 2.0f);
+    NMPoint from(0.0f, 0.0f, -5.0f);
+    NMPoint to(0.0f, 0.0f, 0.0f);
+    NMVector up(0.0f, 1.0f, 0.0f);
+    camera.SetTransform(NMMatrix::ViewTransform(from, to, up));
+
+    // When
+    std::thread renderThread([&camera, &world]
+    {
+        camera.Render(world);
+    });
+
+    try
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        camera.Render(world);
+        FAIL() << "Expected std::runtime_error, but no exception was thrown";
+    }
+    catch (const std::runtime_error& err)
+    {
+        EXPECT_EQ(err.what(), std::string("Camera is already rendering"));
+    }
+    catch (...)
+    {
+        FAIL() << "Expected std::runtime_error, but a different exception was thrown";
+    }
+
+    renderThread.join();
+
+    // Then
+    EXPECT_TRUE(true);
+}
+
+// Scenario: Render can be canceled
+TEST_F(NMCameraTest, RenderCancel)
+{
+    // Given
+    NMWorld world = NMWorld::Default();
+    NMCamera camera(11, 11, M_PI / 2.0f);
+    NMPoint from(0.0f, 0.0f, -5.0f);
+    NMPoint to(0.0f, 0.0f, 0.0f);
+    NMVector up(0.0f, 1.0f, 0.0f);
+    camera.SetTransform(NMMatrix::ViewTransform(from, to, up));
+
+    // When
+    std::thread renderThread([&camera, &world]
+    {
+        camera.Render(world);
+    });
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    camera.StopRender();
+    renderThread.join();
+
+    // Then
+    EXPECT_TRUE(true);
+}
+
+// Scenario: StopRender can be called even when not rendering
+TEST_F(NMCameraTest, RenderCancel_WhenNotRendering)
+{
+    // Given
+    NMWorld world = NMWorld::Default();
+    NMCamera camera(11, 11, M_PI / 2.0f);
+    NMPoint from(0.0f, 0.0f, -5.0f);
+    NMPoint to(0.0f, 0.0f, 0.0f);
+    NMVector up(0.0f, 1.0f, 0.0f);
+    camera.SetTransform(NMMatrix::ViewTransform(from, to, up));
+
+    // When
+    camera.StopRender();
+
+    // Then
+    EXPECT_TRUE(true);
+}

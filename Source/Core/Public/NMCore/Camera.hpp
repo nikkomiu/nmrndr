@@ -19,7 +19,7 @@ public:
         UpdatePixelSize();
     }
 
-    ~NMCamera() { }
+    ~NMCamera() {}
 
     inline std::size_t GetHSize() const { return hSize; }
     inline std::size_t GetVSize() const { return vSize; }
@@ -56,6 +56,13 @@ public:
         return NMRay(origin, direction);
     }
 
+    /**
+     * @brief Render the world to a canvas.
+     * @note This method will block until rendering is complete.
+     * @param world The world to render to the canvas.
+     * @param threadCount The number of threads to use for rendering (0 = use all available threads).
+     * @return The rendered canvas.
+     */
     inline NMCanvas Render(const NMWorld& world, std::size_t threadCount = 0)
     {
         NMCanvas image(hSize, vSize);
@@ -63,12 +70,20 @@ public:
         return image;
     }
 
+    /**
+     * @brief Render the world to a canvas.
+     * @note This method will block until rendering is complete.
+     * @param world The world to render to the canvas.
+     * @param image The canvas to render to.
+     * @param threadCount The number of threads to use for rendering (0 = use all available threads).
+     *                    A negative value will use all available threads minus the absolute value of the parameter.
+     * @return The rendered canvas.
+     */
     void Render(const NMWorld& world, NMCanvas* image, std::size_t threadCount = 0)
     {
         if (pool)
         {
-            printf("Render already in progress\n");
-            return;
+            throw std::runtime_error("Camera is already rendering");
         }
 
         if (threadCount <= 0)
@@ -76,7 +91,7 @@ public:
             threadCount = std::thread::hardware_concurrency() + threadCount;
         }
 
-        pool = new ThreadPool(std::thread::hardware_concurrency());
+        pool = new ThreadPool(threadCount);
         for (std::size_t y = 0; y < vSize; ++y)
         {
             for (std::size_t x = 0; x < hSize; ++x)
@@ -94,6 +109,10 @@ public:
         pool = nullptr;
     }
 
+    /**
+     * @brief Stop rendering the world to a canvas.
+     * @note This method will return immediately, but the thread running Render() will block until cancel has completed.
+     */
     void StopRender()
     {
         if (pool)

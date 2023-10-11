@@ -1,12 +1,10 @@
 #include "TestApplication.hpp"
 
+#include <NMCore/Light/Point.hpp>
 #include <NMCore/Primitive/Plane.hpp>
 #include <NMCore/Primitive/Sphere.hpp>
-#include <NMCore/Light/Point.hpp>
 
-TestApplication::TestApplication(std::size_t width, std::size_t height) : Application(width, height)
-{
-}
+TestApplication::TestApplication(std::size_t width, std::size_t height) : Application(width, height) {}
 
 NMWorld TestApplication::LoadWorld()
 {

@@ -10,6 +10,7 @@ struct SDL_Window;
 class Application
 {
 public:
+
     Application(std::size_t width, std::size_t height);
     ~Application();
 

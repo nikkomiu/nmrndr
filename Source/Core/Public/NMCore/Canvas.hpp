@@ -24,7 +24,10 @@ public:
     inline std::size_t GetWidth() const { return width; }
     inline std::size_t GetHeight() const { return height; }
 
-    inline bool IsSize(std::size_t width, std::size_t height) const { return this->width == width && this->height == height; }
+    inline bool IsSize(std::size_t width, std::size_t height) const
+    {
+        return this->width == width && this->height == height;
+    }
 
     void Resize(std::size_t width, std::size_t height)
     {
