@@ -41,7 +41,7 @@ NMWorld TestApplication::LoadWorld()
     std::shared_ptr<NMSphere> middle = std::make_shared<NMSphere>();
     middle->SetTransform(NMMatrix::Translation(-0.5f, 1.0f, 0.5f));
     NMMaterial middleMat = NMMaterial();
-    middleMat.SetPattern<NMStripePattern>(NMColor(0.1f, 1.0f, 0.5f), NMColor(0.5f, 1.0f, 0.1f));
+    middleMat.SetPattern<NMStripePattern>(NMColor(0.1f, 1.0f, 0.5f), NMColor(0.5f, 1.0f, 0.1f), NMMatrix::Scaling(0.25f, 0.25f, 0.25f));
     middleMat.SetDiffuse(0.7f);
     middleMat.SetSpecular(0.3f);
     middle->SetMaterial(middleMat);
@@ -51,7 +51,7 @@ NMWorld TestApplication::LoadWorld()
     std::shared_ptr<NMSphere> right = std::make_shared<NMSphere>();
     right->SetTransform(NMMatrix::Translation(1.5f, 0.5f, -0.5f) * NMMatrix::Scaling(0.5f, 0.5f, 0.5f));
     NMMaterial rightMat = NMMaterial();
-    rightMat.SetPattern<NMStripePattern>(NMColor(0.5f, 1.0f, 0.1f), NMColor(0.1f, 1.0f, 0.5f));
+    rightMat.SetPattern<NMStripePattern>(NMColor(0.5f, 1.0f, 0.1f), NMColor(0.1f, 1.0f, 0.5f), NMMatrix::Scaling(0.1f, 0.1f, 0.1f));
     rightMat.SetDiffuse(0.7f);
     rightMat.SetSpecular(0.3f);
     right->SetMaterial(rightMat);

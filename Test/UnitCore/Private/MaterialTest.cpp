@@ -3,6 +3,7 @@
 #include "NMCore/Material.hpp"
 #include "NMCore/Light/Point.hpp"
 #include "NMCore/Pattern/Stripe.hpp"
+#include "NMCore/Primitive/Sphere.hpp"
 #include "NMM/Vector.hpp"
 
 class NMMaterialTest : public ::testing::Test
@@ -195,6 +196,7 @@ TEST_F(NMMaterialTest, Assign_Shininess)
 TEST_F(NMMaterialTest, Lighting_EyeBetweenLightAndSurface)
 {
     // Given
+    NMSphere sphere;
     NMMaterial material;
     NMPoint position(0, 0, 0);
     NMVector eyev(0, 0, -1);
@@ -202,7 +204,7 @@ TEST_F(NMMaterialTest, Lighting_EyeBetweenLightAndSurface)
     NMPointLight light(NMPoint(0, 0, -10), NMColor(1, 1, 1));
 
     // When
-    NMColor result = material.Lighting(light, position, eyev, normalv, false);
+    NMColor result = material.Lighting(sphere, light, position, eyev, normalv, false);
 
     // Then
     ASSERT_EQ(result, NMColor(1.9f, 1.9f, 1.9f));
@@ -221,6 +223,7 @@ TEST_F(NMMaterialTest, Lighting_EyeBetweenLightAndSurface)
 TEST_F(NMMaterialTest, Lighting_EyeBetweenLightAndSurface_EyeOffset45)
 {
     // Given
+    NMSphere sphere;
     NMMaterial material;
     NMPoint position(0, 0, 0);
     NMVector eyev(0, sqrt(2.0f) / 2.0f, -sqrt(2.0f) / 2.0f);
@@ -228,7 +231,7 @@ TEST_F(NMMaterialTest, Lighting_EyeBetweenLightAndSurface_EyeOffset45)
     NMPointLight light(NMPoint(0, 0, -10), NMColor(1, 1, 1));
 
     // When
-    NMColor result = material.Lighting(light, position, eyev, normalv, false);
+    NMColor result = material.Lighting(sphere, light, position, eyev, normalv, false);
 
     // Then
     ASSERT_EQ(result, NMColor(1.0f, 1.0f, 1.0f));
@@ -247,6 +250,7 @@ TEST_F(NMMaterialTest, Lighting_EyeBetweenLightAndSurface_EyeOffset45)
 TEST_F(NMMaterialTest, Lighting_EyeOppositeSurface_LightOffset45)
 {
     // Given
+    NMSphere sphere;
     NMMaterial material;
     NMPoint position(0, 0, 0);
     NMVector eyev(0, 0, -1);
@@ -254,7 +258,7 @@ TEST_F(NMMaterialTest, Lighting_EyeOppositeSurface_LightOffset45)
     NMPointLight light(NMPoint(0, 10, -10), NMColor(1, 1, 1));
 
     // When
-    NMColor result = material.Lighting(light, position, eyev, normalv, false);
+    NMColor result = material.Lighting(sphere, light, position, eyev, normalv, false);
 
     // Then
     ASSERT_EQ(result, NMColor(0.736396f, 0.736396f, 0.736396f));
@@ -273,6 +277,7 @@ TEST_F(NMMaterialTest, Lighting_EyeOppositeSurface_LightOffset45)
 TEST_F(NMMaterialTest, Lighting_EyeInPathOfReflectionVector)
 {
     // Given
+    NMSphere sphere;
     NMMaterial material;
     NMPoint position(0, 0, 0);
     NMVector eyev(0, -sqrt(2.0f) / 2.0f, -sqrt(2.0f) / 2.0f);
@@ -280,7 +285,7 @@ TEST_F(NMMaterialTest, Lighting_EyeInPathOfReflectionVector)
     NMPointLight light(NMPoint(0, 10, -10), NMColor(1, 1, 1));
 
     // When
-    NMColor result = material.Lighting(light, position, eyev, normalv, false);
+    NMColor result = material.Lighting(sphere, light, position, eyev, normalv, false);
 
     // Then
     ASSERT_EQ(result, NMColor(1.636385f, 1.636385f, 1.636385f));
@@ -299,6 +304,7 @@ TEST_F(NMMaterialTest, Lighting_EyeInPathOfReflectionVector)
 TEST_F(NMMaterialTest, Lighting_LightBehindSurface)
 {
     // Given
+    NMSphere sphere;
     NMMaterial material;
     NMPoint position(0, 0, 0);
     NMVector eyev(0, 0, -1);
@@ -306,7 +312,7 @@ TEST_F(NMMaterialTest, Lighting_LightBehindSurface)
     NMPointLight light(NMPoint(0, 0, 10), NMColor(1, 1, 1));
 
     // When
-    NMColor result = material.Lighting(light, position, eyev, normalv, false);
+    NMColor result = material.Lighting(sphere, light, position, eyev, normalv, false);
 
     // Then
     ASSERT_EQ(result, NMColor(0.1f, 0.1f, 0.1f));
@@ -322,6 +328,7 @@ TEST_F(NMMaterialTest, Lighting_LightBehindSurface)
 TEST_F(NMMaterialTest, Lighting_SurfaceInShadow)
 {
     // Given
+    NMSphere sphere;
     NMMaterial material;
     NMPoint position(0, 0, 0);
     NMVector eyev(0, 0, -1);
@@ -330,7 +337,7 @@ TEST_F(NMMaterialTest, Lighting_SurfaceInShadow)
     bool inShadow = true;
 
     // When
-    NMColor result = material.Lighting(light, position, eyev, normalv, inShadow);
+    NMColor result = material.Lighting(sphere, light, position, eyev, normalv, inShadow);
 
     // Then
     ASSERT_EQ(result, NMColor(0.1f, 0.1f, 0.1f));
@@ -351,6 +358,7 @@ TEST_F(NMMaterialTest, Lighting_SurfaceInShadow)
 TEST_F(NMMaterialTest, Lighting_PatternApplied)
 {
     // Given
+    NMSphere sphere;
     NMMaterial material;
     material.SetPattern(std::make_shared<NMStripePattern>(NMColor(1, 1, 1), NMColor(0, 0, 0)));
     material.SetAmbient(1);
@@ -361,8 +369,8 @@ TEST_F(NMMaterialTest, Lighting_PatternApplied)
     NMPointLight light(NMPoint(0, 0, -10), NMColor(1, 1, 1));
 
     // When
-    NMColor c1 = material.Lighting(light, NMPoint(0.9f, 0, 0), eyev, normalv, false);
-    NMColor c2 = material.Lighting(light, NMPoint(1.1f, 0, 0), eyev, normalv, false);
+    NMColor c1 = material.Lighting(sphere, light, NMPoint(0.9f, 0, 0), eyev, normalv, false);
+    NMColor c2 = material.Lighting(sphere, light, NMPoint(1.1f, 0, 0), eyev, normalv, false);
 
     // Then
     ASSERT_EQ(c1, NMColor(1, 1, 1));

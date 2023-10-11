@@ -6,7 +6,8 @@ class NMStripePattern : public NMPatternBase
 {
 public:
 
-    NMStripePattern(const NMColor& colorA, const NMColor& colorB) : colorA(colorA), colorB(colorB) {}
+    NMStripePattern(const NMColor& colorA, const NMColor& colorB, const NMMatrix& transform = NMMatrix::Identity4x4())
+        : NMPatternBase(transform), colorA(colorA), colorB(colorB) {}
 
     inline NMColor GetColorA() const { return colorA; }
     inline NMColor GetColorB() const { return colorB; }

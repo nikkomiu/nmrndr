@@ -118,8 +118,8 @@ public:
         bool isShadowed = IsShadowed(state.overPoint);
         for (NMPointLight light : pointLights)
         {
-            color += state.object->GetMaterial().Lighting(light, state.point, state.eyeVector, state.normalVector,
-                                                          isShadowed);
+            color += state.object->GetMaterial().Lighting(*state.object, light, state.point, state.eyeVector,
+                                                          state.normalVector, isShadowed);
         }
 
         return color;

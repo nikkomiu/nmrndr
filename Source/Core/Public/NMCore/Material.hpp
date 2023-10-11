@@ -52,11 +52,11 @@ public:
         pattern = std::make_shared<T>(std::forward<Args>(args)...);
     }
 
-    NMColor Lighting(const NMPointLight &light, const NMPoint &point, const NMVector &eyeVector,
+    NMColor Lighting(const NMPrimitiveBase &object, const NMPointLight &light, const NMPoint &point, const NMVector &eyeVector,
                      const NMVector &normalVector, bool inShadow) const
     {
         // If the material has a pattern, use the pattern color instead of the material's color
-        NMColor materialColor = pattern ? pattern->ColorAt(point) : color;
+        NMColor materialColor = pattern ? pattern->ColorAtShapePoint(object, point) : color;
 
         // Combine the surface color with the light's color/intensity
         NMColor effectiveColor = materialColor * light.GetColor();

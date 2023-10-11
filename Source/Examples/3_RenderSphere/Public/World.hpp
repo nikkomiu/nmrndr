@@ -45,7 +45,7 @@ public:
                     NMPoint hitPoint = ray.Position(hit->t);
                     NMVector normal = sphere.NormalAt(hitPoint);
                     NMVector eye = -ray.GetDirection();
-                    NMColor color = sphere.GetMaterial().Lighting(pointLight, hitPoint, eye, normal, false);
+                    NMColor color = sphere.GetMaterial().Lighting(sphere, pointLight, hitPoint, eye, normal, false);
                     canvas.WritePixel(x, y, color);
                 }
             }
