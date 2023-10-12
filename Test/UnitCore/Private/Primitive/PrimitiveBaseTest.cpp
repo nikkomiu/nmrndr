@@ -184,11 +184,11 @@ TEST_F(NMPrimitiveBaseTest, PrimitiveBase_ComputingNormalOnTransformedShape)
 {
     // Given
     NMTestShape shape;
-    NMMatrix transform = NMMatrix::Scaling(1.0f, 0.5f, 1.0f) * NMMatrix::RotationZ(M_PI / 5.0f);
+    NMMatrix transform = NMMatrix::Scaling(1.0f, 0.5f, 1.0f) * NMMatrix::RotationZ(static_cast<float>(M_PI / 5.0f));
     shape.SetTransform(transform);
 
     // When
-    NMVector normal = shape.NormalAt(NMPoint(0.0f, sqrt(2.0f) / 2.0f, -sqrt(2.0f) / 2.0f));
+    NMVector normal = shape.NormalAt(NMPoint(0.0f, nmmath::sqrt2Over2, -nmmath::sqrt2Over2));
 
     // Then
     EXPECT_EQ(normal, NMVector(0.0f, 0.970143f, -0.242536f));

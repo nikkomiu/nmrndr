@@ -85,77 +85,6 @@ TEST_F(NMWorldTest, IntersectWorld)
     ASSERT_FLOAT_EQ(intersections[3].t, 6.0f);
 }
 
-// Scenario: Precomputing the state of an intersection
-TEST_F(NMWorldTest, PrecomputeState)
-{
-    // Given
-    NMWorld world = NMWorld::Default();
-    NMRay ray(NMPoint(0.0f, 0.0f, -5.0f), NMVector(0.0f, 0.0f, 1.0f));
-    SNMIntersectionList intersections = world.Intersect(ray);
-
-    // When
-    SNMIntersectionState state = world.PrepareState(intersections[0], ray);
-
-    // Then
-    std::shared_ptr<NMPrimitiveBase> sphere = world.GetObject(0);
-    const NMPrimitiveBase* stateObject = state.object;
-    ASSERT_TRUE(stateObject == sphere.get());
-    ASSERT_EQ(state.point, NMPoint(0.0f, 0.0f, -1.0f));
-    ASSERT_EQ(state.eyeVector, NMVector(0.0f, 0.0f, -1.0f));
-    ASSERT_EQ(state.normalVector, NMVector(0.0f, 0.0f, -1.0f));
-}
-
-// Scenario: The hit, when an intersection occurs on the outside
-TEST_F(NMWorldTest, HitOutside)
-{
-    // Given
-    NMWorld world = NMWorld::Default();
-    NMRay ray(NMPoint(0.0f, 0.0f, -5.0f), NMVector(0.0f, 0.0f, 1.0f));
-    SNMIntersectionList intersections = world.Intersect(ray);
-
-    // When
-    SNMIntersectionState state = world.PrepareState(intersections[0], ray);
-
-    // Then
-    ASSERT_FALSE(state.isInside);
-}
-
-// Scenario: The hit, when an intersection occurs on the inside
-TEST_F(NMWorldTest, HitInside)
-{
-    // Given
-    NMWorld world = NMWorld::Default();
-    NMRay ray(NMPoint(0.0f, 0.0f, 0.0f), NMVector(0.0f, 0.0f, 1.0f));
-    SNMIntersectionList intersections = world.Intersect(ray);
-
-    // When
-    SNMIntersectionState state = world.PrepareState(intersections[1], ray);
-
-    // Then
-    ASSERT_EQ(state.point, NMPoint(0.0f, 0.0f, 1.0f));
-    ASSERT_EQ(state.eyeVector, NMVector(0.0f, 0.0f, -1.0f));
-    ASSERT_TRUE(state.isInside);
-    ASSERT_EQ(state.normalVector, NMVector(0.0f, 0.0f, -1.0f));
-}
-
-// Scenario: The hit should offset the point
-TEST_F(NMWorldTest, HitOffset)
-{
-    // Given
-    NMWorld world;
-    NMRay ray(NMPoint(0.0f, 0.0f, -5.0f), NMVector(0.0f, 0.0f, 1.0f));
-    NMSphere sphere;
-    sphere.SetTransform(NMMatrix::Translation(0.0f, 0.0f, 1.0f));
-    SNMIntersection intersection(5.0f, &sphere);
-
-    // When
-    SNMIntersectionState state = world.PrepareState(intersection, ray);
-
-    // Then
-    ASSERT_TRUE(state.overPoint.GetZ() < -nmmath::rayEpsilon / 2.0f);
-    ASSERT_TRUE(state.point.GetZ() > state.overPoint.GetZ());
-}
-
 // Scenario: Shading an intersection
 TEST_F(NMWorldTest, ShadingIntersection)
 {
@@ -165,8 +94,7 @@ TEST_F(NMWorldTest, ShadingIntersection)
     SNMIntersectionList intersections = world.Intersect(ray);
 
     // When
-    SNMIntersectionState state = world.PrepareState(intersections[0], ray);
-    NMColor color = world.ShadeHit(state);
+    NMColor color = world.ShadeHit(SNMIntersectionState(intersections[0], ray));
 
     // Then
     ASSERT_EQ(color, NMColor(0.380661f, 0.475827f, 0.285496f));
@@ -183,8 +111,7 @@ TEST_F(NMWorldTest, ShadingIntersectionInside)
     SNMIntersection intersection(0.5f, shape.get());
 
     // When
-    SNMIntersectionState state = world.PrepareState(intersection, ray);
-    NMColor color = world.ShadeHit(state);
+    NMColor color = world.ShadeHit(SNMIntersectionState(intersection, ray));
 
     // Then
     ASSERT_EQ(color, NMColor(0.1f, 0.1f, 0.1f));
@@ -208,8 +135,7 @@ TEST_F(NMWorldTest, ShadingIntersectionShadow)
     SNMIntersection intersection(4.0f, s2.get());
 
     // When
-    SNMIntersectionState state = world.PrepareState(intersection, ray);
-    NMColor color = world.ShadeHit(state);
+    NMColor color = world.ShadeHit(SNMIntersectionState(intersection, ray));
 
     // Then
     ASSERT_EQ(color, NMColor(0.1f, 0.1f, 0.1f));

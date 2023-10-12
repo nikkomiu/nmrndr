@@ -27,23 +27,31 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const NMMaterial &material)
     {
-        os << "Mat(" << material.color << ", " << std::setprecision(2) << std::fixed << "Ambient(" << material.ambient
+        os << "Mtl(" << material.color << ", " << std::setprecision(2) << std::fixed << "Ambient(" << material.ambient
            << "), Diffuse(" << material.diffuse << "), Specular(" << material.specular << "), Shininess("
-           << std::setprecision(0) << material.shininess << "))";
+           << std::setprecision(0) << material.shininess << "), Reflective(" << material.reflective << "))";
         return os;
     }
 
     inline const NMColor &GetColor() const { return color; }
-    inline float GetAmbient() const { return ambient; }
-    inline float GetDiffuse() const { return diffuse; }
-    inline float GetSpecular() const { return specular; }
-    inline float GetShininess() const { return shininess; }
-
     inline void SetColor(const NMColor &newColor) { color = newColor; }
+
+    inline float GetAmbient() const { return ambient; }
     inline void SetAmbient(float newAmbient) { ambient = newAmbient; }
+
+    inline float GetDiffuse() const { return diffuse; }
     inline void SetDiffuse(float newDiffuse) { diffuse = newDiffuse; }
+
+    inline float GetSpecular() const { return specular; }
     inline void SetSpecular(float newSpecular) { specular = newSpecular; }
+
+    inline float GetShininess() const { return shininess; }
     inline void SetShininess(float newShininess) { shininess = newShininess; }
+
+    inline float GetReflective() const { return reflective; }
+    inline void SetReflective(float newReflective) { reflective = newReflective; }
+
+    inline std::shared_ptr<NMPatternBase> GetPattern() const { return pattern; }
     inline void SetPattern(std::shared_ptr<NMPatternBase> newPattern) { pattern = newPattern; }
 
     template<typename T, typename... Args>
@@ -103,6 +111,7 @@ protected:
     float diffuse = 0.9f;
     float specular = 0.9f;
     float shininess = 200.0f;
+    float reflective = 0.0f;
 
     std::shared_ptr<NMPatternBase> pattern;
 };

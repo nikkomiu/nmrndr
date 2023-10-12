@@ -72,25 +72,6 @@ public:
         return intersections;
     }
 
-    SNMIntersectionState PrepareState(const SNMIntersection& intersection, const NMRay& ray) const
-    {
-        SNMIntersectionState state(intersection);
-
-        // Precompute some useful values
-        state.point = ray.Position(state.t);
-        state.eyeVector = -ray.GetDirection();
-        state.normalVector = state.object->NormalAt(state.point);
-        state.overPoint = state.point + (state.normalVector * nmmath::rayEpsilon);
-
-        if (state.normalVector.DotProduct(state.eyeVector) < 0.0f)
-        {
-            state.isInside = true;
-            state.normalVector = -state.normalVector;
-        }
-
-        return state;
-    }
-
     bool IsShadowed(const NMPoint& point) const
     {
         // TODO: support multiple lights (pass the light in as a reference)
@@ -135,7 +116,7 @@ public:
             return NMColor(0.0f, 0.0f, 0.0f);
         }
 
-        SNMIntersectionState state = PrepareState(*intersection, ray);
+        SNMIntersectionState state = SNMIntersectionState(*intersection, ray);
 
         return ShadeHit(state);
     }

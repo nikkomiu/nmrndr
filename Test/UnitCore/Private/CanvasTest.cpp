@@ -15,9 +15,9 @@ TEST_F(NMCanvasTest, CreateCanvas)
     ASSERT_EQ(canvas.GetWidth(), 10);
     ASSERT_EQ(canvas.GetHeight(), 10);
 
-    for (int y = 0; y < canvas.GetHeight(); ++y)
+    for (std::size_t y = 0; y < canvas.GetHeight(); ++y)
     {
-        for (int x = 0; x < canvas.GetWidth(); ++x)
+        for (std::size_t x = 0; x < canvas.GetWidth(); ++x)
         {
             ASSERT_EQ(canvas.ReadPixel(x, y), NMColor(0.0f, 0.0f, 0.0f));
         }
@@ -74,9 +74,9 @@ TEST_F(NMCanvasTest, ResizeCanvas)
     ASSERT_EQ(canvas.GetWidth(), 20);
     ASSERT_EQ(canvas.GetHeight(), 30);
 
-    for (int y = 0; y < canvas.GetHeight(); ++y)
+    for (std::size_t y = 0; y < canvas.GetHeight(); ++y)
     {
-        for (int x = 0; x < canvas.GetWidth(); ++x)
+        for (std::size_t x = 0; x < canvas.GetWidth(); ++x)
         {
             ASSERT_EQ(canvas.ReadPixel(x, y), NMColor(0.0f, 0.0f, 0.0f));
         }
@@ -96,9 +96,9 @@ TEST_F(NMCanvasTest, ResizeCanvas_Smaller)
     ASSERT_EQ(canvas.GetWidth(), 5);
     ASSERT_EQ(canvas.GetHeight(), 5);
 
-    for (int y = 0; y < canvas.GetHeight(); ++y)
+    for (std::size_t y = 0; y < canvas.GetHeight(); ++y)
     {
-        for (int x = 0; x < canvas.GetWidth(); ++x)
+        for (std::size_t x = 0; x < canvas.GetWidth(); ++x)
         {
             ASSERT_EQ(canvas.ReadPixel(x, y), NMColor(0.0f, 0.0f, 0.0f));
         }
@@ -118,9 +118,9 @@ TEST_F(NMCanvasTest, ResizeCanvas_SameSize)
     ASSERT_EQ(canvas.GetWidth(), 10);
     ASSERT_EQ(canvas.GetHeight(), 10);
 
-    for (int y = 0; y < canvas.GetHeight(); ++y)
+    for (std::size_t y = 0; y < canvas.GetHeight(); ++y)
     {
-        for (int x = 0; x < canvas.GetWidth(); ++x)
+        for (std::size_t x = 0; x < canvas.GetWidth(); ++x)
         {
             ASSERT_EQ(canvas.ReadPixel(x, y), NMColor(0.0f, 0.0f, 0.0f));
         }
@@ -162,9 +162,9 @@ TEST_F(NMCanvasTest, CreateCanvas_WithWidthAndHeight)
     ASSERT_EQ(canvas.GetWidth(), 20);
     ASSERT_EQ(canvas.GetHeight(), 30);
 
-    for (int y = 0; y < canvas.GetHeight(); ++y)
+    for (std::size_t y = 0; y < canvas.GetHeight(); ++y)
     {
-        for (int x = 0; x < canvas.GetWidth(); ++x)
+        for (std::size_t x = 0; x < canvas.GetWidth(); ++x)
         {
             ASSERT_EQ(canvas.ReadPixel(x, y), NMColor(0.0f, 0.0f, 0.0f));
         }
@@ -180,9 +180,9 @@ TEST_F(NMCanvasTest, CreateCanvas_WithWidthAndHeightAndColor)
     ASSERT_EQ(canvas.GetWidth(), 20);
     ASSERT_EQ(canvas.GetHeight(), 30);
 
-    for (int y = 0; y < canvas.GetHeight(); ++y)
+    for (std::size_t y = 0; y < canvas.GetHeight(); ++y)
     {
-        for (int x = 0; x < canvas.GetWidth(); ++x)
+        for (std::size_t x = 0; x < canvas.GetWidth(); ++x)
         {
             ASSERT_EQ(canvas.ReadPixel(x, y), NMColor(0.5f, 0.5f, 0.5f));
         }
@@ -212,19 +212,6 @@ TEST_F(NMCanvasTest, WritePixel_OutOfBounds)
 
     // Then
     ASSERT_EQ(canvas.ReadPixel(9, 9), NMColor(0.0f, 0.0f, 0.0f));
-}
-
-TEST_F(NMCanvasTest, WritePixel_Negative)
-{
-    // Given
-    NMCanvas canvas;
-
-    // When
-    canvas.WritePixel(-20, 1, NMColor(1.0f, 0.0f, 0.0f));
-    canvas.WritePixel(1, -10, NMColor(1.0f, 0.0f, 0.0f));
-
-    // Then
-    ASSERT_EQ(canvas.ReadPixel(0, 0), NMColor(0.0f, 0.0f, 0.0f));
 }
 
 TEST_F(NMCanvasTest, ClearCanvas)

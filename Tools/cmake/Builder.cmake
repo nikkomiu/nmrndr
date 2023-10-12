@@ -116,15 +116,14 @@ function(nm_test)
             ${ARG_LINK_LIBRARIES}
     )
 
-    # TODO: enable warnings for tests
-    # target_compile_options(${PKG_NAME} PRIVATE
-    #     $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
-    #         -Wall -Werror -pedantic-errors -Wextra -Wconversion -Wsign-conversion
-    #     >
-    #     $<$<CXX_COMPILER_ID:MSVC>:
-    #         /W4 /WX
-    #     >
-    # )
+    target_compile_options(${PKG_NAME} PRIVATE
+        $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
+            -Wall -Werror -pedantic-errors -Wextra -Wconversion -Wsign-conversion
+        >
+        $<$<CXX_COMPILER_ID:MSVC>:
+            /W4 /WX
+        >
+    )
 
     # TODO: Add support for code coverage on Windows
     target_compile_options(${PKG_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
@@ -139,10 +138,6 @@ function(nm_test)
     )
 
     if("${WITH_COVERAGE}" STREQUAL "ON")
-        # set_target_properties(${PKG_NAME} PROPERTIES
-        #     EXCLUDE_FROM_ALL TRUE
-        # )
-
         add_custom_target(${PKG_NAME}Coverage # ALL
             COMMAND $<TARGET_FILE:${PKG_NAME}> --gtest_output=xml:${CMAKE_CURRENT_BINARY_DIR}/default.xml
             DEPENDS ${PKG_NAME}

@@ -213,23 +213,25 @@ TEST_F(NMSphereTest, SphereNormal_ZAxis)
 TEST_F(NMSphereTest, SphereNormal_NonAxial)
 {
     // Given
+    float sqrt3Over3 = static_cast<float>(std::sqrt(3.0f) / 3.0f);
     NMSphere sphere;
 
     // When
-    NMVector normal = sphere.NormalAt(NMPoint(sqrt(3.0f) / 3.0f, sqrt(3.0f) / 3.0f, sqrt(3.0f) / 3.0f));
+    NMVector normal = sphere.NormalAt(NMPoint(sqrt3Over3, sqrt3Over3, sqrt3Over3));
 
     // Then
-    EXPECT_EQ(normal, NMVector(sqrt(3.0f) / 3.0f, sqrt(3.0f) / 3.0f, sqrt(3.0f) / 3.0f));
+    EXPECT_EQ(normal, NMVector(sqrt3Over3, sqrt3Over3, sqrt3Over3));
 }
 
 // Scenario: The normal is a normalized vector
 TEST_F(NMSphereTest, SphereNormal_Normalized)
 {
     // Given
+    float sqrt3Over3 = static_cast<float>(std::sqrt(3.0f) / 3.0f);
     NMSphere sphere;
 
     // When
-    NMVector normal = sphere.NormalAt(NMPoint(sqrt(3.0f) / 3.0f, sqrt(3.0f) / 3.0f, sqrt(3.0f) / 3.0f));
+    NMVector normal = sphere.NormalAt(NMPoint(sqrt3Over3, sqrt3Over3, sqrt3Over3));
 
     // Then
     EXPECT_EQ(normal, normal.Normalized());
@@ -254,10 +256,10 @@ TEST_F(NMSphereTest, SphereNormal_Transformed)
 {
     // Given
     NMSphere sphere;
-    sphere.SetTransform(NMMatrix::Scaling(1.0f, 0.5f, 1.0f) * NMMatrix::RotationZ(M_PI / 5.0f));
+    sphere.SetTransform(NMMatrix::Scaling(1.0f, 0.5f, 1.0f) * NMMatrix::RotationZ(static_cast<float>(M_PI / 5.0f)));
 
     // When
-    NMVector normal = sphere.NormalAt(NMPoint(0.0f, sqrt(2.0f) / 2.0f, -sqrt(2.0f) / 2.0f));
+    NMVector normal = sphere.NormalAt(NMPoint(0.0f, nmmath::sqrt2Over2, -nmmath::sqrt2Over2));
 
     // Then
     EXPECT_EQ(normal, NMVector(0.0f, 0.970143f, -0.242536f));

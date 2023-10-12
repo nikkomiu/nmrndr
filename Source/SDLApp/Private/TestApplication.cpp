@@ -21,8 +21,8 @@ NMWorld TestApplication::LoadWorld()
     floor->SetMaterial(floorMat);
     world.AddObject(floor);
 
-    float halfPi = static_cast<float>(M_PI / 2.0f);
-    float quarterPi = static_cast<float>(M_PI / 4.0f);
+    float halfPi = static_cast<float>(nmmath::halfPi);
+    float quarterPi = static_cast<float>(nmmath::quarterPi);
 
     // Left wall
     std::shared_ptr<NMPlane> leftWall = std::make_shared<NMPlane>();
@@ -77,7 +77,7 @@ NMWorld TestApplication::LoadWorld()
 
 NMCamera TestApplication::LoadScene()
 {
-    NMCamera camera = NMCamera(windowWidth, windowHeight, static_cast<float>(M_PI / 3.0f));
+    NMCamera camera = NMCamera(windowWidth, windowHeight, nmmath::thirdPi);
     camera.SetTransform(
         NMMatrix::ViewTransform(NMPoint(0.0f, 1.5f, -5.0f), NMPoint(0.0f, 1.0f, 0.0f), NMVector(0.0f, 1.0f, 0.0f)));
 

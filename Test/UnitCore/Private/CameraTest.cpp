@@ -13,9 +13,9 @@ class NMCameraTest : public ::testing::Test
 TEST_F(NMCameraTest, Construct)
 {
     // Given
-    int hSize = 160;
-    int vSize = 120;
-    float fov = M_PI / 2.0f;
+    std::size_t hSize = 160;
+    std::size_t vSize = 120;
+    float fov = nmmath::halfPi;
 
     // When
     NMCamera camera(hSize, vSize, fov);
@@ -31,7 +31,7 @@ TEST_F(NMCameraTest, Construct)
 TEST_F(NMCameraTest, PixelSizeHorizontal)
 {
     // Given
-    NMCamera camera(200, 125, M_PI / 2.0f);
+    NMCamera camera(200, 125, nmmath::halfPi);
 
     // Then
     EXPECT_FLOAT_EQ(camera.GetPixelSize(), 0.01f);
@@ -41,7 +41,7 @@ TEST_F(NMCameraTest, PixelSizeHorizontal)
 TEST_F(NMCameraTest, PixelSizeVertical)
 {
     // Given
-    NMCamera camera(125, 200, M_PI / 2.0f);
+    NMCamera camera(125, 200, nmmath::halfPi);
 
     // Then
     EXPECT_FLOAT_EQ(camera.GetPixelSize(), 0.01f);
@@ -51,7 +51,7 @@ TEST_F(NMCameraTest, PixelSizeVertical)
 TEST_F(NMCameraTest, RayThroughCenter)
 {
     // Given
-    NMCamera camera(201, 101, M_PI / 2.0f);
+    NMCamera camera(201, 101, nmmath::halfPi);
 
     // When
     NMRay ray = camera.RayForPixel(100, 50);
@@ -65,7 +65,7 @@ TEST_F(NMCameraTest, RayThroughCenter)
 TEST_F(NMCameraTest, RayThroughCorner)
 {
     // Given
-    NMCamera camera(201, 101, M_PI / 2.0f);
+    NMCamera camera(201, 101, nmmath::halfPi);
 
     // When
     NMRay ray = camera.RayForPixel(0, 0);
@@ -79,8 +79,8 @@ TEST_F(NMCameraTest, RayThroughCorner)
 TEST_F(NMCameraTest, RayWhenTransformed)
 {
     // Given
-    NMCamera camera(201, 101, M_PI / 2.0f);
-    camera.SetTransform(NMMatrix::RotationY(M_PI / 4.0f) * NMMatrix::Translation(0.0f, -2.0f, 5.0f));
+    NMCamera camera(201, 101, nmmath::halfPi);
+    camera.SetTransform(NMMatrix::RotationY(static_cast<float>(M_PI / 4.0f)) * NMMatrix::Translation(0.0f, -2.0f, 5.0f));
 
     // When
     NMRay ray = camera.RayForPixel(100, 50);
@@ -95,7 +95,7 @@ TEST_F(NMCameraTest, Render)
 {
     // Given
     NMWorld world = NMWorld::Default();
-    NMCamera camera(11, 11, M_PI / 2.0f);
+    NMCamera camera(11, 11, nmmath::halfPi);
     NMPoint from(0.0f, 0.0f, -5.0f);
     NMPoint to(0.0f, 0.0f, 0.0f);
     NMVector up(0.0f, 1.0f, 0.0f);
@@ -106,7 +106,7 @@ TEST_F(NMCameraTest, Render)
     NMColor pixelColor = canvas.ReadPixel(5, 5);
 
     // Then
-    EXPECT_EQ(canvas.ReadPixel(5, 5), NMColor(0.380661f, 0.475827f, 0.285496f));
+    EXPECT_EQ(pixelColor, NMColor(0.380661f, 0.475827f, 0.285496f));
 }
 
 // Scenario: Render uses multiple threads
@@ -114,7 +114,7 @@ TEST_F(NMCameraTest, RenderMultiThreaded)
 {
     // Given
     NMWorld world = NMWorld::Default();
-    NMCamera camera(11, 11, M_PI / 2.0f);
+    NMCamera camera(11, 11, nmmath::halfPi);
     NMPoint from(0.0f, 0.0f, -5.0f);
     NMPoint to(0.0f, 0.0f, 0.0f);
     NMVector up(0.0f, 1.0f, 0.0f);
@@ -125,7 +125,7 @@ TEST_F(NMCameraTest, RenderMultiThreaded)
     NMColor pixelColor = canvas.ReadPixel(5, 5);
 
     // Then
-    EXPECT_EQ(canvas.ReadPixel(5, 5), NMColor(0.380661f, 0.475827f, 0.285496f));
+    EXPECT_EQ(pixelColor, NMColor(0.380661f, 0.475827f, 0.285496f));
 }
 
 // Scenario: Render throws an error if already rendering
@@ -133,7 +133,7 @@ TEST_F(NMCameraTest, Render_WhenAlreadyRendering)
 {
     // Given
     NMWorld world = NMWorld::Default();
-    NMCamera camera(11, 11, M_PI / 2.0f);
+    NMCamera camera(11, 11, nmmath::halfPi);
     NMPoint from(0.0f, 0.0f, -5.0f);
     NMPoint to(0.0f, 0.0f, 0.0f);
     NMVector up(0.0f, 1.0f, 0.0f);
@@ -171,7 +171,7 @@ TEST_F(NMCameraTest, RenderCancel)
 {
     // Given
     NMWorld world = NMWorld::Default();
-    NMCamera camera(11, 11, M_PI / 2.0f);
+    NMCamera camera(11, 11, nmmath::halfPi);
     NMPoint from(0.0f, 0.0f, -5.0f);
     NMPoint to(0.0f, 0.0f, 0.0f);
     NMVector up(0.0f, 1.0f, 0.0f);
@@ -196,7 +196,7 @@ TEST_F(NMCameraTest, RenderCancel_WhenNotRendering)
 {
     // Given
     NMWorld world = NMWorld::Default();
-    NMCamera camera(11, 11, M_PI / 2.0f);
+    NMCamera camera(11, 11, nmmath::halfPi);
     NMPoint from(0.0f, 0.0f, -5.0f);
     NMPoint to(0.0f, 0.0f, 0.0f);
     NMVector up(0.0f, 1.0f, 0.0f);

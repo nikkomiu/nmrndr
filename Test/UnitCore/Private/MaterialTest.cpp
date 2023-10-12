@@ -115,7 +115,7 @@ TEST_F(NMMaterialTest, StreamInsertionOperator)
     stream << material;
 
     // Then
-    ASSERT_EQ(stream.str(), "Mat(rgb(255, 255, 255), Ambient(0.10), Diffuse(0.90), Specular(0.90), Shininess(200))");
+    ASSERT_EQ(stream.str(), "Mtl(rgb(255, 255, 255), Ambient(0.10), Diffuse(0.90), Specular(0.90), Shininess(200), Reflective(0))");
 }
 
 TEST_F(NMMaterialTest, Assign_Color)
@@ -226,7 +226,7 @@ TEST_F(NMMaterialTest, Lighting_EyeBetweenLightAndSurface_EyeOffset45)
     NMSphere sphere;
     NMMaterial material;
     NMPoint position(0, 0, 0);
-    NMVector eyev(0, sqrt(2.0f) / 2.0f, -sqrt(2.0f) / 2.0f);
+    NMVector eyev(0, nmmath::sqrt2Over2, -nmmath::sqrt2Over2);
     NMVector normalv(0, 0, -1);
     NMPointLight light(NMPoint(0, 0, -10), NMColor(1, 1, 1));
 
@@ -280,7 +280,7 @@ TEST_F(NMMaterialTest, Lighting_EyeInPathOfReflectionVector)
     NMSphere sphere;
     NMMaterial material;
     NMPoint position(0, 0, 0);
-    NMVector eyev(0, -sqrt(2.0f) / 2.0f, -sqrt(2.0f) / 2.0f);
+    NMVector eyev(0, -nmmath::sqrt2Over2, -nmmath::sqrt2Over2);
     NMVector normalv(0, 0, -1);
     NMPointLight light(NMPoint(0, 10, -10), NMColor(1, 1, 1));
 
@@ -375,4 +375,16 @@ TEST_F(NMMaterialTest, Lighting_PatternApplied)
     // Then
     ASSERT_EQ(c1, NMColor(1, 1, 1));
     ASSERT_EQ(c2, NMColor(0, 0, 0));
+}
+
+// Scenario: Reflectivity for the default material
+//   Given m ← material()
+//   Then m.reflective = 0.0
+TEST_F(NMMaterialTest, Reflectivity_Default)
+{
+    // Given
+    NMMaterial material;
+
+    // Then
+    ASSERT_FLOAT_EQ(material.GetReflective(), 0.0f);
 }

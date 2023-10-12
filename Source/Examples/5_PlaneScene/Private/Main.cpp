@@ -24,20 +24,17 @@ int main()
     floor->SetMaterial(floorMat);
     world.AddObject(floor);
 
-    float halfPi = static_cast<float>(M_PI / 2.0f);
-    float quarterPi = static_cast<float>(M_PI / 4.0f);
-
     // Left wall
     std::shared_ptr<NMPlane> leftWall = std::make_shared<NMPlane>();
-    leftWall->SetTransform(NMMatrix::Translation(0.0f, 0.0f, 5.0f) * NMMatrix::RotationY(-quarterPi)
-                           * NMMatrix::RotationX(halfPi));
+    leftWall->SetTransform(NMMatrix::Translation(0.0f, 0.0f, 5.0f) * NMMatrix::RotationY(-nmmath::quarterPi)
+                           * NMMatrix::RotationX(nmmath::halfPi));
     leftWall->SetMaterial(floorMat);
     world.AddObject(leftWall);
 
     // Right wall
     std::shared_ptr<NMPlane> rightWall = std::make_shared<NMPlane>();
-    rightWall->SetTransform(NMMatrix::Translation(0.0f, 0.0f, 5.0f) * NMMatrix::RotationY(quarterPi)
-                            * NMMatrix::RotationX(halfPi));
+    rightWall->SetTransform(NMMatrix::Translation(0.0f, 0.0f, 5.0f) * NMMatrix::RotationY(nmmath::quarterPi)
+                            * NMMatrix::RotationX(nmmath::halfPi));
     rightWall->SetMaterial(floorMat);
     world.AddObject(rightWall);
 

@@ -514,8 +514,8 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_RotationX)
 {
     // Given
     NMPoint point(0.0f, 1.0f, 0.0f);
-    NMMatrix halfQuarter = NMMatrix::RotationX(M_PI / 4.0f);
-    NMMatrix fullQuarter = NMMatrix::RotationX(M_PI / 2.0f);
+    NMMatrix halfQuarter = NMMatrix::RotationX(nmmath::quarterPi);
+    NMMatrix fullQuarter = NMMatrix::RotationX(nmmath::halfPi);
 
     // When
     NMPoint result1 = halfQuarter * point;
@@ -531,7 +531,7 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_RotationX_Inverse)
 {
     // Given
     NMPoint point(0.0f, 1.0f, 0.0f);
-    NMMatrix halfQuarter = NMMatrix::RotationX(M_PI / 4.0f);
+    NMMatrix halfQuarter = NMMatrix::RotationX(nmmath::quarterPi);
     NMMatrix inverse = halfQuarter.Inverse();
 
     // When
@@ -546,8 +546,8 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_RotationY)
 {
     // Given
     NMPoint point(0.0f, 0.0f, 1.0f);
-    NMMatrix halfQuarter = NMMatrix::RotationY(M_PI / 4.0f);
-    NMMatrix fullQuarter = NMMatrix::RotationY(M_PI / 2.0f);
+    NMMatrix halfQuarter = NMMatrix::RotationY(nmmath::quarterPi);
+    NMMatrix fullQuarter = NMMatrix::RotationY(nmmath::halfPi);
 
     // When
     NMPoint result1 = halfQuarter * point;
@@ -563,8 +563,8 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_RotationZ)
 {
     // Given
     NMPoint point(0.0f, 1.0f, 0.0f);
-    NMMatrix halfQuarter = NMMatrix::RotationZ(M_PI / 4.0f);
-    NMMatrix fullQuarter = NMMatrix::RotationZ(M_PI / 2.0f);
+    NMMatrix halfQuarter = NMMatrix::RotationZ(nmmath::quarterPi);
+    NMMatrix fullQuarter = NMMatrix::RotationZ(nmmath::halfPi);
 
     // When
     NMPoint result1 = halfQuarter * point;
@@ -664,7 +664,7 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_TransformSequence)
 {
     // Given
     NMPoint point(1.0f, 0.0f, 1.0f);
-    NMMatrix a = NMMatrix::RotationX(M_PI / 2.0f);
+    NMMatrix a = NMMatrix::RotationX(static_cast<float>(M_PI / 2.0f));
     NMMatrix b = NMMatrix::Scaling(5.0f, 5.0f, 5.0f);
     NMMatrix c = NMMatrix::Translation(10.0f, 5.0f, 7.0f);
 
@@ -684,7 +684,7 @@ TEST_F(NMMatrixTest, OperatorMultiply_Point_TransformSequence_Chained)
 {
     // Given
     NMPoint point(1.0f, 0.0f, 1.0f);
-    NMMatrix a = NMMatrix::RotationX(M_PI / 2.0f);
+    NMMatrix a = NMMatrix::RotationX(static_cast<float>(M_PI / 2.0f));
     NMMatrix b = NMMatrix::Scaling(5.0f, 5.0f, 5.0f);
     NMMatrix c = NMMatrix::Translation(10.0f, 5.0f, 7.0f);
 
@@ -787,17 +787,6 @@ TEST_F(NMMatrixTest, Get_OutOfBounds)
     ASSERT_TRUE(std::isnan(matrix.Get(5, 9)));
 }
 
-TEST_F(NMMatrixTest, Get_NegativeIndex)
-{
-    // Given
-    NMMatrix matrix(2, 3);
-
-    // Then
-    ASSERT_TRUE(std::isnan(matrix.Get(-1, 0)));
-    ASSERT_TRUE(std::isnan(matrix.Get(0, -1)));
-    ASSERT_TRUE(std::isnan(matrix.Get(-5, -9)));
-}
-
 TEST_F(NMMatrixTest, Set)
 {
     // Given
@@ -829,25 +818,6 @@ TEST_F(NMMatrixTest, Set_OutOfBounds)
     matrix.Set(3, 0, 1.0f);
     matrix.Set(0, 4, 2.0f);
     matrix.Set(5, 9, 3.0f);
-
-    // Then
-    ASSERT_EQ(matrix.Get(0, 0), 0.0f);
-    ASSERT_EQ(matrix.Get(1, 0), 0.0f);
-    ASSERT_EQ(matrix.Get(0, 1), 0.0f);
-    ASSERT_EQ(matrix.Get(1, 1), 0.0f);
-    ASSERT_EQ(matrix.Get(0, 2), 0.0f);
-    ASSERT_EQ(matrix.Get(1, 2), 0.0f);
-}
-
-TEST_F(NMMatrixTest, Set_NegativeIndex)
-{
-    // Given
-    NMMatrix matrix(2, 3);
-
-    // When
-    matrix.Set(-1, 0, 1.0f);
-    matrix.Set(0, -1, 2.0f);
-    matrix.Set(-5, -9, 3.0f);
 
     // Then
     ASSERT_EQ(matrix.Get(0, 0), 0.0f);

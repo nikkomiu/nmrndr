@@ -1,5 +1,6 @@
 #pragma once
 
+#include "NMCore/Primitive/PrimitiveBase.hpp"
 #include "NMCore/RT/Intersection.hpp"
 #include "NMCore/RT/Ray.hpp"
 #include "NMM/Point.hpp"
@@ -11,18 +12,26 @@ public:
 
     SNMIntersectionState() = default;
 
-    // TODO: move World.hpp#PrepareState() here
-    SNMIntersectionState(const SNMIntersection& intersection)
+    SNMIntersectionState(const SNMIntersection& intersection, const NMRay& ray)
+        : t(intersection.t), object(intersection.object), point(ray.Position(t)),
+          eyeVector(-ray.GetDirection()), normalVector(object->NormalAt(point))
     {
-        t = intersection.t;
-        object = intersection.object;
+        overPoint = point + (normalVector * nmmath::rayEpsilon);
+        reflectVector = ray.GetDirection().Reflect(normalVector);
+
+        if (normalVector.DotProduct(eyeVector) < 0.0f)
+        {
+            isInside = true;
+            normalVector = -normalVector;
+        }
     }
 
-    float t;
-    const NMPrimitiveBase* object;
-    NMPoint point;
-    NMPoint overPoint;
-    NMVector eyeVector;
-    NMVector normalVector;
+    float t = 0.0f;
+    const NMPrimitiveBase* object = nullptr;
+    NMPoint point = NMPoint();
+    NMPoint overPoint = NMPoint();
+    NMVector eyeVector = NMVector();
+    NMVector normalVector = NMVector();
+    NMVector reflectVector = NMVector();
     bool isInside = false;
 };
