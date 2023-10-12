@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <random>
 
 #include "Canvas.hpp"
 #include "NMM/Matrix.hpp"
@@ -92,19 +93,45 @@ public:
         }
 
         pool = new ThreadPool(threadCount);
-        for (std::size_t y = 0; y < vSize; ++y)
+
+        // Generate a list of indices to render and shuffle them
+        std::vector<std::size_t> indices;
+        for (std::size_t i = 0; i < hSize * vSize; ++i)
         {
-            for (std::size_t x = 0; x < hSize; ++x)
-            {
-                pool->Enqueue(
-                    [this, &world, &image, x, y]
-                    {
-                        NMRay ray = RayForPixel(x, y);
-                        NMColor color = world.ColorAt(ray);
-                        image->WritePixel(x, y, color);
-                    });
-            }
+            indices.push_back(i);
         }
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::shuffle(indices.begin(), indices.end(), g);
+
+        for (std::size_t i = 0; i < indices.size(); ++i)
+        {
+            std::size_t index = indices[i];
+            std::size_t x = index % hSize;
+            std::size_t y = index / hSize;
+            pool->Enqueue(
+                [this, &world, &image, x, y]
+                {
+                    NMRay ray = RayForPixel(x, y);
+                    NMColor color = world.ColorAt(ray);
+                    image->WritePixel(x, y, color);
+                });
+        }
+
+        // // Sequentially render each pixel
+        // for (std::size_t y = 0; y < vSize; ++y)
+        // {
+        //     for (std::size_t x = 0; x < hSize; ++x)
+        //     {
+        //         pool->Enqueue(
+        //             [this, &world, &image, x, y]
+        //             {
+        //                 NMRay ray = RayForPixel(x, y);
+        //                 NMColor color = world.ColorAt(ray);
+        //                 image->WritePixel(x, y, color);
+        //             });
+        //     }
+        // }
         delete pool;
         pool = nullptr;
     }
