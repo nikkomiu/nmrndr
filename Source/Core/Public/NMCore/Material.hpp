@@ -13,8 +13,8 @@ public:
 
     NMMaterial() = default;
 
-    NMMaterial(const NMColor &color, float ambient, float diffuse, float specular, float shininess)
-        : color(color), ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess)
+    NMMaterial(const NMColor &color, float ambient, float diffuse, float specular, float shininess, float reflective = 0.0f)
+        : color(color), ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess), reflective(reflective)
     {
     }
 
@@ -57,6 +57,8 @@ public:
     template<typename T, typename... Args>
     inline void SetPattern(Args &&... args)
     {
+        static_assert(std::is_base_of<NMPatternBase, T>::value, "T must inherit from NMPatternBase");
+
         pattern = std::make_shared<T>(std::forward<Args>(args)...);
     }
 

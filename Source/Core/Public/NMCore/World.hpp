@@ -94,16 +94,34 @@ public:
 
     NMColor ShadeHit(const SNMIntersectionState& state) const
     {
-        NMColor color = NMColor(0.0f, 0.0f, 0.0f);
+        NMColor surfaceColor = NMColor(0.0f, 0.0f, 0.0f);
 
         bool isShadowed = IsShadowed(state.overPoint);
         for (NMPointLight light : pointLights)
         {
-            color += state.object->GetMaterial().Lighting(*state.object, light, state.point, state.eyeVector,
+            surfaceColor += state.object->GetMaterial().Lighting(*state.object, light, state.point, state.eyeVector,
                                                           state.normalVector, isShadowed);
         }
 
-        return color;
+        NMColor reflectedColor = ReflectedColor(state);
+
+        return surfaceColor + reflectedColor;
+    }
+
+    NMColor ReflectedColor(const SNMIntersectionState& state) const
+    {
+        float reflectiveValue = state.object->GetMaterial().GetReflective();
+        if (reflectiveValue == 0.0f)
+        {
+            return NMColor(0.0f, 0.0f, 0.0f);
+        }
+
+        NMRay ray(state.overPoint, state.reflectVector);
+        NMColor color = ColorAt(ray);
+
+        std::cout << state << std::endl;
+
+        return color * reflectiveValue;
     }
 
     NMColor ColorAt(const NMRay& ray) const

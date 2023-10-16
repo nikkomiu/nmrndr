@@ -78,20 +78,17 @@ TEST_F(SNMIntersectionStateTest, HitOffset)
     ASSERT_TRUE(state.point.GetZ() > state.overPoint.GetZ());
 }
 
-// // Scenario: Precomputing the reflection vector
-// TEST_F(SNMIntersectionStateTest, PrecomputeReflectionVector)
-// {
-//     // Given
-//     std::shared_ptr<NMPrimitiveBase> plane = std::make_shared<NMPlane>();
-//     plane->SetTransform(NMMatrix::Translation(0.0f, -1.0f, 0.0f));
-//     defaultWorld.AddObject(plane);
+// Scenario: Precomputing the reflection vector
+TEST_F(SNMIntersectionStateTest, PrecomputeReflectionVector)
+{
+    // Given
+    NMPlane plane = NMPlane();
+    NMRay ray(NMPoint(0.0f, 1.0f, -1.0f), NMVector(0.0f, -nmmath::sqrt2Over2, nmmath::sqrt2Over2));
+    SNMIntersection intersection(std::sqrt(2.0f), &plane);
 
-//     NMRay ray(NMPoint(0.0f, 1.0f, -1.0f), NMVector(0.0f, -nmmath::sqrt2Over2, nmmath::sqrt2Over2));
-//     SNMIntersectionList intersections = defaultWorld.Intersect(ray);
+    // When
+    SNMIntersectionState state = SNMIntersectionState(intersection, ray);
 
-//     // When
-//     SNMIntersectionState state = SNMIntersectionState(intersections[0], ray);
-
-//     // Then
-//     ASSERT_TRUE(state.reflectVector == NMVector(0.0f, nmmath::sqrt2Over2, nmmath::sqrt2Over2));
-// }
+    // Then
+    ASSERT_EQ(state.reflectVector, NMVector(0.0f, nmmath::sqrt2Over2, nmmath::sqrt2Over2));
+}

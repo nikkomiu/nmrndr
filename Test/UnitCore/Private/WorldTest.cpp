@@ -1,10 +1,19 @@
 #include <gtest/gtest.h>
 
-#include "NMCore/World.hpp"
+#include "NMCore/Primitive/Plane.hpp"
 #include "NMCore/RT/Intersection.hpp"
+#include "NMCore/World.hpp"
 
 class NMWorldTest : public ::testing::Test
 {
+protected:
+
+    NMWorld defaultWorld;
+
+    void SetUp() override
+    {
+    defaultWorld = NMWorld::Default();
+    }
 };
 
 // Scenario: Create a world
@@ -21,22 +30,19 @@ TEST_F(NMWorldTest, CreateWorld)
 // Scenario: The default world
 TEST_F(NMWorldTest, DefaultWorld)
 {
-    // Given
-    NMWorld world = NMWorld::Default();
-
     // Then
-    ASSERT_EQ(world.GetPointLightCount(), 1);
-    ASSERT_EQ(world.GetObjectCount(), 2);
+    ASSERT_EQ(defaultWorld.GetPointLightCount(), 1);
+    ASSERT_EQ(defaultWorld.GetObjectCount(), 2);
 
-    NMPointLight pointLight = world.GetPointLight(0);
+    NMPointLight pointLight = defaultWorld.GetPointLight(0);
     ASSERT_EQ(pointLight.GetPosition(), NMPoint(-10.0f, 10.0f, -10.0f));
     ASSERT_EQ(pointLight.GetColor(), NMColor(1.0f, 1.0f, 1.0f));
 
-    std::shared_ptr<NMPrimitiveBase> sphere = world.GetObject(0);
+    std::shared_ptr<NMPrimitiveBase> sphere = defaultWorld.GetObject(0);
     ASSERT_EQ(sphere->GetTransform(), NMMatrix::Identity4x4());
     ASSERT_EQ(sphere->GetMaterial(), NMMaterial(NMColor(0.8f, 1.0f, 0.6f), 0.1f, 0.7f, 0.2f, 200.0f));
 
-    sphere = world.GetObject(1);
+    sphere = defaultWorld.GetObject(1);
     ASSERT_EQ(sphere->GetTransform(), NMMatrix::Scaling(0.5f, 0.5f, 0.5f));
     ASSERT_EQ(sphere->GetMaterial(), NMMaterial());
 }
@@ -71,11 +77,8 @@ TEST_F(NMWorldTest, SetLight_OutOfBounds)
 // Scenario: Intersect a world with a ray
 TEST_F(NMWorldTest, IntersectWorld)
 {
-    // Given
-    NMWorld world = NMWorld::Default();
-
     // When
-    SNMIntersectionList intersections = world.Intersect(NMRay(NMPoint(0.0f, 0.0f, -5.0f), NMVector(0.0f, 0.0f, 1.0f)));
+    SNMIntersectionList intersections = defaultWorld.Intersect(NMRay(NMPoint(0.0f, 0.0f, -5.0f), NMVector(0.0f, 0.0f, 1.0f)));
 
     // Then
     ASSERT_EQ(intersections.Size(), 4);
@@ -89,12 +92,11 @@ TEST_F(NMWorldTest, IntersectWorld)
 TEST_F(NMWorldTest, ShadingIntersection)
 {
     // Given
-    NMWorld world = NMWorld::Default();
     NMRay ray(NMPoint(0.0f, 0.0f, -5.0f), NMVector(0.0f, 0.0f, 1.0f));
-    SNMIntersectionList intersections = world.Intersect(ray);
+    SNMIntersectionList intersections = defaultWorld.Intersect(ray);
 
     // When
-    NMColor color = world.ShadeHit(SNMIntersectionState(intersections[0], ray));
+    NMColor color = defaultWorld.ShadeHit(SNMIntersectionState(intersections[0], ray));
 
     // Then
     ASSERT_EQ(color, NMColor(0.380661f, 0.475827f, 0.285496f));
@@ -104,14 +106,13 @@ TEST_F(NMWorldTest, ShadingIntersection)
 TEST_F(NMWorldTest, ShadingIntersectionInside)
 {
     // Given
-    NMWorld world = NMWorld::Default();
-    world.SetLight(0, NMPointLight(NMPoint(0.0f, 0.25f, 0.0f), NMColor(1.0f, 1.0f, 1.0f)));
+    defaultWorld.SetLight(0, NMPointLight(NMPoint(0.0f, 0.25f, 0.0f), NMColor(1.0f, 1.0f, 1.0f)));
     NMRay ray(NMPoint(0.0f, 0.0f, 0.0f), NMVector(0.0f, 0.0f, 1.0f));
-    std::shared_ptr<NMPrimitiveBase> shape = world.GetObject(1);
+    std::shared_ptr<NMPrimitiveBase> shape = defaultWorld.GetObject(1);
     SNMIntersection intersection(0.5f, shape.get());
 
     // When
-    NMColor color = world.ShadeHit(SNMIntersectionState(intersection, ray));
+    NMColor color = defaultWorld.ShadeHit(SNMIntersectionState(intersection, ray));
 
     // Then
     ASSERT_EQ(color, NMColor(0.1f, 0.1f, 0.1f));
@@ -145,11 +146,10 @@ TEST_F(NMWorldTest, ShadingIntersectionShadow)
 TEST_F(NMWorldTest, ColorMiss)
 {
     // Given
-    NMWorld world = NMWorld::Default();
     NMRay ray(NMPoint(0.0f, 0.0f, -5.0f), NMVector(0.0f, 1.0f, 0.0f));
 
     // When
-    NMColor color = world.ColorAt(ray);
+    NMColor color = defaultWorld.ColorAt(ray);
 
     // Then
     ASSERT_EQ(color, NMColor(0.0f, 0.0f, 0.0f));
@@ -159,11 +159,10 @@ TEST_F(NMWorldTest, ColorMiss)
 TEST_F(NMWorldTest, ColorHit)
 {
     // Given
-    NMWorld world = NMWorld::Default();
     NMRay ray(NMPoint(0.0f, 0.0f, -5.0f), NMVector(0.0f, 0.0f, 1.0f));
 
     // When
-    NMColor color = world.ColorAt(ray);
+    NMColor color = defaultWorld.ColorAt(ray);
 
     // Then
     ASSERT_EQ(color, NMColor(0.380661f, 0.475827f, 0.285496f));
@@ -173,15 +172,14 @@ TEST_F(NMWorldTest, ColorHit)
 TEST_F(NMWorldTest, ColorBehind)
 {
     // Given
-    NMWorld world = NMWorld::Default();
-    std::shared_ptr<NMPrimitiveBase> outer = world.GetObject(0);
+    std::shared_ptr<NMPrimitiveBase> outer = defaultWorld.GetObject(0);
     outer->SetMaterial(NMMaterial(NMColor(0.8f, 1.0f, 0.6f), 1.0f, 0.7f, 0.2f, 200.0f));
-    std::shared_ptr<NMPrimitiveBase> inner = world.GetObject(1);
+    std::shared_ptr<NMPrimitiveBase> inner = defaultWorld.GetObject(1);
     inner->SetMaterial(NMMaterial(NMColor(0.8f, 1.0f, 0.6f), 1.0f, 0.7f, 0.2f, 200.0f));
     NMRay ray(NMPoint(0.0f, 0.0f, 0.75f), NMVector(0.0f, 0.0f, -1.0f));
 
     // When
-    NMColor color = world.ColorAt(ray);
+    NMColor color = defaultWorld.ColorAt(ray);
 
     // Then
     ASSERT_EQ(color, inner->GetMaterial().GetColor());
@@ -191,11 +189,10 @@ TEST_F(NMWorldTest, ColorBehind)
 TEST_F(NMWorldTest, NoShadow)
 {
     // Given
-    NMWorld world = NMWorld::Default();
     NMPoint point = NMPoint(0.0f, 10.0f, 0.0f);
 
     // When
-    bool isInShadow = world.IsShadowed(point);
+    bool isInShadow = defaultWorld.IsShadowed(point);
 
     // Then
     ASSERT_FALSE(isInShadow);
@@ -205,11 +202,10 @@ TEST_F(NMWorldTest, NoShadow)
 TEST_F(NMWorldTest, Shadow)
 {
     // Given
-    NMWorld world = NMWorld::Default();
     NMPoint point = NMPoint(10.0f, -10.0f, 10.0f);
 
     // When
-    bool isInShadow = world.IsShadowed(point);
+    bool isInShadow = defaultWorld.IsShadowed(point);
 
     // Then
     ASSERT_TRUE(isInShadow);
@@ -219,11 +215,10 @@ TEST_F(NMWorldTest, Shadow)
 TEST_F(NMWorldTest, NoShadowBehindLight)
 {
     // Given
-    NMWorld world = NMWorld::Default();
     NMPoint point = NMPoint(-20.0f, 20.0f, -20.0f);
 
     // When
-    bool isInShadow = world.IsShadowed(point);
+    bool isInShadow = defaultWorld.IsShadowed(point);
 
     // Then
     ASSERT_FALSE(isInShadow);
@@ -233,12 +228,103 @@ TEST_F(NMWorldTest, NoShadowBehindLight)
 TEST_F(NMWorldTest, NoShadowBehindPoint)
 {
     // Given
-    NMWorld world = NMWorld::Default();
     NMPoint point = NMPoint(-2.0f, 2.0f, -2.0f);
 
     // When
-    bool isInShadow = world.IsShadowed(point);
+    bool isInShadow = defaultWorld.IsShadowed(point);
 
     // Then
     ASSERT_FALSE(isInShadow);
+}
+
+// Scenario: The reflected color for a nonreflective material
+TEST_F(NMWorldTest, ReflectedColor_Nonreflective)
+{
+    // Given
+    std::shared_ptr<NMPrimitiveBase> shape = defaultWorld.GetObject(1);
+    shape->SetMaterial(NMMaterial(NMColor(0.8f, 1.0f, 0.6f), 1.0f, 0.7f, 0.0f, 200.0f));
+    NMRay ray(NMPoint(0.0f, 0.0f, 0.0f), NMVector(0.0f, 0.0f, 1.0f));
+    SNMIntersection intersection(1.0f, shape.get());
+
+    // When
+    NMColor color = defaultWorld.ReflectedColor(SNMIntersectionState(intersection, ray));
+
+    // Then
+    ASSERT_EQ(color, NMColor(0.0f, 0.0f, 0.0f));
+}
+
+// Scenario: The reflected color for a reflective material
+TEST_F(NMWorldTest, ReflectedColor_Reflective)
+{
+    // Given
+    std::shared_ptr<NMPrimitiveBase> shape = std::make_shared<NMPlane>();
+    NMMaterial shapeMat = NMMaterial();
+    shapeMat.SetReflective(0.5f);
+    shape->SetMaterial(shapeMat);
+    shape->SetTransform(NMMatrix::Translation(0.0f, -1.0f, 0.0f));
+    defaultWorld.AddObject(shape);
+
+    NMRay ray(NMPoint(0.0f, 0.0f, -3.0f), NMVector(0.0f, -nmmath::sqrt2Over2, nmmath::sqrt2Over2));
+    SNMIntersection intersection(std::sqrt(2.0f), shape.get());
+
+    // When
+    SNMIntersectionState state(intersection, ray);
+    NMColor color = defaultWorld.ReflectedColor(state);
+
+    // Then
+    ASSERT_EQ(color, NMColor(0.191192f, 0.238991f, 0.143394f));
+}
+
+// Scenario: ShadeHit with a reflective material
+TEST_F(NMWorldTest, ShadeHit_WithReflectiveMaterial)
+{
+    // Given
+    std::shared_ptr<NMPrimitiveBase> shape = std::make_shared<NMPlane>();
+    NMMaterial shapeMat = NMMaterial();
+    shapeMat.SetReflective(0.5f);
+    shape->SetMaterial(shapeMat);
+    shape->SetTransform(NMMatrix::Translation(0.0f, -1.0f, 0.0f));
+    defaultWorld.AddObject(shape);
+
+    NMRay ray(NMPoint(0.0f, 0.0f, -3.0f), NMVector(0.0f, -nmmath::sqrt2Over2, nmmath::sqrt2Over2));
+    SNMIntersection intersection(std::sqrt(2.0f), shape.get());
+
+    // When
+    SNMIntersectionState state(intersection, ray);
+    NMColor color = defaultWorld.ShadeHit(state);
+
+    // Then
+    ASSERT_EQ(color, NMColor(0.877618f, 0.925416f, 0.829819f));
+}
+
+// Scenario: ColorAt with mutually reflective surfaces
+TEST_F(NMWorldTest, ColorAt_MutuallyReflectiveSurfaces)
+{
+    // Given
+    NMWorld world;
+    world.AddLight(NMPointLight(NMPoint(0.0f, 0.0f, 0.0f), NMColor(1.0f, 1.0f, 1.0f)));
+
+    std::shared_ptr<NMPrimitiveBase> lower = std::make_shared<NMPlane>();
+    NMMaterial lowerMat = NMMaterial();
+    lowerMat.SetReflective(1.0f);
+    lower->SetMaterial(lowerMat);
+    lower->SetTransform(NMMatrix::Translation(0.0f, -1.0f, 0.0f));
+    world.AddObject(lower);
+
+    std::shared_ptr<NMPrimitiveBase> upper = std::make_shared<NMPlane>();
+    NMMaterial upperMat = NMMaterial();
+    upperMat.SetReflective(1.0f);
+    upper->SetMaterial(upperMat);
+    // the normal is backwards...this seems to be causing the overpoint to
+    // be facing the wrong direction for the upper plane...fix this to show the "nomral"...
+    upper->SetTransform(NMMatrix::Translation(0.0f, 1.0f, 0.0f) * NMMatrix::RotationX(nmmath::pi));
+    world.AddObject(upper);
+
+    NMRay ray(NMPoint(0.0f, 0.0f, 0.0f), NMVector(0.0f, 1.0f, 0.0f));
+
+    // When
+    NMColor color = world.ColorAt(ray);
+
+    // Then
+    ASSERT_EQ(color, NMColor(0.0f, 0.0f, 0.0f));
 }

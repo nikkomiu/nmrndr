@@ -1,4 +1,4 @@
-#include "NMCore/Application.hpp"
+#include "NMApp/Application.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -120,8 +120,7 @@ void Application::ResizeWindow(std::size_t width, std::size_t height, bool updat
 
 bool Application::Initialize()
 {
-    int sdlResult = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
-    if (sdlResult != 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
     {
         SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
         return false;
@@ -190,11 +189,8 @@ void Application::DrawFrame(NMCanvas* canvas)
     SDL_SetRenderDrawColor(renderer, 10, 10, 10, 255);
     SDL_RenderClear(renderer);
 
-    std::size_t canvasWidth = canvas->GetWidth();
-    std::size_t canvasHeight = canvas->GetHeight();
-
-    float scaleX = static_cast<float>(windowWidth) / static_cast<float>(canvasWidth);
-    float scaleY = static_cast<float>(windowHeight) / static_cast<float>(canvasHeight);
+    float scaleX = static_cast<float>(windowWidth) / static_cast<float>(canvas->GetWidth());
+    float scaleY = static_cast<float>(windowHeight) / static_cast<float>(canvas->GetHeight());
     float scale = std::min(scaleX, scaleY);
 
     // Draw each pixel of the canvas to the screen

@@ -34,4 +34,20 @@ public:
     NMVector normalVector = NMVector();
     NMVector reflectVector = NMVector();
     bool isInside = false;
+
+    friend std::ostream& operator<<(std::ostream& os, const SNMIntersectionState& state)
+    {
+        os << "IntersectionState(" << std::endl;
+        os << "\tt: " << state.t << std::endl;
+        os << "\tobject: " << state.object << std::endl;
+        os << "\tpoint: " << state.point << std::endl;
+        os << "\toverPoint: " << state.overPoint << std::endl;
+        os << "\teyeVector: " << state.eyeVector << std::endl;
+        os << "\tnormalVector: " << state.normalVector << std::endl;
+        os << "\treflectVector: " << state.reflectVector << std::endl;
+        os << "\tisInside: " << state.isInside << std::endl;
+        os << ")" << std::endl;
+
+        return os;
+    }
 };

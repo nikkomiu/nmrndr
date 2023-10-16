@@ -39,6 +39,7 @@ find_package(SDL2 CONFIG REQUIRED)
 # ###################################################################### #
 add_subdirectory(Source/Math)
 add_subdirectory(Source/Core)
+add_subdirectory(Source/App)
 add_subdirectory(Source/SDLApp)
 
 add_subdirectory(Tools)

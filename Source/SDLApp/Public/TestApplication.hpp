@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NMCore/Application.hpp>
+#include <NMApp/Application.hpp>
 
 class TestApplication : public Application
 {

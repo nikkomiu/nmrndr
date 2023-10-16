@@ -1,0 +1,10 @@
+nm_build(
+    PKG_NAME App
+    PKG_TYPE STATIC
+    PUBLIC_LINK_LIBRARIES
+        NMCore
+
+    PRIVATE_LINK_LIBRARIES
+        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+        $<IF:$<TARGET_EXISTS:SDL2::SDL2-static>,SDL2::SDL2-static,SDL2::SDL2>
+)

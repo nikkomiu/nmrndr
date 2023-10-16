@@ -70,7 +70,7 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const NMVector &vector)
     {
-        os << std::fixed << std::setprecision(7);
+        os << std::fixed << std::setprecision(2);
         os << "(" << vector.x << ", " << vector.y << ", " << vector.z << ")";
         return os;
     }

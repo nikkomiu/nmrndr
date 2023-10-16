@@ -64,7 +64,7 @@ public:
      * @param threadCount The number of threads to use for rendering (0 = use all available threads).
      * @return The rendered canvas.
      */
-    inline NMCanvas Render(const NMWorld& world, std::size_t threadCount = 0)
+    inline NMCanvas Render(const NMWorld& world, int64_t threadCount = 0)
     {
         NMCanvas image(hSize, vSize);
         Render(world, &image, threadCount);
@@ -80,7 +80,7 @@ public:
      *                    A negative value will use all available threads minus the absolute value of the parameter.
      * @return The rendered canvas.
      */
-    void Render(const NMWorld& world, NMCanvas* image, std::size_t threadCount = 0)
+    void Render(const NMWorld& world, NMCanvas* image, int64_t threadCount = 0)
     {
         if (pool)
         {
@@ -92,7 +92,7 @@ public:
             threadCount = std::thread::hardware_concurrency() + threadCount;
         }
 
-        pool = new ThreadPool(threadCount);
+        pool = new ThreadPool(static_cast<std::size_t>(threadCount));
 
         // Generate a list of indices to render and shuffle them
         std::vector<std::size_t> indices;

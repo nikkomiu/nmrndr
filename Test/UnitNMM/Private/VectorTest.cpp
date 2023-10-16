@@ -431,7 +431,7 @@ TEST_F(NMVectorTest, Reflect_Slanted)
 {
     // Given
     NMVector vector(0.0f, -1.0f, 0.0f);
-    NMVector normal(std::sqrt(2.0f) / 2.0f, std::sqrt(2.0f) / 2.0f, 0.0f);
+    NMVector normal(nmmath::sqrt2Over2, nmmath::sqrt2Over2, 0.0f);
 
     // When
     NMVector result = vector.Reflect(normal);
