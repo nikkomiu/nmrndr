@@ -11,6 +11,20 @@ protected:
 
 };
 
+TEST_F(NMGradientPatternTest, GradientPatternCreation)
+{
+    // Given
+    NMColor black = NMColor(0.0f, 0.0f, 0.0f);
+    NMColor white = NMColor(1.0f, 1.0f, 1.0f);
+
+    // When
+    NMGradientPattern pattern(white, black);
+
+    // Then
+    EXPECT_EQ(pattern.GetColorA(), white);
+    EXPECT_EQ(pattern.GetColorB(), black);
+}
+
 // Scenario: A gradient linearly interpolates between colors
 TEST_F(NMGradientPatternTest, GradientPatternLinearlyInterpolates)
 {

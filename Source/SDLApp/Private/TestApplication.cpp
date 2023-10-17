@@ -45,6 +45,7 @@ NMWorld TestApplication::LoadWorld()
     middleMat.SetPattern<NMGradientPattern>(NMColor(0.1f, 1.0f, 0.5f), NMColor(1.0f, 0.5f, 0.1f), NMMatrix::Translation(1.0f, 1.0f, 1.0f) * NMMatrix::Scaling(2.0f, 2.0f, 2.0f));
     middleMat.SetDiffuse(0.7f);
     middleMat.SetSpecular(0.3f);
+    middleMat.SetReflective(1.0f);
     middle->SetMaterial(middleMat);
     world.AddObject(middle);
 

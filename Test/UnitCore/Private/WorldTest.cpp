@@ -96,7 +96,7 @@ TEST_F(NMWorldTest, ShadingIntersection)
     SNMIntersectionList intersections = defaultWorld.Intersect(ray);
 
     // When
-    NMColor color = defaultWorld.ShadeHit(SNMIntersectionState(intersections[0], ray));
+    NMColor color = defaultWorld.ShadeHit(SNMIntersectionState(intersections[0], ray), 8);
 
     // Then
     ASSERT_EQ(color, NMColor(0.380661f, 0.475827f, 0.285496f));
@@ -112,7 +112,7 @@ TEST_F(NMWorldTest, ShadingIntersectionInside)
     SNMIntersection intersection(0.5f, shape.get());
 
     // When
-    NMColor color = defaultWorld.ShadeHit(SNMIntersectionState(intersection, ray));
+    NMColor color = defaultWorld.ShadeHit(SNMIntersectionState(intersection, ray), 8);
 
     // Then
     ASSERT_EQ(color, NMColor(0.1f, 0.1f, 0.1f));
@@ -136,7 +136,7 @@ TEST_F(NMWorldTest, ShadingIntersectionShadow)
     SNMIntersection intersection(4.0f, s2.get());
 
     // When
-    NMColor color = world.ShadeHit(SNMIntersectionState(intersection, ray));
+    NMColor color = world.ShadeHit(SNMIntersectionState(intersection, ray), 8);
 
     // Then
     ASSERT_EQ(color, NMColor(0.1f, 0.1f, 0.1f));
@@ -247,7 +247,7 @@ TEST_F(NMWorldTest, ReflectedColor_Nonreflective)
     SNMIntersection intersection(1.0f, shape.get());
 
     // When
-    NMColor color = defaultWorld.ReflectedColor(SNMIntersectionState(intersection, ray));
+    NMColor color = defaultWorld.ReflectedColor(SNMIntersectionState(intersection, ray), 99);
 
     // Then
     ASSERT_EQ(color, NMColor(0.0f, 0.0f, 0.0f));
@@ -269,7 +269,7 @@ TEST_F(NMWorldTest, ReflectedColor_Reflective)
 
     // When
     SNMIntersectionState state(intersection, ray);
-    NMColor color = defaultWorld.ReflectedColor(state);
+    NMColor color = defaultWorld.ReflectedColor(state, 99);
 
     // Then
     ASSERT_EQ(color, NMColor(0.191192f, 0.238991f, 0.143394f));
@@ -291,7 +291,7 @@ TEST_F(NMWorldTest, ShadeHit_WithReflectiveMaterial)
 
     // When
     SNMIntersectionState state(intersection, ray);
-    NMColor color = defaultWorld.ShadeHit(state);
+    NMColor color = defaultWorld.ShadeHit(state, 8);
 
     // Then
     ASSERT_EQ(color, NMColor(0.877618f, 0.925416f, 0.829819f));
@@ -315,7 +315,7 @@ TEST_F(NMWorldTest, ColorAt_MutuallyReflectiveSurfaces)
     NMMaterial upperMat = NMMaterial();
     upperMat.SetReflective(1.0f);
     upper->SetMaterial(upperMat);
-    // the normal is backwards...this seems to be causing the overpoint to
+    // TODO: the normal is backwards...this seems to be causing the overpoint to
     // be facing the wrong direction for the upper plane...fix this to show the "nomral"...
     upper->SetTransform(NMMatrix::Translation(0.0f, 1.0f, 0.0f) * NMMatrix::RotationX(nmmath::pi));
     world.AddObject(upper);
@@ -324,6 +324,28 @@ TEST_F(NMWorldTest, ColorAt_MutuallyReflectiveSurfaces)
 
     // When
     NMColor color = world.ColorAt(ray);
+
+    // Then
+    ASSERT_EQ(color.GetClamped(), NMColor(1.0f, 1.0f, 1.0f));
+}
+
+// Scenario: The reflected color at the maximum recursive depth
+TEST_F(NMWorldTest, ReflectedColor_MaxRecursiveDepth)
+{
+    // Given
+    std::shared_ptr<NMPrimitiveBase> shape = std::make_shared<NMPlane>();
+    NMMaterial shapeMat = NMMaterial();
+    shapeMat.SetReflective(0.5f);
+    shape->SetMaterial(shapeMat);
+    shape->SetTransform(NMMatrix::Translation(0.0f, -1.0f, 0.0f));
+    defaultWorld.AddObject(shape);
+
+    NMRay ray(NMPoint(0.0f, 0.0f, -3.0f), NMVector(0.0f, -nmmath::sqrt2Over2, nmmath::sqrt2Over2));
+    SNMIntersection intersection(std::sqrt(2.0f), shape.get());
+
+    // When
+    SNMIntersectionState state(intersection, ray);
+    NMColor color = defaultWorld.ReflectedColor(state, 0);
 
     // Then
     ASSERT_EQ(color, NMColor(0.0f, 0.0f, 0.0f));

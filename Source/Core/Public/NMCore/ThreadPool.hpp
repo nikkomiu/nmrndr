@@ -10,7 +10,7 @@ class ThreadPool
 {
 public:
 
-    ThreadPool(std::size_t numThreads) : stop(false)
+    ThreadPool(std::size_t numThreads, bool stopWhenEmpty = true) : stop(false), stopWhenEmpty(stopWhenEmpty)
     {
         for (std::size_t i = 0; i < numThreads; ++i)
         {
@@ -60,6 +60,7 @@ protected:
     std::condition_variable stopCondition;
     bool cancel = false;
     bool stop = false;
+    bool stopWhenEmpty = true;
 
     void RunTask()
     {
@@ -69,7 +70,7 @@ protected:
 
             {
                 std::unique_lock<std::mutex> lock(queueMutex);
-                condition.wait(lock, [this] { return stop || cancel || !tasks.empty(); });
+                condition.wait(lock, [this] { return stop || cancel || (stopWhenEmpty && !tasks.empty()); });
 
                 if ((stop && tasks.empty()) || cancel)
                 {
@@ -82,11 +83,5 @@ protected:
 
             task();
         }
-    }
-
-    void WaitForStop()
-    {
-        std::unique_lock<std::mutex> lock(queueMutex);
-        stopCondition.wait(lock, [this] { return stop || cancel; });
     }
 };

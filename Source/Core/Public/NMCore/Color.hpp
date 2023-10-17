@@ -38,6 +38,11 @@ public:
         }
     }
 
+    inline NMColor GetClamped() const
+    {
+        return NMColor(nmmath::Clamp(r, 0.0f, 1.0f), nmmath::Clamp(g, 0.0f, 1.0f), nmmath::Clamp(b, 0.0f, 1.0f));
+    }
+
     inline int GetClampedRed() const { return static_cast<int>(nmmath::Clamp(r, 0.0f, 1.0f) * 255.0f); }
     inline int GetClampedGreen() const { return static_cast<int>(nmmath::Clamp(g, 0.0f, 1.0f) * 255.0f); }
     inline int GetClampedBlue() const { return static_cast<int>(nmmath::Clamp(b, 0.0f, 1.0f) * 255.0f); }

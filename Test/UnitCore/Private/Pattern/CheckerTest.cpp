@@ -10,6 +10,20 @@ protected:
     NMColor white = NMColor(1.0f, 1.0f, 1.0f);
 };
 
+TEST_F(NMCheckerPatternTest, CheckerPatternCreation)
+{
+    // Given
+    NMColor black = NMColor(0.0f, 0.0f, 0.0f);
+    NMColor white = NMColor(1.0f, 1.0f, 1.0f);
+
+    // When
+    NMCheckerPattern pattern(white, black);
+
+    // Then
+    EXPECT_EQ(pattern.GetColorA(), white);
+    EXPECT_EQ(pattern.GetColorB(), black);
+}
+
 // Scenario: Checkers should repeat in x
 TEST_F(NMCheckerPatternTest, CheckerPatternRepeatX)
 {

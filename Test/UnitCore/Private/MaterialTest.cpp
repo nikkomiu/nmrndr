@@ -343,6 +343,31 @@ TEST_F(NMMaterialTest, Lighting_SurfaceInShadow)
     ASSERT_EQ(result, NMColor(0.1f, 0.1f, 0.1f));
 }
 
+TEST_F(NMMaterialTest, Lighting_GetPattern)
+{
+    // Given
+    NMMaterial material;
+    material.SetPattern(std::make_shared<NMStripePattern>(NMColor(1, 1, 1), NMColor(0, 0, 0)));
+
+    // When
+    std::shared_ptr<NMPatternBase> pattern = material.GetPattern();
+
+    // Then
+    ASSERT_NE(pattern, nullptr);
+}
+
+TEST_F(NMMaterialTest, Lighting_GetPatternNull)
+{
+    // Given
+    NMMaterial material;
+
+    // When
+    std::shared_ptr<NMPatternBase> pattern = material.GetPattern();
+
+    // Then
+    ASSERT_EQ(pattern, nullptr);
+}
+
 // Scenario: Lighting with a pattern applied
 //   Given m.pattern ← stripe_pattern(color(1, 1, 1), color(0, 0, 0))
 //   And m.ambient ← 1

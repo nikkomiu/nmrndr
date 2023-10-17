@@ -15,7 +15,7 @@ class NMWorld
 {
 public:
 
-    NMWorld() = default;
+    NMWorld(uint16_t reflectionTraceDepth = 8) : reflectionTraceDepth(reflectionTraceDepth) {}
 
     static NMWorld Default()
     {
@@ -92,7 +92,7 @@ public:
         return true;
     }
 
-    NMColor ShadeHit(const SNMIntersectionState& state) const
+    NMColor ShadeHit(const SNMIntersectionState& state, uint16_t remainingReflections) const
     {
         NMColor surfaceColor = NMColor(0.0f, 0.0f, 0.0f);
 
@@ -103,13 +103,18 @@ public:
                                                           state.normalVector, isShadowed);
         }
 
-        NMColor reflectedColor = ReflectedColor(state);
+        NMColor reflectedColor = ReflectedColor(state, remainingReflections);
 
         return surfaceColor + reflectedColor;
     }
 
-    NMColor ReflectedColor(const SNMIntersectionState& state) const
+    NMColor ReflectedColor(const SNMIntersectionState& state, uint16_t remainingReflections) const
     {
+        if (remainingReflections == 0)
+        {
+            return NMColor(0.0f, 0.0f, 0.0f);
+        }
+
         float reflectiveValue = state.object->GetMaterial().GetReflective();
         if (reflectiveValue == 0.0f)
         {
@@ -117,14 +122,21 @@ public:
         }
 
         NMRay ray(state.overPoint, state.reflectVector);
-        NMColor color = ColorAt(ray);
-
-        std::cout << state << std::endl;
+        NMColor color = ColorAt(ray, remainingReflections - 1);
 
         return color * reflectiveValue;
     }
 
-    NMColor ColorAt(const NMRay& ray) const
+    inline NMColor ColorAt(const NMRay& ray) const { return ColorAt(ray, reflectionTraceDepth); }
+
+protected:
+
+    uint16_t reflectionTraceDepth;
+
+    std::vector<NMPointLight> pointLights;
+    std::vector<std::shared_ptr<NMPrimitiveBase>> objects;
+
+    NMColor ColorAt(const NMRay& ray, uint16_t remainingReflections) const
     {
         SNMIntersectionList intersections = Intersect(ray);
         SNMIntersection* intersection = intersections.Hit();
@@ -136,11 +148,6 @@ public:
 
         SNMIntersectionState state = SNMIntersectionState(*intersection, ray);
 
-        return ShadeHit(state);
+        return ShadeHit(state, remainingReflections);
     }
-
-protected:
-
-    std::vector<NMPointLight> pointLights;
-    std::vector<std::shared_ptr<NMPrimitiveBase>> objects;
 };

@@ -53,8 +53,6 @@ public:
         return pixels[y * width + x];
     }
 
-    inline std::vector<NMColor> ReadPixels() const { return pixels; }
-
     inline void WritePixel(std::size_t x, std::size_t y, const NMColor& color)
     {
         if (x >= width || y >= height)

@@ -28,6 +28,56 @@ TEST_F(NMColorTest, ColorCreation)
     EXPECT_FLOAT_EQ(color.GetBlue(), 1.7f);
 }
 
+TEST_F(NMColorTest, ColorArrayOperator)
+{
+    // Given
+    NMColor color(-0.5f, 0.4f, 1.7f);
+
+    // Then
+    EXPECT_EQ(color[0], -0.5f);
+    EXPECT_EQ(color[1], 0.4f);
+    EXPECT_EQ(color[2], 1.7f);
+    EXPECT_EQ(color[3], 1.0f);
+    EXPECT_EQ(color[4], 0.0f);
+    EXPECT_EQ(color[5], 0.0f);
+}
+
+TEST_F(NMColorTest, Color_Clamped)
+{
+    // Given
+    NMColor startColor = NMColor(0.5f, 0.5f, 0.5f);
+
+    // When
+    NMColor clampedColor = startColor.GetClamped();
+
+    // Then
+    EXPECT_EQ(clampedColor, NMColor(0.5f, 0.5f, 0.5f));
+}
+
+TEST_F(NMColorTest, Color_Clamped_Min)
+{
+    // Given
+    NMColor startColor = NMColor(-0.5f, -0.5f, -0.5f);
+
+    // When
+    NMColor clampedColor = startColor.GetClamped();
+
+    // Then
+    EXPECT_EQ(clampedColor, NMColor(0.0f, 0.0f, 0.0f));
+}
+
+TEST_F(NMColorTest, Color_Clamped_Max)
+{
+    // Given
+    NMColor startColor = NMColor(1000.5f, 1000.5f, 1000.5f);
+
+    // When
+    NMColor clampedColor = startColor.GetClamped();
+
+    // Then
+    EXPECT_EQ(clampedColor, NMColor(1.0f, 1.0f, 1.0f));
+}
+
 TEST_F(NMColorTest, GetClampedColor_Min)
 {
     // Given
