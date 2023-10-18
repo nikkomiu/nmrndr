@@ -11,11 +11,27 @@
 #include "RT/IntersectionList.hpp"
 #include "RT/IntersectionState.hpp"
 
+struct SNMWorldSettings
+{
+public:
+
+    /**
+     * @brief The maximum number of reflections to trace per ray.
+     * This value is used to prevent infinite recursion when tracing reflections.
+     */
+    uint8_t ReflectionTraceDepth = 5;
+
+    /**
+     * @brief
+     */
+    uint8_t X = 1;
+};
+
 class NMWorld
 {
 public:
 
-    NMWorld(uint16_t reflectionTraceDepth = 8) : reflectionTraceDepth(reflectionTraceDepth) {}
+    NMWorld(SNMWorldSettings worldSettings = SNMWorldSettings()) : worldSettings(worldSettings) {}
 
     static NMWorld Default()
     {
@@ -92,7 +108,7 @@ public:
         return true;
     }
 
-    NMColor ShadeHit(const SNMIntersectionState& state, uint16_t remainingReflections) const
+    NMColor ShadeHit(const SNMIntersectionState& state, uint8_t remainingReflections) const
     {
         NMColor surfaceColor = NMColor(0.0f, 0.0f, 0.0f);
 
@@ -108,7 +124,7 @@ public:
         return surfaceColor + reflectedColor;
     }
 
-    NMColor ReflectedColor(const SNMIntersectionState& state, uint16_t remainingReflections) const
+    NMColor ReflectedColor(const SNMIntersectionState& state, uint8_t remainingReflections) const
     {
         if (remainingReflections == 0)
         {
@@ -127,16 +143,16 @@ public:
         return color * reflectiveValue;
     }
 
-    inline NMColor ColorAt(const NMRay& ray) const { return ColorAt(ray, reflectionTraceDepth); }
+    inline NMColor ColorAt(const NMRay& ray) const { return ColorAt(ray, worldSettings.ReflectionTraceDepth); }
 
 protected:
 
-    uint16_t reflectionTraceDepth;
+    SNMWorldSettings worldSettings;
 
     std::vector<NMPointLight> pointLights;
     std::vector<std::shared_ptr<NMPrimitiveBase>> objects;
 
-    NMColor ColorAt(const NMRay& ray, uint16_t remainingReflections) const
+    NMColor ColorAt(const NMRay& ray, uint8_t remainingReflections) const
     {
         SNMIntersectionList intersections = Intersect(ray);
         SNMIntersection* intersection = intersections.Hit();

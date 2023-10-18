@@ -15,6 +15,12 @@ public:
     {
     }
 
+    // enumerable
+    inline std::vector<SNMIntersection>::iterator begin() { return intersections.begin(); }
+    inline std::vector<SNMIntersection>::iterator end() { return intersections.end(); }
+    inline std::vector<SNMIntersection>::const_iterator begin() const { return intersections.begin(); }
+    inline std::vector<SNMIntersection>::const_iterator end() const { return intersections.end(); }
+
     inline bool IsSorted() const { return isSorted; }
     inline std::size_t Size() const { return intersections.size(); }
 

@@ -2,7 +2,7 @@
 
 #include "NMCore/Pattern/Stripe.hpp"
 
-class NMStripePatternTest : public ::testing::Test
+class NMStripePatternTest : public testing::Test
 {
 protected:
 

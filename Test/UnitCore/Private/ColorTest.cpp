@@ -2,7 +2,7 @@
 
 #include "NMCore/Color.hpp"
 
-class NMColorTest : public ::testing::Test
+class NMColorTest : public testing::Test
 {
 };
 

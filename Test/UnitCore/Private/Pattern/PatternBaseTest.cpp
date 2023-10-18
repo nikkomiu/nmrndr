@@ -16,7 +16,7 @@ public:
 
 };
 
-class NMPatternBaseTest : public ::testing::Test
+class NMPatternBaseTest : public testing::Test
 {
 protected:
 

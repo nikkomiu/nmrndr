@@ -20,7 +20,7 @@ protected:
     }
 };
 
-class NMPrimitiveBaseTest : public ::testing::Test
+class NMPrimitiveBaseTest : public testing::Test
 {
 };
 

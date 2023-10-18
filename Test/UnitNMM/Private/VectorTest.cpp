@@ -6,7 +6,7 @@
 #include "NMM/Tuple.hpp"
 #include "NMM/Vector.hpp"
 
-class NMVectorTest : public ::testing::Test
+class NMVectorTest : public testing::Test
 {
 };
 

@@ -2,7 +2,7 @@
 
 #include "NMCore/Pattern/Gradient.hpp"
 
-class NMGradientPatternTest : public ::testing::Test
+class NMGradientPatternTest : public testing::Test
 {
 protected:
 

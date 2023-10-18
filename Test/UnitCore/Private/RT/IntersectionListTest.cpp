@@ -4,7 +4,7 @@
 #include "NMCore/RT/Intersection.hpp"
 #include "NMCore/RT/IntersectionList.hpp"
 
-class SNMIntersectionListTest : public ::testing::Test
+class SNMIntersectionListTest : public testing::Test
 {
 };
 

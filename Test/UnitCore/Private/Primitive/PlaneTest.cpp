@@ -2,7 +2,7 @@
 
 #include "NMCore/Primitive/Plane.hpp"
 
-class NMPlaneTest : public ::testing::Test
+class NMPlaneTest : public testing::Test
 {
 };
 

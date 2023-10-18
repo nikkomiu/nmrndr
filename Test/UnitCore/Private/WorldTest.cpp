@@ -4,7 +4,7 @@
 #include "NMCore/RT/Intersection.hpp"
 #include "NMCore/World.hpp"
 
-class NMWorldTest : public ::testing::Test
+class NMWorldTest : public testing::Test
 {
 protected:
 

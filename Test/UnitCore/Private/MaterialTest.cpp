@@ -6,7 +6,7 @@
 #include "NMCore/Primitive/Sphere.hpp"
 #include "NMM/Vector.hpp"
 
-class NMMaterialTest : public ::testing::Test
+class NMMaterialTest : public testing::Test
 {
 };
 
@@ -115,7 +115,9 @@ TEST_F(NMMaterialTest, StreamInsertionOperator)
     stream << material;
 
     // Then
-    ASSERT_EQ(stream.str(), "Mtl(rgb(255, 255, 255), Ambient(0.10), Diffuse(0.90), Specular(0.90), Shininess(200), Reflective(0))");
+    std::string expected = "Mtl(rgb(255, 255, 255), Ambient(0.10), Diffuse(0.90), Specular(0.90), Shininess(200), "
+        "Reflective(0), Transparency(0.00), RefractiveIndex(1.00))";
+    ASSERT_EQ(stream.str(), expected);
 }
 
 TEST_F(NMMaterialTest, Assign_Color)
@@ -412,4 +414,38 @@ TEST_F(NMMaterialTest, Reflectivity_Default)
 
     // Then
     ASSERT_FLOAT_EQ(material.GetReflective(), 0.0f);
+}
+
+// Scenario: Transparency and Refractive Index for the default material
+//   Given m ← material()
+//   Then m.transparency = 0.0
+//     And m.refractive_index = 1.0
+TEST_F(NMMaterialTest, TransparencyAndRefractiveIndex_Default)
+{
+    // Given
+    NMMaterial material;
+
+    // Then
+    ASSERT_FLOAT_EQ(material.GetTransparency(), 0.0f);
+    ASSERT_FLOAT_EQ(material.GetRefractiveIndex(), 1.0f);
+}
+
+// Scenario: Setting the transparency and refractive index
+//   Given m ← material()
+//   When m.transparency ← 1.0
+//     And m.refractive_index ← 1.5
+//   Then m.transparency = 1.0
+//     And m.refractive_index = 1.5
+TEST_F(NMMaterialTest, TransparencyAndRefractiveIndex_Set)
+{
+    // Given
+    NMMaterial material;
+
+    // When
+    material.SetTransparency(1.0f);
+    material.SetRefractiveIndex(1.5f);
+
+    // Then
+    ASSERT_FLOAT_EQ(material.GetTransparency(), 1.0f);
+    ASSERT_FLOAT_EQ(material.GetRefractiveIndex(), 1.5f);
 }

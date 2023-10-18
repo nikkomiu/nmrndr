@@ -2,7 +2,7 @@
 
 #include "NMCore/Pattern/Checker.hpp"
 
-class NMCheckerPatternTest : public ::testing::Test
+class NMCheckerPatternTest : public testing::Test
 {
 protected:
 

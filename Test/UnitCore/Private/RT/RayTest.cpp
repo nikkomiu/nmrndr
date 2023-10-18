@@ -5,7 +5,7 @@
 #include "NMCore/RT/Ray.hpp"
 #include "NMCore/Primitive/Sphere.hpp"
 
-class NMRayTest : public ::testing::Test
+class NMRayTest : public testing::Test
 {
 };
 

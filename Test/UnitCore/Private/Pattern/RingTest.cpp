@@ -2,7 +2,7 @@
 
 #include "NMCore/Pattern/Ring.hpp"
 
-class NMRingPatternTest : public ::testing::Test
+class NMRingPatternTest : public testing::Test
 {
 protected:
 

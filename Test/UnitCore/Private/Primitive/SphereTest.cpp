@@ -8,7 +8,7 @@
     static_assert(std::is_base_of<base, derived>::value, \
     #derived " must inherit from " #base)
 
-class NMSphereTest : public ::testing::Test
+class NMSphereTest : public testing::Test
 {
 };
 

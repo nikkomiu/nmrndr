@@ -2,7 +2,7 @@
 
 #include "NMM/Tuple.hpp"
 
-class NMTupleTest : public ::testing::Test
+class NMTupleTest : public testing::Test
 {
 };
 

@@ -3,7 +3,7 @@
 #include "NMM/Point.hpp"
 #include "NMM/Tuple.hpp"
 
-class NMPointTest : public ::testing::Test
+class NMPointTest : public testing::Test
 {
 };
 

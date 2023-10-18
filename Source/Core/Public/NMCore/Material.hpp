@@ -11,16 +11,17 @@ class NMMaterial
 {
 public:
 
-    NMMaterial() = default;
-
-    NMMaterial(const NMColor &color, float ambient, float diffuse, float specular, float shininess,
-               float reflective = 0.0f)
+    NMMaterial(const NMColor &color = NMColor(1, 1, 1), float ambient = 0.1f, float diffuse = 0.9f,
+               float specular = 0.9f, float shininess = 200.0f, float reflective = 0.0f, float transparency = 0.0f,
+               float refractiveIndex = 1.0f)
         : color(color),
           ambient(ambient),
           diffuse(diffuse),
           specular(specular),
           shininess(shininess),
-          reflective(reflective)
+          reflective(reflective),
+          transparency(transparency),
+          refractiveIndex(refractiveIndex)
     {
     }
 
@@ -33,9 +34,11 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const NMMaterial &material)
     {
-        os << "Mtl(" << material.color << ", " << std::setprecision(2) << std::fixed << "Ambient(" << material.ambient
-           << "), Diffuse(" << material.diffuse << "), Specular(" << material.specular << "), Shininess("
-           << std::setprecision(0) << material.shininess << "), Reflective(" << material.reflective << "))";
+        os << "Mtl(" << material.color << ", " << std::setprecision(2) << std::fixed << "Ambient(" << material.ambient;
+        os << "), Diffuse(" << material.diffuse << "), Specular(" << material.specular << "), Shininess(";
+        os << std::setprecision(0) << material.shininess << "), Reflective(" << material.reflective << "),";
+        os << std::setprecision(2) << " Transparency(" << material.transparency << "), RefractiveIndex(";
+        os << material.refractiveIndex << "))";
         return os;
     }
 
@@ -56,6 +59,12 @@ public:
 
     inline float GetReflective() const { return reflective; }
     inline void SetReflective(float newReflective) { reflective = newReflective; }
+
+    inline float GetTransparency() const { return transparency; }
+    inline void SetTransparency(float newTransparency) { transparency = newTransparency; }
+
+    inline float GetRefractiveIndex() const { return refractiveIndex; }
+    inline void SetRefractiveIndex(float newRefractiveIndex) { refractiveIndex = newRefractiveIndex; }
 
     inline std::shared_ptr<NMPatternBase> GetPattern() const { return pattern; }
     inline void SetPattern(std::shared_ptr<NMPatternBase> newPattern) { pattern = newPattern; }
@@ -113,12 +122,14 @@ public:
 
 protected:
 
-    NMColor color = NMColor(1, 1, 1);
-    float ambient = 0.1f;
-    float diffuse = 0.9f;
-    float specular = 0.9f;
-    float shininess = 200.0f;
-    float reflective = 0.0f;
+    NMColor color;
+    float ambient;
+    float diffuse;
+    float specular;
+    float shininess;
+    float reflective;
+    float transparency;
+    float refractiveIndex;
 
     std::shared_ptr<NMPatternBase> pattern;
 };

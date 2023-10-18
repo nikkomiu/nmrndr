@@ -2,7 +2,7 @@
 
 #include "NMM/Util.hpp"
 
-class NMUtilTest : public ::testing::Test
+class NMUtilTest : public testing::Test
 {
 };
 

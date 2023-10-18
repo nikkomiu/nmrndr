@@ -5,7 +5,7 @@
 #include "NMCore/Camera.hpp"
 #include "NMCore/World.hpp"
 
-class NMCameraTest : public ::testing::Test
+class NMCameraTest : public testing::Test
 {
 };
 

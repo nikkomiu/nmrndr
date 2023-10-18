@@ -2,7 +2,7 @@
 
 #include "NMCore/Light/Point.hpp"
 
-class NMPointLightTest : public ::testing::Test
+class NMPointLightTest : public testing::Test
 {
 };
 

@@ -49,6 +49,16 @@ public:
         return std::vector<SNMIntersection>{int1, int2};
     }
 
+    static NMSphere GlassSphere()
+    {
+        NMSphere sphere;
+        NMMaterial material;
+        material.SetTransparency(1.0f);
+        material.SetRefractiveIndex(1.5f);
+        sphere.SetMaterial(material);
+        return sphere;
+    }
+
 protected:
 
     float radius = 1.0f;

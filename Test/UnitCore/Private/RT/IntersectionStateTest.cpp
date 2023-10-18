@@ -4,7 +4,7 @@
 #include "NMCore/World.hpp"
 #include "NMCore/Primitive/Plane.hpp"
 
-class SNMIntersectionStateTest : public ::testing::Test
+class SNMIntersectionStateTest : public testing::Test
 {
 protected:
 
@@ -118,3 +118,93 @@ TEST_F(SNMIntersectionStateTest, StreamingInsertionOperator)
     expected << ")" << std::endl;
     ASSERT_EQ(stream.str(), expected.str());
 }
+
+// Refreaction Testing
+
+struct SRefractionTestParams
+{
+public:
+
+    uint32_t index;
+    float n1;
+    float n2;
+
+    SRefractionTestParams(uint32_t index, float n1, float n2) : index(index), n1(n1), n2(n2) {}
+
+    friend std::ostream& operator<<(std::ostream& os, const SRefractionTestParams& params)
+    {
+        os << "P(i:" << params.index << ", n1:" << params.n1 << " n2:" << params.n2 << ")";
+        return os;
+    }
+};
+
+class SNMIntersectionStateRefractionTest : public SNMIntersectionStateTest,
+    public testing::WithParamInterface<SRefractionTestParams>
+{
+public:
+
+    void SetUp() override
+    {
+        sphereA = NMSphere::GlassSphere();
+        sphereA.SetTransform(NMMatrix::Scaling(2.0f, 2.0f, 2.0f));
+        NMMaterial sphereAMaterial;
+        sphereAMaterial.SetRefractiveIndex(1.5f);
+        sphereA.SetMaterial(sphereAMaterial);
+
+        sphereB = NMSphere::GlassSphere();
+        sphereB.SetTransform(NMMatrix::Translation(0.0f, 0.0f, -0.25f));
+        NMMaterial sphereBMaterial;
+        sphereBMaterial.SetRefractiveIndex(2.0f);
+        sphereB.SetMaterial(sphereBMaterial);
+
+        sphereC = NMSphere::GlassSphere();
+        sphereC.SetTransform(NMMatrix::Translation(0.0f, 0.0f, 0.25f));
+        NMMaterial sphereCMaterial;
+        sphereCMaterial.SetRefractiveIndex(2.5f);
+        sphereC.SetMaterial(sphereCMaterial);
+
+        ray = NMRay(NMPoint(0.0f, 0.0f, -4.0f), NMVector(0.0f, 0.0f, 1.0f));
+
+        intersections = SNMIntersectionList({
+            SNMIntersection(2.0f, &sphereA),
+            SNMIntersection(2.75f, &sphereB),
+            SNMIntersection(3.25f, &sphereC),
+            SNMIntersection(4.75f, &sphereB),
+            SNMIntersection(5.25f, &sphereC),
+            SNMIntersection(6.0f, &sphereA)
+        });
+    }
+
+protected:
+
+    NMSphere sphereA;
+    NMSphere sphereB;
+    NMSphere sphereC;
+
+    NMRay ray;
+
+    SNMIntersectionList intersections;
+};
+
+// Scenario: Finding n1 and n2 at various intersections
+TEST_P(SNMIntersectionStateRefractionTest, N1N2AtPoints)
+{
+    // Given
+    const SRefractionTestParams& tt = GetParam();
+
+    // When
+    SNMIntersectionState state = SNMIntersectionState(intersections[tt.index], ray, intersections);
+
+    // Then
+    ASSERT_EQ(state.n1, tt.n1);
+    ASSERT_EQ(state.n2, tt.n2);
+}
+
+INSTANTIATE_TEST_SUITE_P(SNMIntersectionState, SNMIntersectionStateRefractionTest, testing::Values(
+    SRefractionTestParams(0, 1.0f, 1.5f),
+    SRefractionTestParams(1, 1.5f, 2.0f),
+    SRefractionTestParams(2, 2.0f, 2.5f),
+    SRefractionTestParams(3, 2.5f, 2.5f),
+    SRefractionTestParams(4, 2.5f, 1.5f),
+    SRefractionTestParams(5, 1.5f, 1.0f)
+));

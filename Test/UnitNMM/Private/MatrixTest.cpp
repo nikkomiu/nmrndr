@@ -5,7 +5,7 @@
 #include "NMM/Matrix.hpp"
 #include "NMM/Tuple.hpp"
 
-class NMMatrixTest : public ::testing::Test
+class NMMatrixTest : public testing::Test
 {
 };
 

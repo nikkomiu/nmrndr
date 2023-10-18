@@ -3,7 +3,7 @@
 #include "NMCore/Primitive/Sphere.hpp"
 #include "NMCore/RT/Intersection.hpp"
 
-class SNMIntersectionTest : public ::testing::Test
+class SNMIntersectionTest : public testing::Test
 {
 };
 

@@ -2,7 +2,7 @@
 
 #include "NMCore/Canvas.hpp"
 
-class NMCanvasTest : public ::testing::Test
+class NMCanvasTest : public testing::Test
 {
 };
 
