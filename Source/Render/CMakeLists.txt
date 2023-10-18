@@ -1,5 +1,5 @@
 nm_build(
-    PKG_NAME App
+    PKG_NAME Render
     PKG_TYPE STATIC
     PUBLIC_LINK_LIBRARIES
         NMCore

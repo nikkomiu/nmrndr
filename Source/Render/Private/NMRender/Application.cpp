@@ -1,4 +1,4 @@
-#include "NMApp/Application.hpp"
+#include "NMRender/Application.hpp"
 
 #include <SDL2/SDL.h>
 
