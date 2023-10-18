@@ -100,7 +100,7 @@ public:
         for (NMPointLight light : pointLights)
         {
             surfaceColor += state.object->GetMaterial().Lighting(*state.object, light, state.point, state.eyeVector,
-                                                          state.normalVector, isShadowed);
+                                                                 state.normalVector, isShadowed);
         }
 
         NMColor reflectedColor = ReflectedColor(state, remainingReflections);

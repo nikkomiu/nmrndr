@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <limits>
+#include <type_traits>
 
 namespace nmmath
 {
@@ -16,8 +17,7 @@ static constexpr float rayEpsilon = 0.005f;
 
 static constexpr float floatEpsilon = std::numeric_limits<float>::epsilon() * 10.0f;
 
-template<typename T, typename U>
-inline bool FloatEquals(T a, U b, float epsilon = floatEpsilon)
+template <typename T, typename U> inline bool FloatEquals(T a, U b, float epsilon = floatEpsilon)
 {
     static_assert(std::is_floating_point<T>::value, "T must be a floating point number type.");
     static_assert(std::is_floating_point<U>::value, "U must be a floating point number type.");

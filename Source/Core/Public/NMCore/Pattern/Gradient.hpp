@@ -7,7 +7,9 @@ class NMGradientPattern : public NMPatternBase
 public:
 
     NMGradientPattern(const NMColor& colorA, const NMColor& colorB, const NMMatrix& transform = NMMatrix::Identity4x4())
-        : NMPatternBase(transform), colorA(colorA), colorB(colorB) {}
+        : NMPatternBase(transform), colorA(colorA), colorB(colorB)
+    {
+    }
 
     inline NMColor GetColorA() const { return colorA; }
     inline NMColor GetColorB() const { return colorB; }

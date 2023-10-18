@@ -10,7 +10,7 @@ class NMPatternBase
 {
 public:
 
-    NMPatternBase(const NMMatrix& transform = NMMatrix::Identity4x4()) : transform(transform) {};
+    NMPatternBase(const NMMatrix& transform = NMMatrix::Identity4x4()) : transform(transform){};
     virtual ~NMPatternBase() = default;
 
     virtual NMColor ColorAt(const NMPoint& point) const = 0;

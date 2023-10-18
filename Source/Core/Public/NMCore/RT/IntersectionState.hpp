@@ -13,8 +13,11 @@ public:
     SNMIntersectionState() = default;
 
     SNMIntersectionState(const SNMIntersection& intersection, const NMRay& ray)
-        : t(intersection.t), object(intersection.object), point(ray.Position(t)),
-          eyeVector(-ray.GetDirection()), normalVector(object->NormalAt(point))
+        : t(intersection.t),
+          object(intersection.object),
+          point(ray.Position(t)),
+          eyeVector(-ray.GetDirection()),
+          normalVector(object->NormalAt(point))
     {
         overPoint = point + (normalVector * nmmath::rayEpsilon);
         reflectVector = ray.GetDirection().Reflect(normalVector);

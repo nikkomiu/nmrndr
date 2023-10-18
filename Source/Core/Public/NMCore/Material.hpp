@@ -13,8 +13,14 @@ public:
 
     NMMaterial() = default;
 
-    NMMaterial(const NMColor &color, float ambient, float diffuse, float specular, float shininess, float reflective = 0.0f)
-        : color(color), ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess), reflective(reflective)
+    NMMaterial(const NMColor &color, float ambient, float diffuse, float specular, float shininess,
+               float reflective = 0.0f)
+        : color(color),
+          ambient(ambient),
+          diffuse(diffuse),
+          specular(specular),
+          shininess(shininess),
+          reflective(reflective)
     {
     }
 
@@ -54,16 +60,15 @@ public:
     inline std::shared_ptr<NMPatternBase> GetPattern() const { return pattern; }
     inline void SetPattern(std::shared_ptr<NMPatternBase> newPattern) { pattern = newPattern; }
 
-    template<typename T, typename... Args>
-    inline void SetPattern(Args &&... args)
+    template <typename T, typename... Args> inline void SetPattern(Args &&...args)
     {
         static_assert(std::is_base_of<NMPatternBase, T>::value, "T must inherit from NMPatternBase");
 
         pattern = std::make_shared<T>(std::forward<Args>(args)...);
     }
 
-    NMColor Lighting(const NMPrimitiveBase &object, const NMPointLight &light, const NMPoint &point, const NMVector &eyeVector,
-                     const NMVector &normalVector, bool inShadow) const
+    NMColor Lighting(const NMPrimitiveBase &object, const NMPointLight &light, const NMPoint &point,
+                     const NMVector &eyeVector, const NMVector &normalVector, bool inShadow) const
     {
         // If the material has a pattern, use the pattern color instead of the material's color
         NMColor materialColor = pattern ? pattern->ColorAtShapePoint(object, point) : color;
